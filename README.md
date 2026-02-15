@@ -3,11 +3,10 @@
 ## Table of Contents
 
 - [Technologies](#technologies)
-- [Getting Started](#getting-started)
+- [Getting Started](#usage)
 - [Testing](#testing)
 - [Deploy and CI/CD](#deploy-and-cicd)
 - [Contributing](#contributing)
-- [To do](#to-do)
 - [Project Team](#project-team)
 
 ## Technologies
@@ -86,6 +85,8 @@ Just because.
 - [Alexandr Zhdanko](https://github.com/Zhdko) — Front-End Engineer
 - [Vsevolod Timoshenko](https://github.com/shoblinsky) — Front-End Engineer
 - [Anatoliy Rubankov](https://github.com/anatolirub) — Front-End Engineer
+- [Hanna](https://github.com/khasekai) — Mentor
+- [Roman](https://github.com/PoMaKoM) — Mentor
 
 ---
 
