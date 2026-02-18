@@ -21,7 +21,7 @@ PR: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/2
 <details>
 <summary>Такой файл получился:</summary>
 
-````name: GitHub Actions
+```name: GitHub Actions
 run-name: Production deployment triggered by ${{ github.actor }}
 
 on:
@@ -78,5 +78,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 ```
+        uses: actions/deploy-pages@v4
 </details>
+```
