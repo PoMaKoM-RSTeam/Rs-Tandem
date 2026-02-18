@@ -1,0 +1,45 @@
+name: Sync Development Notes
+on:
+  push:
+    branches:
+      - development-notes
+
+jobs:
+  check-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Нужно для сравнения коммитов
+
+      - name: Check changed files
+        id: filter
+        run: |
+          # Получаем список измененных файлов относительно предыдущего состояния
+          # Если это первый пуш в ветку, сравнение идет с master
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "Files changed: $CHANGED_FILES"
+          
+          # Проверяем, есть ли файлы вне папки development-notes/
+          # Игнорируем пустые строки и саму папку
+          BAD_FILES=$(echo "$CHANGED_FILES" | grep -v "^development-notes/" || true)
+          
+          if [ -n "$BAD_FILES" ]; then
+            echo "Error: You are trying to change files outside of development-notes/ folder!"
+            echo "Forbidden files: $BAD_FILES"
+            exit 1
+          fi
+
+      - name: Config Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge to Master
+        run: |
+          git checkout master
+          # Используем --ff-only, если хочешь строго линейную историю, 
+          # или обычный merge, чтобы видеть факт синхронизации
+          git merge development-notes --no-ff -m "docs: auto-sync development notes"
+          git push origin master
