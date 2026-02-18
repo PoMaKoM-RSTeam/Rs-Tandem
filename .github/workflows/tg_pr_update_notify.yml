@@ -1,0 +1,23 @@
+name: PR Updated Notification
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  notify_updated:
+    runs-on: ubuntu-latest
+    steps:
+      - name: send telegram notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
+          message: |
+            <b>🔄 Pull Request ОБНОВЛЕН! (New Commits)</b>
+            
+            <b>Название:</b> ${{ github.event.pull_request.title }}
+            <b>Кто обновил:</b> ${{ github.actor }}
+            <b>Ветка:</b> <code>${{ github.head_ref }}</code>
+            
+            <a href="${{ github.event.pull_request.html_url }}">Посмотреть изменения в GitHub</a>

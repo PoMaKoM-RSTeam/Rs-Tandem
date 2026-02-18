@@ -13,8 +13,11 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,ts}": [
       "eslint . --fix --no-cache --max-warnings=0"
+    ],
+    "*.{scss, css, html}": [
+      "prettier --write"
     ]
   },
   "private": true,
