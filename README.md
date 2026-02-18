@@ -1,5 +1,15 @@
 # RS-Tandem
 
+This project is an interactive application designed to help users prepare for technical interviews and strengthen their hard skills in JavaScript and Typescript.<br>
+It combines learning and practice in a gamified format to make technical preparation more engaging and effective.
+
+The application features a set of interactive games designed to focus on specific technical concepts:
+
+- Async Sorter
+- Type Investigator
+- Code Golf
+- Code Sandbox
+
 ## Table of Contents
 
 - [Technologies](#technologies)
@@ -67,10 +77,6 @@ ng build
 ## Deploy and CI/CD
 
 ...
-
-### Why did you develop this project?
-
-Just because.
 
 ## To do
 
