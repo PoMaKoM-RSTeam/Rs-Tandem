@@ -6,8 +6,8 @@ A library of reusable, high-performance UI components for the TNDM project. Buil
 
 ## Table of Contents
 
-- [General Principles](#general-principles)
 - [Form Components](#form-components)
+  - [General Principles](#general-principles)
   - [TndmInputComponent](#tndminputcomponent)
   - [TndmCheckboxComponent](#tndmcheckboxcomponent)
 - [Action Components](#action-components)
@@ -16,9 +16,11 @@ A library of reusable, high-performance UI components for the TNDM project. Buil
 
 ---
 
-## 🏗 General Principles
+## Form Components
 
-### Reactive Forms (CVA)
+### General Principles
+
+#### Reactive Forms (CVA)
 
 All form components implement `ControlValueAccessor`. This allows seamless integration with Angular Reactive Forms:
 
@@ -26,22 +28,18 @@ All form components implement `ControlValueAccessor`. This allows seamless integ
 <tndm-input-component formControlName="userName" />
 ```
 
-### Validation Priority
+### TndmInputComponent
+
+A versatile text field supporting various HTML5 input types and validation states.
+
+#### Validation Priority
 
 Error messages are resolved in the following order:
 
 1. **Custom Message** — from `errorMessages` input
 2. **Default Message** — fallback from `DEFAULT_ERROR_MESSAGES` constant
 
----
-
-## Form Components
-
-### TndmInputComponent
-
-A versatile text field supporting various HTML5 input types and validation states.
-
-#### 📸 Visual States
+#### Visual States
 
 | Default                                    | With Icon                                     | Focus/Hover                                    | Error State                                   | Disabled                                    |
 | ------------------------------------------ | --------------------------------------------- | ---------------------------------------------- | --------------------------------------------- | ------------------------------------------- |
@@ -74,8 +72,32 @@ A versatile text field supporting various HTML5 input types and validation state
 
 ### TndmCheckboxComponent
 
-**Status:** 🛠 Planed
-Custom checkbox implementation with CVA support.
+A custom-styled checkbox built for boolean state management and seamless Reactive Forms integration.
+
+#### Visual States
+
+| Default                                          | Checked                                          | Hover/Active                                 | Disabled                                           |
+| :----------------------------------------------- | :----------------------------------------------- | :------------------------------------------- | :------------------------------------------------- |
+| ![Default](./docs/checkbox/checkbox-default.png) | ![Checked](./docs/checkbox/checkbox-checked.png) | ![Hover](./docs/checkbox/checkbox-hover.png) | ![Disabled](./docs/checkbox/checkbox-disabled.png) |
+
+#### API (Inputs)
+
+| Property | Type     | Required | Default | Description                                      |
+| :------- | :------- | :------: | :-----: | :----------------------------------------------- |
+| `id`     | `string` |    ✅    |    —    | Unique identifier for label and checkbox binding |
+| `name`   | `string` |    ✅    |    —    | Field name used for form identification          |
+| `label`  | `string` |    ❌    | `null`  | Text label displayed next to the checkbox        |
+
+#### Usage
+
+```html
+<tndm-checkbox-component
+  formControlName="rememberMe"
+  id="remember-me"
+  name="remember"
+  label="Remember me on this device">
+</tndm-checkbox-component>
+```
 
 ---
 

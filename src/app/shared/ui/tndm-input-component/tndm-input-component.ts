@@ -39,11 +39,11 @@ export class TndmInputComponent implements ControlValueAccessor {
   readonly icon = input<keyof typeof ICONS | null>(null);
   readonly ICONS = ICONS;
 
-  onChange!: (val: string | null) => void;
-  onTouched!: () => void;
+  onChange: (val: string | null) => void = () => {};
+  onTouched: () => void = () => {};
 
   constructor() {
-    this.control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => this.onChange?.(value));
+    this.control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => this.onChange(value));
     if (this.controlDir) {
       this.controlDir.valueAccessor = this;
     }
