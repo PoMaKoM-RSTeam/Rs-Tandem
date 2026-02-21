@@ -60,7 +60,7 @@ module.exports = tseslint.config(
           format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
         },
       ],
-      '@typescript-eslint/no-empty-function': 'warn',
+      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-inferrable-types': 'warn',

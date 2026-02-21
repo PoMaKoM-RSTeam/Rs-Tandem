@@ -1,0 +1,106 @@
+@use '/styles/variables' as v;
+@use '/styles/typography' as t;
+
+.tndm-input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  @include t.text-body();
+}
+
+.label {
+  margin-left: 15px;
+}
+
+.tndm-input-wrapper:has(.input-invalid) {
+  .label {
+    color: v.$color-error;
+  }
+}
+
+.tndm-input-wrapper:has(.input__field:disabled) {
+  .label {
+    color: v.$color-retro-shadow;
+  }
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 2px solid v.$bg-surface;
+  border-radius: v.$radius-lg;
+  padding: v.$space-sm v.$space-md;
+  color: v.$text-secondary-color;
+  transition: v.$transition-base;
+
+  &:has(.input__field:focus) {
+    border-color: v.$border-main-color;
+    color: v.$text-primary-color;
+  }
+
+  &:has(.input__field:hover) {
+    border-color: v.$border-main-color;
+  }
+
+  &:has(.input-invalid) {
+    border-color: v.$color-error;
+    color: v.$color-error;
+
+    &:has(.input__field:focus, .input__field:hover) {
+      border-color: v.$color-error;
+      color: v.$color-error;
+    }
+  }
+
+  &:has(.input__field:disabled) {
+    color: v.$color-retro-shadow;
+    background-color: v.$color-retro-gray;
+    cursor: not-allowed;
+
+    &:has(.input__field:hover) {
+      border-color: v.$color-retro-gray;
+    }
+  }
+
+  &__icon {
+    width: 18px;
+    height: fit-content;
+    fill: red;
+
+    path {
+      fill: currentColor;
+    }
+  }
+}
+
+.input__field {
+  border: none;
+  padding: 0;
+  background-color: inherit;
+  @include t.text-body();
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    color: v.$color-retro-shadow;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: v.$color-retro-gray;
+  }
+}
+
+.error-msg {
+  width: calc(100% - 32px);
+  margin-left: 15px;
+  color: v.$color-error;
+  font-size: 12px;
+}

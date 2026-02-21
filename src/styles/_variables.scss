@@ -3,22 +3,23 @@ $color-white: #ffffff;
 $color-gray: #222222;
 
 $color-retro-cream: #f1ede1;
-$color-retro-red: #f03e1e;
+$color-retro-red: #f15d43;
 $color-retro-black: #121411;
-$color-retro-gray: #c1beb5;
+$color-retro-gray: #e8e6e0;
 $color-retro-shadow: #9b988f;
 $color-retro-green: #3d5a45;
 
 // Semantic Tokens
 $bg-main: $color-retro-cream;
 $bg-surface: $color-retro-gray;
-$bg-accent: $color-retro-red;
+$color-accent: $color-retro-red;
 
 $text-primary-color: $color-retro-black;
 $text-secondary-color: $color-retro-shadow;
 $text-accent-color: $color-retro-red;
 
-$border-main-color: $color-retro-shadow;
+$border-main-color: $color-retro-black;
+$border-second-color: $color-retro-shadow;
 
 $color-error: $color-retro-red;
 $color-success: $color-retro-green;
