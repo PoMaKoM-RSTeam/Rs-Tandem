@@ -1,0 +1,87 @@
+@use '/styles/variables' as v;
+@use '/styles/typography' as t;
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: v.$transition-base;
+  cursor: pointer;
+  user-select: none;
+
+  &__input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    appearance: none;
+
+    &:checked + .checkbox__box {
+      border-color: v.$color-retro-black;
+      background-color: v.$color-retro-black;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 6px;
+        width: 5px;
+        height: 10px;
+        border: solid v.$color-retro-cream;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
+
+    &.input-invalid + .checkbox__box {
+      border-color: v.$color-retro-red;
+    }
+
+    &:disabled {
+      & + .checkbox__box {
+        border-color: v.$color-retro-shadow;
+        background-color: v.$color-retro-gray;
+        cursor: not-allowed;
+      }
+
+      & ~ .checkbox__label {
+        color: v.$color-retro-shadow;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__box {
+    position: relative;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 22px;
+    height: 22px;
+    border: 2px solid v.$color-retro-black;
+    border-radius: 4px;
+    transition: v.$transition-base;
+  }
+
+  &__label {
+    line-height: 1;
+    @include t.text-body(v.$color-retro-black);
+  }
+
+  &:hover &__input:not(:disabled) {
+    & + .checkbox__box {
+      transform: translateY(-1px);
+    }
+
+    &:not(:checked) + .checkbox__box {
+      background-color: lighten(v.$color-retro-cream, 5%);
+    }
+
+    &:checked + .checkbox__box {
+      background-color: v.$color-retro-black;
+    }
+  }
+
+  &:active &__input:not(:disabled) + .checkbox__box {
+    transform: translateY(1px);
+  }
+}

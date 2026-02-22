@@ -1,0 +1,27 @@
+@use '/styles/variables' as v;
+
+@mixin text-title($color: v.$text-primary-color) {
+  color: $color;
+  font-family: v.$font-family-base;
+  font-weight: v.$font-weight-bold;
+  font-size: v.$font-size-lg;
+  letter-spacing: 0.5px;
+}
+
+@mixin text-subtitle($color: v.$text-secondary-color) {
+  color: $color;
+  font-family: v.$font-family-base;
+  font-weight: v.$font-weight-semi-bold;
+  font-size: v.$font-size-base;
+}
+
+@mixin text-body($color: v.$text-primary-color) {
+  color: $color;
+  font-family: v.$font-family-base;
+  font-weight: v.$font-weight-thin;
+  font-size: v.$font-size-sm;
+}
+
+@mixin text-accent {
+  @include text-body(v.$text-accent-color);
+}

@@ -1,0 +1,58 @@
+// Primitive Colors
+$color-white: #ffffff;
+$color-gray: #222222;
+
+$color-retro-cream: #f1ede1;
+$color-retro-red: #f15d43;
+$color-retro-black: #121411;
+$color-retro-gray: #e8e6e0;
+$color-retro-shadow: #9b988f;
+$color-retro-green: #3d5a45;
+
+// Semantic Tokens
+$bg-main: $color-retro-cream;
+$bg-surface: $color-retro-gray;
+$color-accent: $color-retro-red;
+
+$text-primary-color: $color-retro-black;
+$text-secondary-color: $color-retro-shadow;
+$text-accent-color: $color-retro-red;
+
+$border-main-color: $color-retro-black;
+$border-second-color: $color-retro-shadow;
+
+$color-error: $color-retro-red;
+$color-success: $color-retro-green;
+
+// Typography
+$font-family-base: 'Univa', 'Arial', sans-serif;
+$font-size-base: 16px;
+$font-size-sm: 0.875rem;
+$font-size-lg: 1.25rem;
+
+$font-weight-thin: 100;
+$font-weight-normal: 400;
+$font-weight-semi-bold: 600;
+$font-weight-bold: 700;
+
+// Spacing
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+
+// Paddings / Margins
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 30px;
+$radius-round: 50%;
+
+// Transitions
+$transition-fast: 0.2s ease-in-out;
+$transition-base: 0.3s ease;
+
+// Media Queries
+$bp-mobile: 576px;
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
