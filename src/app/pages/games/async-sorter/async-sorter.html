@@ -1,13 +1,8 @@
 <h2>Async sorter</h2>
-<button type="button">Run loop</button>
-<div class="code-field">
-  <ul class="code-blocks-list">
-    <li class="code-block"></li>
-  </ul>
-</div>
-<div class="code-buckets">
-  <ul class="bucket-now"></ul>
-  <ul class="bucket-micro"></ul>
-  <ul class="bucket-macro"></ul>
-</div>
-<ul class="final-stack"></ul>
+
+<tndm-button-component [btnConfig]="{ label: 'Run loop' }" />
+<section class="fields-wrapper">
+  <ul tndm-code-blocks-list></ul>
+  <ul tndm-task-bucket-list></ul>
+  <ul tndm-final-call-stack></ul>
+</section>

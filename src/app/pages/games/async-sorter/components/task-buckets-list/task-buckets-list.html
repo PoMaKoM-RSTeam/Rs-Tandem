@@ -1,0 +1,7 @@
+<h3>Task Buckets</h3>
+
+<div class="task-buckets-list-content">
+  @for (bucket of buckets; track bucket.id) {
+  <li tndm-task-bucket [heading]="bucket.heading"></li>
+  }
+</div>
