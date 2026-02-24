@@ -3,3 +3,5 @@
 /coverage
 /dist
 node_modules
+development-notes/
+src/app/pages/games/async-sorter/components/code-blocks-list/code-blocks-list.html
