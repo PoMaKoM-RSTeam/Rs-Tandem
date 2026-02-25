@@ -4,4 +4,4 @@ export type GolfRank = {
   color: string;
   icon: string;
   width: number;
-}
+};
