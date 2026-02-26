@@ -1,0 +1,41 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form__body">
+    <tndm-input-component
+      label="Login"
+      name="login"
+      [formControl]="loginControl"
+      [id]="'login'"
+      [placeholder]="'Enter your login'"
+      [type]="'text'" />
+    <tndm-input-component
+      label="Email"
+      name="email"
+      [formControl]="emailControl"
+      [id]="'email'"
+      [placeholder]="'Enter email'"
+      [type]="'email'" />
+    <tndm-input-component
+      label="Password"
+      name="password"
+      [formControl]="passwordControl"
+      [id]="'password'"
+      [placeholder]="'Enter password'"
+      [type]="'password'" />
+  </div>
+
+  <div class="form__footer">
+    <tndm-button-component
+      [btnConfig]="{variant: 'primary', size: 'md', label: 'Sign-Up', type: 'submit', isDisabled: !canSubmit()}" />
+    <tndm-button-component
+      [btnConfig]="{icon: 'google',variant: 'secondary', size: 'md', label: 'Sign-Up with Google', isDisabled: isLoading()}"
+      (click)="signWithOAuth('google')" />
+    <tndm-button-component
+      [btnConfig]="{icon: 'github', variant: 'secondary', size: 'md', label: 'Sign-Up with Github', isDisabled: isLoading() }"
+      (click)="signWithOAuth('github')" />
+    <h5 class="form__subtitle">You have an account?</h5>
+    <tndm-button-component
+      [btnConfig]="{variant: 'secondary',size: 'md', label: 'Sign-in'}"
+      (click)="navigateToLogin()" />
+    <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
+  </div>
+</form>
