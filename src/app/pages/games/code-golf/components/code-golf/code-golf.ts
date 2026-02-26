@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { GolfRank } from '../../types/golf-rank';
 import { GOLF_RANKS } from '../../data/data';
 import { REGEX_RULES } from '../../types/regex-pattern';
@@ -9,13 +8,16 @@ import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-compon
 
 @Component({
   selector: 'tndm-code-golf',
-  imports: [FormsModule, TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
   readonly rawCode = signal('');
+
+  protected readonly checkBtnConfig = { label: 'Check Solution' };
+  protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
   readonly byteCount = computed(() => {
     const cleaned = this.rawCode()
