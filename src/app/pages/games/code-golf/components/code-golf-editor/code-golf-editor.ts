@@ -5,10 +5,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'tndm-code-golf-editor',
   standalone: true,
   imports: [FormsModule],
-  template: `
-    <textarea class="code-editor" placeholder="// Write your code here..." spellcheck="false" [(ngModel)]="value">
-    </textarea>
-  `,
+  templateUrl: 'code-golf-editor.html',
   styleUrl: './code-golf-editor.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

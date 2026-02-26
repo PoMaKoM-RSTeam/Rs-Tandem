@@ -10,21 +10,7 @@ import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-compon
 @Component({
   selector: 'tndm-code-golf',
   imports: [FormsModule, TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
-  template: `
-    <tndm-code-golf-rank [byteCount]="byteCount()" [rank]="rank()" />
-
-    <div class="challenge-wrapper">
-      <h2 class="challenge-title">Challenge Title</h2>
-      <p class="challenge-description">Challenge description</p>
-    </div>
-
-    <tndm-code-golf-editor [(value)]="rawCode" />
-
-    <div class="controls">
-      <tndm-button-component [btnConfig]="{ label: 'Check Solution' }" />
-      <tndm-button-component [btnConfig]="{ label: 'Next Challenge' }" />
-    </div>
-  `,
+  templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
