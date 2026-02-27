@@ -1,13 +1,19 @@
 <tndm-code-golf-rank [byteCount]="byteCount()" [rank]="rank()" />
 
 <div class="challenge-wrapper">
-  <h2 class="challenge-title">Challenge Title</h2>
-  <p class="challenge-description">Challenge description</p>
+  @if (currentChallenge(); as challenge) {
+  <h2 class="challenge-title">{{challenge.title}}</h2>
+  <p class="challenge-description">{{challenge.description}}</p>
+  }
+  @else {
+  <div class="loader">Loading challenge...</div>
+  }
+
 </div>
 
 <tndm-code-golf-editor [(value)]="rawCode" />
 
 <div class="controls">
   <tndm-button-component [btnConfig]="checkBtnConfig" />
-  <tndm-button-component [btnConfig]="nextBtnConfig" />
+  <tndm-button-component [btnConfig]="nextBtnConfig" (click)="loadRandomChallenge()" />
 </div>

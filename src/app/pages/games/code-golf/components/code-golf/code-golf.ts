@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
-import { GOLF_RANKS } from '../../data/data';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-component/tndm-button-component';
+import { CodeGolfFetcherService } from '../../services/CodeGolfFectherService';
+import { Challenge } from '../../types/challenge';
 
 @Component({
   selector: 'tndm-code-golf',
@@ -14,10 +15,38 @@ import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
+  private readonly fetcherService = inject(CodeGolfFetcherService);
+
+  readonly ranks = signal<GolfRank[]>([]);
+  readonly currentChallenge = signal<Challenge | null>(null);
   readonly rawCode = signal('');
 
   protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
+
+  constructor() {
+    this.initData();
+  }
+
+  private async initData(): Promise<void> {
+    const ranksData = await this.fetcherService.getGolfRanks();
+    this.ranks.set(ranksData);
+    this.loadRandomChallenge();
+  }
+
+  protected async loadRandomChallenge(): Promise<void> {
+    try {
+      this.currentChallenge.set(null);
+      this.rawCode.set('');
+
+      const data = await this.fetcherService.getRandomChallenge();
+      if (data) {
+        this.currentChallenge.set(data);
+      }
+    } catch (err) {
+      console.error('CodeGolf Error:', err);
+    }
+  }
 
   readonly byteCount = computed(() => {
     const cleaned = this.rawCode()
@@ -29,6 +58,7 @@ export class TndmCodeGolf {
 
   readonly rank = computed((): GolfRank => {
     const bytes = this.byteCount();
-    return GOLF_RANKS.find(rank => bytes <= (rank.maxBytes ?? Infinity)) ?? GOLF_RANKS[GOLF_RANKS.length - 1];
+    const allRanks = this.ranks();
+    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
   });
 }

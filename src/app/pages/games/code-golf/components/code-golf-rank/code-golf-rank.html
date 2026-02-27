@@ -1,12 +1,14 @@
 <div class="game-info">
+  @if (rank(); as rank) {
   <div class="rank-info">
-    <span class="icon">{{ rank().icon }}</span>
+    <span class="icon">{{ rank.icon }}</span>
     <div class="details">
-      <div class="rank" [style.color]="rank().color">{{ rank().label }}</div>
+      <div class="rank" [style.color]="rank.color">{{ rank.label }}</div>
       <div class="bytes-amount">{{ byteCount() }} Bytes</div>
     </div>
   </div>
   <div class="rank-progress">
-    <div class="progress-fill" [style.background-color]="rank().color" [style.width.%]="rank().width"></div>
+    <div class="progress-fill" [style.background-color]="rank.color" [style.width.%]="rank.width"></div>
   </div>
+  }
 </div>
