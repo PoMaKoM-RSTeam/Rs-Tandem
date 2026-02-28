@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, effect, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import {
   AuthError,
   AuthResponse,
@@ -12,11 +12,13 @@ import { environment } from '../../environments/environment';
 import { handleSupabaseAuthError } from './constants/supabase-error-messages';
 import { AUTH_ERROR_KEYS } from './enums/auth-error-key';
 import { AuthProvider } from './types/types';
+import { ToastService } from '../core/toast/toast-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TndmAuthService {
+  private readonly toastService: ToastService = inject(ToastService);
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseKey);
 
   readonly loading: WritableSignal<boolean> = signal(false);
@@ -34,7 +36,9 @@ export class TndmAuthService {
 
     effect((): void => {
       const errorMessage: string | null = this.error();
+
       if (errorMessage) {
+        this.toastService.warning('error', errorMessage);
         setTimeout((): void => this.error.set(null), 5000);
       }
     });
@@ -74,7 +78,7 @@ export class TndmAuthService {
     const { data } = await this.supabase.rpc('check_email_exists', { p_email: email });
 
     if (data.exists) {
-      throw new AuthError(AUTH_ERROR_KEYS.UserAlreadyExists, 400); // data.confirmed ?  : 'Подтвердите email из письма'
+      throw new AuthError(AUTH_ERROR_KEYS.UserAlreadyExists, 400);
     }
   }
 
