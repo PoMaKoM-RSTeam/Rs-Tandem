@@ -10,7 +10,6 @@ export const routes: Routes = [
     path: AUTH_ROUTES_SEGMENTS.AUTH,
     component: TndmAuthPage,
     children: authRoutes,
-    canActivate: [tndmAuthGuard],
   },
   {
     path: 'async-sorter',
