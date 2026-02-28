@@ -5,6 +5,7 @@ import { passwordValidator } from '../validators/password-validator';
 import { Router } from '@angular/router';
 import { AUTH_ROUTES, TndmAuthService } from '@auth';
 import { AuthProvider } from '../types/types';
+import { loginValidator } from '@auth/validators/login-validator';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {
@@ -22,7 +23,7 @@ export abstract class TndmAuthFormCore implements OnInit {
 
   protected readonly loginControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
-    validators: [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
+    validators: [Validators.required, Validators.minLength(3), loginValidator, Validators.maxLength(20)],
   });
 
   protected readonly emailControl: FormControl<string> = new FormControl<string>('', {
