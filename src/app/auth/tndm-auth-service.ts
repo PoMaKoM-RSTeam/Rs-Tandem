@@ -9,7 +9,7 @@ import {
   User,
 } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-import { handleSupabaseAuthError } from './constants/supabase-error-messages';
+import { handleSupabaseAuthError } from './helpers/supabase-error-messages';
 import { AUTH_ERROR_KEYS } from './enums/auth-error-key';
 import { AuthProvider } from './types/types';
 import { ToastService } from '../core/toast/toast-service';
