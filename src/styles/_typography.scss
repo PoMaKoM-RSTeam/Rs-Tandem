@@ -11,7 +11,7 @@
 @mixin text-subtitle($color: v.$text-secondary-color) {
   color: $color;
   font-family: v.$font-family-base;
-  font-weight: v.$font-weight-semi-bold;
+  font-weight: v.$font-weight-normal;
   font-size: v.$font-size-base;
 }
 
