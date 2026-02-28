@@ -22,11 +22,11 @@
         }
       </div>
       <!-- TODO: Add variant button without background -->
-      <tndm-button-component [btnConfig]="closeBtnConfig" (clicked)="onRemove(item.id)" />
+      <tndm-button class="close-button" [btnConfig]="closeBtnConfig" (clicked)="onRemove(item.id)" />
     </li>
     }
   </ul>
-  <tndm-button-component [btnConfig]="closeAllBtnConfig" (clicked)="onRemoveAll()" />
+  <tndm-button class="close-all-toasts-button" [btnConfig]="closeAllBtnConfig" (clicked)="onRemoveAll()" />
 </aside>
 
 }

@@ -134,15 +134,18 @@ A custom-styled checkbox built for boolean state management and seamless Reactiv
 
 ## Action Components
 
-### TndmButtonComponent
+### TndmButton
 
 A high-performance, signal-based button component. It uses strict typing to ensure the button has either a label, an icon, or both, maintaining design consistency across the application.
 
 #### Visual States
 
-| Primary (MD)                                          | Secondary (SM)                                          | With Icon                                          | Hover     | Pressed   | Disabled  |
-| :---------------------------------------------------- | :------------------------------------------------------ | :------------------------------------------------- | :-------- | :-------- | :-------- |
-| <img src="./docs/button/btn-primary.png" height="70"> | <img src="./docs/button/btn-secondary.png" height="70"> | <img src="./docs/button/btn-icon.png" height="70"> | _Planned_ | _Planned_ | _Planned_ |
+| Variant   | Default                                                            | Hover / Focus                                                    | Disabled                                                            | Pressed       | With Icon                                                          |
+| :-------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------------ | :------------ | :----------------------------------------------------------------- |
+| Primary   | <img src="./docs/button/button-primary-default.png" height="32">   | <img src="./docs/button/button-primary-hover.png" height="32">   | <img src="./docs/button/button-primary-disabled.png" height="32">   | `scale(0.97)` | <img src="./docs/button/button-primary-with-icon.png" height="32"> |
+| Secondary | <img src="./docs/button/button-secondary-default.png" height="32"> | <img src="./docs/button/button-secondary-hover.png" height="32"> | <img src="./docs/button/button-secondary-disabled.png" height="32"> | `scale(0.97)` | `none`                                                             |
+| Black     | <img src="./docs/button/button-black-default.png" height="32">     | <img src="./docs/button/button-black-hover.png" height="44">     | <img src="./docs/button/button-black-disabled.png" height="32">     | `scale(0.97)` | <img src="./docs/button/button-black-with-icon.png" height="32">   |
+| Icon      | <img src="./docs/button/button-icon-default.png" height="32">      | <img src="./docs/button/button-icon-hover.png" height="32">      | <img src="./docs/button/button-icon-disabled.png" height="32">      | `scale(0.97)` | -                                                                  |
 
 #### API (Inputs & Outputs)
 
@@ -153,45 +156,56 @@ A high-performance, signal-based button component. It uses strict typing to ensu
 
 #### ButtonConfig Properties
 
-| Property     | Type                        |   Default   | Description                                        |
-| :----------- | :-------------------------- | :---------: | :------------------------------------------------- |
-| `label`      | `string`                    |      —      | Button text (auto-formatted to Sentence case)      |
-| `icon`       | [`IconType`](#shared-types) |      —      | Icon key from the internal `ICONS` library         |
-| `variant`    | `'primary' \| 'secondary'`  | `'primary'` | Visual style of the button                         |
-| `size`       | `'sm' \| 'md'`              |   `'md'`    | Size dimensions                                    |
-| `isDisabled` | `boolean`                   |   `false`   | Disables interaction and applies gray-scale styles |
-| `type`       | `'button' \| 'submit'`      | `'button'`  | Standard HTML button type.                         |
-| `place`      | `string`                    |      —      | Optional modifier class for specific positioning   |
+| Property     | Type                                             |   Default   | Description                                        |
+| :----------- | :----------------------------------------------- | :---------: | :------------------------------------------------- |
+| `label`      | `string`                                         |      —      | Button text (auto-formatted to Sentence case)      |
+| `icon`       | [`IconType`](#shared-types)                      |      —      | Icon key from the internal `ICONS` library         |
+| `variant`    | `'primary' \| 'secondary'  \| 'black' \| 'icon'` | `'primary'` | Visual style of the button                         |
+| `size`       | `'sm' \| 'md'  \| 'lg' `                         |   `'md'`    | Size dimensions                                    |
+| `isDisabled` | `boolean`                                        |   `false`   | Disables interaction and applies gray-scale styles |
+| `type`       | `'button' \| 'submit'`                           | `'button'`  | Standard HTML button type.                         |
 
 > **Note:** `ButtonConfig` is a union type. You must provide at least a `label` or an `icon`.
+
+#### Configuration Types
+
+The component enforces content rules via TypeScript:
+
+- **Primary / Black**: label is required, icon is optional.
+- **Secondary**: label is required, icon is forbidden (never).
+- **Icon**: icon is required, label is forbidden (never).
 
 #### Usage
 
 ```html
 <!-- Primary button with text and icon -->
-<tndm-button-component
+<tndm-button
   [btnConfig]="{
     label: 'get started',
     icon: 'home',
-    variant: 'primary',
-    size: 'md'
   }"
   (clicked)="onProceed($event)">
-</tndm-button-component>
+</tndm-button>
 
 <!-- Small secondary button with icon only -->
-<tndm-button-component
+<tndm-button
   [btnConfig]="{
-    icon: 'close',
+    label: 'start',
     variant: 'secondary',
     size: 'sm'
   }">
-</tndm-button-component>
+</tndm-button>
 ```
 
 #### Component Features
 
-- **Label Auto-Formatting**: The component uses a `computed` signal to ensure consistent typography. It automatically converts the `label` to **Sentence case** (e.g., `"GET STARTED"` → `"Get started"`).
+- **Smart Labeling**: The component uses a computed signal to manage typography consistency. A specific visual rule is applied to the Primary variant:
+
+```ts
+// If (variant === 'primary' && !icon)
+'login'  =>  '> login'
+```
+
 - **Smart Click Handling**: The `clicked` output is protected by an internal check. It will **never** emit if `isDisabled` is set to `true`.
 - **Form Integration**: When used inside a `<form>`, set the `type` property to `'submit'` in the `btnConfig` to trigger form submission.
 
@@ -200,15 +214,15 @@ A high-performance, signal-based button component. It uses strict typing to ensu
 To disable the button based on form status, bind the `isDisabled` property to the form's state:
 
 ```html
-<tndm-button-component
+<tndm-button
   [btnConfig]="{
     label: 'save changes',
-    variant: 'primary',
-    size: 'md',
+    variant: 'secondary',
+    size: 'lg',
     isDisabled: profileForm.invalid || profileForm.pending
   }"
   type="submit">
-</tndm-button-component>
+</tndm-button>
 ```
 
 ---
@@ -238,7 +252,7 @@ A global, signal-based notification system designed for stacking multiple alerts
 1. **Include the toaster component in your root layout** (e.g., `app.html`):
 
 ```html
-<tndm-toast-component />
+<tndm-toast />
 ```
 
 2. **Inject the ToastService into your component or service**

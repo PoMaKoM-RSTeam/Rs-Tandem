@@ -1,5 +1,6 @@
 @use '/styles/variables' as v;
 @use '/styles/typography' as t;
+@use '/styles/mixins' as m;
 
 .toaster-container {
   position: fixed;
@@ -59,12 +60,25 @@
   }
 
   &:hover,
-  &:focus {
-    border-width: 2px;
-    padding: 9px;
-
+  &:focus-visible {
     .toast__icon {
-      transform: scale(1.1);
+      transform: scale(1.07);
+    }
+
+    .icon-wrapper {
+      &::after,
+      &::before {
+        opacity: 1;
+      }
+
+      &::before {
+        top: 0;
+        left: 0;
+      }
+      &::after {
+        right: 0;
+        bottom: 0;
+      }
     }
   }
 
@@ -107,6 +121,12 @@
       -webkit-line-clamp: unset;
     }
   }
+
+  .close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
 .icon-wrapper {
@@ -117,6 +137,13 @@
   width: 40px;
   height: 40px;
 
+  @include m.corner-borders($position: 4px);
+
+  &::after,
+  &::before {
+    opacity: 0;
+  }
+
   .toast__icon {
     flex-shrink: 0;
     width: 20px;
@@ -126,27 +153,6 @@
     path {
       fill: currentColor;
     }
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid currentColor;
-    border-left: 2px solid currentColor;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-  }
-
-  &::after {
-    right: 0;
-    bottom: 0;
-    transform: rotate(180deg);
   }
 }
 
@@ -174,6 +180,11 @@
       color: v.$color-error;
     }
   }
+}
+
+.close-all-toasts-button {
+  align-self: flex-end;
+  width: 100%;
 }
 
 @keyframes slideIn {
