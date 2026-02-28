@@ -5,11 +5,11 @@ import { GOLF_RANKS } from '../../data/data';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
-import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-component/tndm-button-component';
+import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 
 @Component({
   selector: 'tndm-code-golf',
-  imports: [FormsModule, TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
+  imports: [FormsModule, TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
   template: `
     <tndm-code-golf-rank [byteCount]="byteCount()" [rank]="rank()" />
 
@@ -21,8 +21,8 @@ import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-compon
     <tndm-code-golf-editor [(value)]="rawCode" />
 
     <div class="controls">
-      <tndm-button-component [btnConfig]="{ label: 'Check Solution' }" />
-      <tndm-button-component [btnConfig]="{ label: 'Next Challenge' }" />
+      <tndm-button [btnConfig]="{ label: 'Check Solution' }" />
+      <tndm-button [btnConfig]="{ label: 'Next Challenge' }" />
     </div>
   `,
   styleUrl: './code-golf.scss',

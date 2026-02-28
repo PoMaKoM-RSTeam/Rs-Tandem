@@ -8,14 +8,14 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ButtonConfig, TndmButtonComponent } from '../tndm-button-component/tndm-button-component';
+import { ButtonConfig, TndmButton } from '../tndm-button/tndm-button';
 import { ToastService } from '../../../core/toast/toast-service';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { ICONS } from '../../constants/icons.constant';
 
 @Component({
   selector: 'tndm-toaster',
-  imports: [TndmButtonComponent, SvgIconComponent],
+  imports: [TndmButton, SvgIconComponent],
   templateUrl: './tndm-toaster.html',
   styleUrl: './tndm-toaster.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,13 +23,11 @@ import { ICONS } from '../../constants/icons.constant';
 export class TndmToaster {
   protected readonly toast = inject(ToastService);
   protected readonly ICONS = ICONS;
-  protected readonly closeBtnConfig: ButtonConfig = { icon: 'close', size: 'sm', variant: 'secondary', place: 'toast' };
+  protected readonly closeBtnConfig: ButtonConfig = { icon: 'close', size: 'sm', variant: 'icon' };
   protected readonly closeAllBtnConfig: ButtonConfig = {
-    label: 'close',
-    icon: 'close',
-    size: 'sm',
-    variant: 'secondary',
-    place: 'toaster',
+    label: 'clear',
+    size: 'md',
+    variant: 'black',
   };
   protected readonly openedToastId = signal<number | null>(null);
 
