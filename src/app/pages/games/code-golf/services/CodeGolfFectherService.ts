@@ -16,6 +16,7 @@ export class CodeGolfFetcherService {
   }
 
   async getRandomChallenge(lang: 'ru' | 'en' = 'en'): Promise<Challenge | null> {
+     //TODO add checking data from DB
     const { data, error } = await this.supabase.rpc(this.GET_CHALLENGE, { lang });
 
     if (error) {
@@ -26,7 +27,11 @@ export class CodeGolfFetcherService {
   }
 
   async getGolfRanks(): Promise<GolfRank[]> {
-    const { data, error } = await this.supabase.from('golf_ranks').select('*').order('sort_order', { ascending: true });
+    //TODO add checking data from DB
+    const { data, error } = await this.supabase
+      .from('code_golf_ranks')
+      .select('*')
+      .order('sort_order', { ascending: true });
 
     if (error) {
       return [];

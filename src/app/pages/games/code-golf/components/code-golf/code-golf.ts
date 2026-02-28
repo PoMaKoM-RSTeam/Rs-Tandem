@@ -28,11 +28,20 @@ export class TndmCodeGolf {
     this.initData();
   }
 
-  private async initData(): Promise<void> {
-    const ranksData = await this.fetcherService.getGolfRanks();
-    this.ranks.set(ranksData);
-    this.loadRandomChallenge();
-  }
+  readonly byteCount = computed(() => {
+    const cleaned = this.rawCode()
+      .replace(REGEX_RULES.MultiComment, '')
+      .replace(REGEX_RULES.SingleComment, '')
+      .replace(REGEX_RULES.AllWhitespace, '');
+    return new Blob([cleaned]).size;
+  });
+
+  readonly rank = computed((): GolfRank => {
+    const bytes = this.byteCount();
+    const allRanks = this.ranks();
+
+    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
+  });
 
   protected async loadRandomChallenge(): Promise<void> {
     try {
@@ -48,17 +57,9 @@ export class TndmCodeGolf {
     }
   }
 
-  readonly byteCount = computed(() => {
-    const cleaned = this.rawCode()
-      .replace(REGEX_RULES.MultiComment, '')
-      .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '');
-    return new Blob([cleaned]).size;
-  });
-
-  readonly rank = computed((): GolfRank => {
-    const bytes = this.byteCount();
-    const allRanks = this.ranks();
-    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
-  });
+  private async initData(): Promise<void> {
+    const ranksData = await this.fetcherService.getGolfRanks();
+    this.ranks.set(ranksData);
+    this.loadRandomChallenge();
+  }
 }
