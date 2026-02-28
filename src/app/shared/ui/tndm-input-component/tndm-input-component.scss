@@ -103,4 +103,27 @@
   margin-left: 15px;
   color: v.$color-error;
   font-size: 12px;
+
+  opacity: 0;
+  transform: translateY(-8px);
+  height: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    height 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.error-msg.show {
+  opacity: 1;
+  transform: translateY(0);
+  height: 18px;
+  visibility: visible;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    height 0.3s ease,
+    visibility 0s linear 0s;
 }
