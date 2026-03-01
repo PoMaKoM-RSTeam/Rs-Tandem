@@ -19,8 +19,5 @@
       [type]="type()"
       (blur)="onTouched()" />
   </div>
-
-  @if (isError()) {
-  <span class="error-msg">{{ textError() }}</span>
-  }
+  <span class="error-msg" [class.show]="isError()">{{ textError() }}</span>
 </div>
