@@ -1,0 +1,15 @@
+<h3>Code Blocks</h3>
+
+@for (block of codeBlocks; track $index) {
+  @if (isChain(block)) {
+    @for (subBlock of block; track $index) {
+      <li tndm-code-block>
+        <pre>{{ subBlock }}</pre>
+      </li>
+    }
+  } @else {
+    <li tndm-code-block>
+      <pre>{{ block }}</pre>
+    </li>
+  }
+}
