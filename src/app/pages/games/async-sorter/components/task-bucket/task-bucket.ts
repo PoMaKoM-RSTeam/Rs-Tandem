@@ -7,5 +7,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmTaskBucket {
-  readonly heading = input.required();
+  readonly heading = input.required<string>();
 }
