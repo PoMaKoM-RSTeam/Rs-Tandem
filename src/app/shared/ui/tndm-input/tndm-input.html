@@ -4,10 +4,6 @@
   }
 
   <div class="input">
-    @if (icon()) {
-    <svg-icon class="input__icon" [applyClass]="true" [src]="ICONS[icon()!]" />
-    }
-
     <input
       #input
       class="input__field"
@@ -18,9 +14,13 @@
       [placeholder]="placeholder() ?? ''"
       [type]="type()"
       (blur)="onTouched()" />
+
+    @if (icon()) {
+    <svg-icon class="input__icon" [applyClass]="true" [src]="ICONS[icon()!]" />
+    }
   </div>
 
-  @if (isError()) {
-  <span class="error-msg">{{ textError() }}</span>
-  }
+  <div class="error-container" [class.show]="isError()">
+    <span class="error-msg">{{ textError() || '' }}</span>
+  </div>
 </div>
