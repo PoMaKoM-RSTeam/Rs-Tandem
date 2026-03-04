@@ -33,7 +33,7 @@ export class TndmCodeGolf {
       .replace(REGEX_RULES.MultiComment, '')
       .replace(REGEX_RULES.SingleComment, '')
       .replace(REGEX_RULES.AllWhitespace, '');
-    return new Blob([cleaned]).size;
+    return cleaned.length;
   });
 
   readonly rank = computed((): GolfRank => {
@@ -53,13 +53,14 @@ export class TndmCodeGolf {
         this.currentChallenge.set(data);
       }
     } catch (err) {
+      //TODO handle error
       console.error('CodeGolf Error:', err);
     }
   }
 
   private async initData(): Promise<void> {
     const ranksData = await this.fetcherService.getGolfRanks();
-    this.ranks.set(ranksData);
+    this.ranks.set(ranksData.sort((a, b) => a.maxBytes - b.maxBytes));
     this.loadRandomChallenge();
   }
 }
