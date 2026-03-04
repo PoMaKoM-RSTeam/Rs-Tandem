@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { TndmAsyncSorter } from './pages/games/async-sorter/async-sorter';
-import { TndmCodeGolf } from './pages/games/code-golf/components/code-golf/code-golf';
 
 export const routes: Routes = [
   {
@@ -9,7 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'code-golf',
-    component: TndmCodeGolf,
+    loadComponent: () => import('./pages/games/code-golf/components/code-golf/code-golf').then(m => m.TndmCodeGolf),
     title: 'Code Golf',
   },
 ];

@@ -9,6 +9,7 @@ import { Challenge } from '../../types/challenge';
 
 @Component({
   selector: 'tndm-code-golf',
+  standalone: true,
   imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
