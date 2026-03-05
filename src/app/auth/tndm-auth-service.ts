@@ -13,11 +13,14 @@ import { handleSupabaseAuthError } from './helpers/supabase-error-messages';
 import { AUTH_ERROR_KEYS } from './enums/auth-error-key';
 import { AuthProvider } from './types/types';
 import { ToastService } from '../core/toast/toast-service';
+import { Router } from '@angular/router';
+import { AUTH_ROUTES } from '@auth/constants/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TndmAuthService {
+  private readonly router: Router = inject(Router);
   private readonly toastService: ToastService = inject(ToastService);
   private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseKey);
 
@@ -172,14 +175,26 @@ export class TndmAuthService {
 
   async updatePassword(newPassword: string): Promise<boolean> {
     const response: boolean | null = await this.authBody<boolean>(async (): Promise<boolean> => {
-      const { error } = await this.supabase.auth.updateUser({ password: newPassword });
+      const { data, error } = await this.supabase.auth.updateUser({ password: newPassword });
 
       if (error) {
         this.error.set(handleSupabaseAuthError(error));
         return false;
+        await this.logout();
+        await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
+        throw error;
       }
 
-      return true;
+      if (data) {
+        await this.logout();
+        this.toastService.info('Пароль обновлён', 'Войдите с новым паролем');
+        await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
+        return true;
+      }
+
+      await this.logout();
+      await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
+      return false;
     });
 
     return response ?? false;
