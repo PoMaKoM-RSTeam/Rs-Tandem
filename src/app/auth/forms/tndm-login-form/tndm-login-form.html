@@ -17,18 +17,11 @@
   </div>
 
   <div class="form__footer">
-    <tndm-button-component
-      [btnConfig]="{variant: 'primary', size: 'md', label: 'Sign-In', type: 'submit', isDisabled: !canSubmit()}" />
-    <tndm-button-component
-      [btnConfig]="{ icon: 'google', variant: 'secondary', size: 'md', label: 'Sign-In with Google', type: 'button', isDisabled: isLoading() }"
-      (click)="signWithOAuth('google')" />
-    <tndm-button-component
-      [btnConfig]="{ icon: 'github', variant: 'secondary', size: 'md', label: 'Sign-In with Github', type: 'button', isDisabled: isLoading() }"
-      (click)="signWithOAuth('github')" />
+    <tndm-button [btnConfig]="signInBtnConfig()" />
+    <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
+    <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
     <h5 class="form__subtitle">You have an account?</h5>
-    <tndm-button-component
-      [btnConfig]="{variant: 'secondary',size: 'md', label: 'Sign-up', type: 'button', isDisabled: isLoading()}"
-      (click)="navigateToRegister()" />
+    <tndm-button [btnConfig]="toRegisterBtnConfig()" (click)="navigateToRegister()" />
     <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
   </div>
 </form>
