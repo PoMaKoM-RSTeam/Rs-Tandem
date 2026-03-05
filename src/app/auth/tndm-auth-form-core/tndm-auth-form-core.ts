@@ -1,4 +1,4 @@
-import { computed, Directive, effect, inject, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, Directive, inject, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { passwordValidator } from '../validators/password-validator';
@@ -19,6 +19,10 @@ export abstract class TndmAuthFormCore implements OnInit {
 
   private readonly formValues: Signal<unknown> = toSignal(this.form.valueChanges, { initialValue: {} });
 
+  private readonly formStatus = toSignal(this.form.statusChanges, {
+    initialValue: this.form.status,
+  });
+
   protected readonly isLoading: WritableSignal<boolean> = signal<boolean>(false);
 
   protected readonly loginControl: FormControl<string> = new FormControl<string>('', {
@@ -36,25 +40,17 @@ export abstract class TndmAuthFormCore implements OnInit {
     validators: [Validators.required, Validators.minLength(8), passwordValidator],
   });
 
+  private readonly validFormStatus = 'VALID';
+
   protected readonly canSubmit: Signal<boolean> = computed((): boolean => {
     this.formValues();
-
-    return this.form.valid && this.form.dirty && !this.isLoading();
+    return this.formStatus() === this.validFormStatus && this.form.dirty && !this.isLoading();
   });
 
-  private navigated = false;
-
-  protected constructor() {
-    effect((): void => {
-      if (this.authService.jwt() && !this.navigated) {
-        this.navigated = true;
-        this.navigateToMain();
-      }
-    });
-  }
+  protected constructor() {}
 
   protected abstract buildForm(): void;
-  protected abstract handleSubmit(): void | Promise<void>;
+  protected abstract handleSubmit(): Promise<void>;
 
   protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {
@@ -74,22 +70,26 @@ export abstract class TndmAuthFormCore implements OnInit {
     this.buildForm();
   }
 
-  protected navigateToLogin(): void {
-    this.router.navigateByUrl(AUTH_ROUTES.LOGIN).then();
+  protected async navigateToLogin(): Promise<void> {
+    await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
   }
 
-  protected navigateToRegister(): void {
-    this.router.navigateByUrl(AUTH_ROUTES.REGISTER).then();
+  protected async navigateToRegister(): Promise<void> {
+    await this.router.navigateByUrl(AUTH_ROUTES.REGISTER);
   }
 
-  protected navigateToMain(): void {
-    this.router.navigateByUrl('/').then(); // TODO: change path when route will be implemented
+  protected async navigateToMain(): Promise<void> {
+    await this.router.navigateByUrl('/'); // TODO: change path when route will be implemented
   }
 
   protected async signWithOAuth(provider: AuthProvider): Promise<void> {
     this.isLoading.set(true);
     try {
       await this.authService.signWithOAuth(provider);
+
+      if (this.authService.isAuthenticated) {
+        await this.navigateToMain();
+      }
     } finally {
       this.isLoading.set(false);
     }
