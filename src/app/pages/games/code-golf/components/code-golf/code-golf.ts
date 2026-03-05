@@ -4,7 +4,7 @@ import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-component/tndm-button-component';
-import { CodeGolfFetcherService } from '../../services/CodeGolfFectherService';
+import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 import { Challenge } from '../../types/challenge';
 
 @Component({
