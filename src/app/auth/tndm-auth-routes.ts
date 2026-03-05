@@ -18,6 +18,7 @@ export const authRoutes: Routes = [
   },
   {
     path: AUTH_ROUTES_SEGMENTS.UPDATE_PASSWORD,
-    loadComponent: () => import('./forms/tndm-update-password/tndm-update-password').then(m => m.TndmUpdatePassword),
+    loadComponent: () =>
+      import('./forms/tndm-update-password-form/tndm-update-password-form').then(m => m.TndmUpdatePasswordForm),
   },
 ];
