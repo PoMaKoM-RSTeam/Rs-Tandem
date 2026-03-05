@@ -3,13 +3,13 @@ import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'tndm-checkbox-component',
+  selector: 'tndm-checkbox',
   imports: [ReactiveFormsModule],
-  templateUrl: './tndm-checkbox-component.html',
-  styleUrl: './tndm-checkbox-component.scss',
+  templateUrl: './tndm-checkbox.html',
+  styleUrl: './tndm-checkbox.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmCheckboxComponent implements ControlValueAccessor {
+export class TndmCheckbox implements ControlValueAccessor {
   private readonly controlDir = inject(NgControl, { self: true, optional: true });
   private readonly destroyRef = inject(DestroyRef);
   readonly control = new FormControl({ value: false, disabled: false });
