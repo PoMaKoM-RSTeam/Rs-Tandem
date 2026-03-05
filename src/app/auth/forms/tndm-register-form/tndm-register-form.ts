@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TndmInputComponent } from '../../../shared/ui/tndm-input-component/tndm-input-component';
-import { TndmButtonComponent } from '../../../shared/ui/tndm-button-component/tndm-button-component';
+import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AUTH_ROUTES } from '../../';
 import { RouterLink } from '@angular/router';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
@@ -10,12 +10,37 @@ import { FormField } from '../../enums/auth-field-types';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-tndm-register-form',
-  imports: [FormsModule, TndmButtonComponent, TndmInputComponent, ReactiveFormsModule, RouterLink],
+  imports: [TndmButton, TndmInputComponent, ReactiveFormsModule, RouterLink],
   templateUrl: './tndm-register-form.html',
   styleUrl: './tndm-register-form.scss',
 })
 export class TndmRegisterForm extends TndmAuthFormCore {
   protected readonly toForgotPasswordPath: string = AUTH_ROUTES.FORGOT_PASSWORD;
+
+  protected readonly signUpBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    label: 'Sign-Up',
+    type: 'submit',
+    isDisabled: !this.canSubmit(),
+  }));
+
+  protected readonly signWithGoogleBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    icon: 'google',
+    variant: 'black',
+    label: 'Sign-Up with Google',
+    isDisabled: this.isLoading(),
+  }));
+
+  protected readonly signWithGithubBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    icon: 'github',
+    variant: 'black',
+    label: 'Sign-Up with Github',
+    isDisabled: this.isLoading(),
+  }));
+
+  protected readonly toLoginBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    variant: 'secondary',
+    label: 'Sign-in',
+  }));
 
   constructor() {
     super();
@@ -32,6 +57,10 @@ export class TndmRegisterForm extends TndmAuthFormCore {
     const email: string = this.emailControl.value;
     const password: string = this.passwordControl.value;
 
-    await this.authService.register(login, email, password);
+    const user = await this.authService.register(login, email, password);
+
+    if (user) {
+      this.navigateToMain();
+    }
   }
 }

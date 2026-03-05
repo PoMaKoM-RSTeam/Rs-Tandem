@@ -24,18 +24,11 @@
   </div>
 
   <div class="form__footer">
-    <tndm-button-component
-      [btnConfig]="{variant: 'primary', size: 'md', label: 'Sign-Up', type: 'submit', isDisabled: !canSubmit()}" />
-    <tndm-button-component
-      [btnConfig]="{icon: 'google',variant: 'secondary', size: 'md', label: 'Sign-Up with Google', isDisabled: isLoading()}"
-      (click)="signWithOAuth('google')" />
-    <tndm-button-component
-      [btnConfig]="{icon: 'github', variant: 'secondary', size: 'md', label: 'Sign-Up with Github', isDisabled: isLoading() }"
-      (click)="signWithOAuth('github')" />
+    <tndm-button [btnConfig]="signUpBtnConfig()" />
+    <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
+    <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
     <h5 class="form__subtitle">You have an account?</h5>
-    <tndm-button-component
-      [btnConfig]="{variant: 'secondary',size: 'md', label: 'Sign-in'}"
-      (click)="navigateToLogin()" />
+    <tndm-button [btnConfig]="toLoginBtnConfig()" (click)="navigateToLogin()" />
     <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
   </div>
 </form>
