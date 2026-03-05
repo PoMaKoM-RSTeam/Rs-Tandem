@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { inject } from '@angular/core';
 import { AUTH_ROUTES } from './constants/router';
 import { TndmAuthService } from './tndm-auth-service';
@@ -6,7 +6,7 @@ import { TndmAuthService } from './tndm-auth-service';
 export const tndmAuthGuard: CanActivateFn = async (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
-): Promise<boolean> => {
+): Promise<boolean | UrlTree> => {
   const authService: TndmAuthService = inject(TndmAuthService);
   const router: Router = inject(Router);
 
@@ -17,11 +17,19 @@ export const tndmAuthGuard: CanActivateFn = async (
   const url: string = state.url;
   const isAuthRoute: boolean = url.startsWith(AUTH_ROUTES.AUTH);
 
-  if (!isAuth && !isAuthRoute) {
-    router.navigateByUrl(AUTH_ROUTES.LOGIN).then();
+  const isUpdatePasswordRoute: boolean = url.startsWith(AUTH_ROUTES.UPDATE_PASSWORD);
 
-    return false;
+  if (!isAuth) {
+    if (isUpdatePasswordRoute || !isAuthRoute) {
+      return router.parseUrl(AUTH_ROUTES.LOGIN);
+    }
+
+    return true;
   }
 
-  return !(isAuth && isAuthRoute);
+  if (isAuth && isAuthRoute && !isUpdatePasswordRoute) {
+    return router.parseUrl('/');
+  }
+
+  return true;
 };
