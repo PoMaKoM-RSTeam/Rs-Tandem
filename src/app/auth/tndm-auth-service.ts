@@ -102,8 +102,7 @@ export class TndmAuthService {
       });
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
-        return null;
+        throw error;
       }
 
       return user;
@@ -121,8 +120,7 @@ export class TndmAuthService {
       });
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
-        return null;
+        throw error;
       }
 
       return user;
@@ -134,8 +132,7 @@ export class TndmAuthService {
       const { error } = await this.supabase.auth.signOut();
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
-        return null;
+        throw error;
       }
     });
   }
@@ -145,12 +142,12 @@ export class TndmAuthService {
       const { error } = await this.supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${environment.redirectUrl}/`,
+          redirectTo: `${environment.redirectUrl}`,
         },
       });
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
+        throw error;
       }
     });
   }
@@ -158,12 +155,11 @@ export class TndmAuthService {
   async sendPasswordResetEmail(email: string): Promise<boolean> {
     const response: boolean | null = await this.authBody<boolean | null>(async (): Promise<boolean> => {
       const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${environment.redirectUrl}/auth/update-password`,
+        redirectTo: `${environment.redirectUrl}${AUTH_ROUTES.UPDATE_PASSWORD}`,
       });
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
-        return false;
+        throw error;
       }
 
       return true;
