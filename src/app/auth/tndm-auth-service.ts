@@ -68,7 +68,6 @@ export class TndmAuthService {
         this.error.set(error.message);
       } else {
         this.error.set('Unknown error');
-        console.error(error);
       }
 
       return null;
@@ -178,8 +177,6 @@ export class TndmAuthService {
       const { data, error } = await this.supabase.auth.updateUser({ password: newPassword });
 
       if (error) {
-        this.error.set(handleSupabaseAuthError(error));
-        return false;
         await this.logout();
         await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
         throw error;
