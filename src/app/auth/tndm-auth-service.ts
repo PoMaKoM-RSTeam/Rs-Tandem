@@ -3,7 +3,6 @@ import {
   AuthError,
   AuthResponse,
   AuthTokenResponsePassword,
-  createClient,
   Session,
   SupabaseClient,
   User,
@@ -15,6 +14,7 @@ import { AuthProvider } from './types/types';
 import { ToastService } from '../core/toast/toast-service';
 import { Router } from '@angular/router';
 import { AUTH_ROUTES } from '@auth/constants/router';
+import { SupabaseService } from '../core/supabase/supabase-service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,8 @@ import { AUTH_ROUTES } from '@auth/constants/router';
 export class TndmAuthService {
   private readonly router: Router = inject(Router);
   private readonly toastService: ToastService = inject(ToastService);
-  private readonly supabase: SupabaseClient = createClient(environment.supabaseUrl, environment.supabaseKey);
+  private readonly supabaseService: SupabaseService = inject(SupabaseService);
+  private readonly supabase: SupabaseClient = this.supabaseService.client;
 
   readonly loading: WritableSignal<boolean> = signal(false);
   readonly session: WritableSignal<Session | null> = signal<Session | null>(null);
