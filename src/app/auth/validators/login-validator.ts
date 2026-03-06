@@ -2,15 +2,14 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export function loginValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value || '';
-  const trimmedValue = value.trim();
 
   const failed: string[] = [];
 
-  if (!/^[a-zA-Z0-9_-]+$/.test(trimmedValue)) {
+  if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
     failed.push('letters, digits, hyphen or underscore only');
   }
 
-  if (/^\d/.test(trimmedValue)) {
+  if (/^\d/.test(value)) {
     failed.push('cannot start with digit');
   }
 
