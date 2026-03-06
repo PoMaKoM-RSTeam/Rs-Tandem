@@ -17,8 +17,8 @@
     appearance: none;
 
     &:checked + .checkbox__box {
-      border-color: v.$color-retro-black;
-      background-color: v.$color-retro-black;
+      border-color: v.$color-black;
+      background-color: v.$color-black;
 
       &::after {
         content: '';
@@ -27,25 +27,25 @@
         left: 6px;
         width: 5px;
         height: 10px;
-        border: solid v.$color-retro-cream;
+        border: solid v.$color-white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
       }
     }
 
     &.input-invalid + .checkbox__box {
-      border-color: v.$color-retro-red;
+      border-color: v.$color-red;
     }
 
     &:disabled {
       & + .checkbox__box {
-        border-color: v.$color-retro-shadow;
-        background-color: v.$color-retro-gray;
+        border-color: v.$color-dark-grey;
+        background-color: v.$color-dark-grey;
         cursor: not-allowed;
       }
 
       & ~ .checkbox__label {
-        color: v.$color-retro-shadow;
+        color: v.$color-dark-grey;
         cursor: not-allowed;
       }
     }
@@ -57,14 +57,14 @@
     box-sizing: border-box;
     width: 22px;
     height: 22px;
-    border: 2px solid v.$color-retro-black;
+    border: 2px solid v.$color-black;
     border-radius: 4px;
     transition: v.$transition-base;
   }
 
   &__label {
     line-height: 1;
-    @include t.text-body(v.$color-retro-black);
+    @include t.text-body(v.$color-black);
   }
 
   &:hover &__input:not(:disabled) {
@@ -73,11 +73,11 @@
     }
 
     &:not(:checked) + .checkbox__box {
-      background-color: lighten(v.$color-retro-cream, 5%);
+      background-color: lighten(v.$color-white, 5%);
     }
 
     &:checked + .checkbox__box {
-      background-color: v.$color-retro-black;
+      background-color: v.$color-black;
     }
   }
 
