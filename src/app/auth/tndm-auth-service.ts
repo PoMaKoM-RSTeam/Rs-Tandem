@@ -174,21 +174,10 @@ export class TndmAuthService {
       const { data, error } = await this.supabase.auth.updateUser({ password: newPassword });
 
       if (error) {
-        await this.logout();
-        await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
         throw error;
       }
 
-      if (data) {
-        await this.logout();
-        this.toastService.info('Пароль обновлён', 'Войдите с новым паролем');
-        await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
-        return true;
-      }
-
-      await this.logout();
-      await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
-      return false;
+      return !!data;
     });
 
     return response ?? false;

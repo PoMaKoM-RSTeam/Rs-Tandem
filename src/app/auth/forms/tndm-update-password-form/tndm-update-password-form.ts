@@ -4,6 +4,7 @@ import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-bu
 import { TndmInputComponent } from '../../../shared/ui/tndm-input-component/tndm-input-component';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
+import { AUTH_ROUTES } from '@auth';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +35,14 @@ export class TndmUpdatePasswordForm extends TndmAuthFormCore {
     this.form.addControl(FormField.password, this.passwordControl);
   }
   protected override async handleSubmit(): Promise<void> {
-    await this.authService.updatePassword(this.passwordControl.value);
+    const isUpdated: boolean = await this.authService.updatePassword(this.passwordControl.value);
+
+    if (!isUpdated) {
+      return;
+    }
+
+    await this.authService.logout();
+    this.toastService.info('Пароль обновлён', 'Войдите с новым паролем');
+    await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
   }
 }
