@@ -1,46 +1,56 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
-import { GOLF_RANKS } from '../../data/data';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
+import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tndm-code-golf',
-  imports: [FormsModule, TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
-  template: `
-    <tndm-code-golf-rank [byteCount]="byteCount()" [rank]="rank()" />
-
-    <div class="challenge-wrapper">
-      <h2 class="challenge-title">Challenge Title</h2>
-      <p class="challenge-description">Challenge description</p>
-    </div>
-
-    <tndm-code-golf-editor [(value)]="rawCode" />
-
-    <div class="controls">
-      <tndm-button [btnConfig]="{ label: 'Check Solution' }" />
-      <tndm-button [btnConfig]="{ label: 'Next Challenge' }" />
-    </div>
-  `,
+  standalone: true,
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
+  templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
+  private readonly fetcherService = inject(CodeGolfFetcherService);
+
+  readonly ranksResource = rxResource({
+    stream: () => this.fetcherService.getGolfRanks(),
+  });
+  readonly challengeResource = rxResource({
+    stream: () => this.fetcherService.getRandomChallenge(),
+  });
+
   readonly rawCode = signal('');
 
+  readonly currentChallenge = computed(() => this.challengeResource.value());
+
+  protected readonly checkBtnConfig = { label: 'Check Solution' };
+  protected readonly nextBtnConfig = { label: 'Next Challenge' };
+
   readonly byteCount = computed(() => {
-    const cleaned = this.rawCode()
+    const code = this.rawCode();
+    if (!code) {
+      return 0;
+    }
+    return code
       .replace(REGEX_RULES.MultiComment, '')
       .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '');
-    return new Blob([cleaned]).size;
+      .replace(REGEX_RULES.AllWhitespace, '').length;
   });
 
-  readonly rank = computed((): GolfRank => {
+  readonly currentRank = computed((): GolfRank => {
     const bytes = this.byteCount();
-    return GOLF_RANKS.find(rank => bytes <= (rank.maxBytes ?? Infinity)) ?? GOLF_RANKS[GOLF_RANKS.length - 1];
+    const allRanks = this.ranksResource.value() ?? [];
+    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
   });
+
+  protected async nextChallenge(): Promise<void> {
+    this.rawCode.set('');
+    this.challengeResource.reload();
+  }
 }
