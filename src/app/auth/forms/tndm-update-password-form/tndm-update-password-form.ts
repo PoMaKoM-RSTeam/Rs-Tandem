@@ -9,7 +9,7 @@ import { ToastService } from '../../../core/toast/toast-service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'tndm-tndm-update-password-form',
+  selector: 'tndm-update-password-form',
   imports: [TndmButton, TndmInputComponent, ReactiveFormsModule],
   templateUrl: './tndm-update-password-form.html',
   styleUrl: './tndm-update-password-form.scss',
