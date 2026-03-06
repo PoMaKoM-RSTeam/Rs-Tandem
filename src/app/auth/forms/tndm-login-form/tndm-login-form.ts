@@ -9,7 +9,7 @@ import { FormField } from '../../enums/auth-field-types';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'tndm-tndm-login-form',
+  selector: 'tndm-login-form',
   imports: [ReactiveFormsModule, TndmInputComponent, TndmButton, RouterLink],
   templateUrl: './tndm-login-form.html',
   styleUrl: './tndm-login-form.scss',

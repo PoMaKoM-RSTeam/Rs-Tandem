@@ -7,7 +7,7 @@ import { FormField } from '../../enums/auth-field-types';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'tndm-tndm-forgot-password-form',
+  selector: 'tndm-forgot-password-form',
   imports: [ReactiveFormsModule, TndmInputComponent, TndmButton],
   templateUrl: './tndm-forgot-password-form.html',
   styleUrl: './tndm-forgot-password-form.scss',
