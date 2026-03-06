@@ -2,37 +2,42 @@
 $color-white: #ffffff;
 $color-gray: #222222;
 
-$color-retro-cream: #f1ede1;
-$color-retro-red: #f15d43;
-$color-retro-black: #121411;
-$color-retro-gray: #e8e6e0;
-$color-retro-shadow: #9b988f;
-$color-retro-green: #3d5a45;
+$color-white: #f6f6f6;
+$color-light-grey: #e4e4e4;
+$color-grey: #c7c4c3;
+$color-dark-grey: #a29d9a;
+$color-black: #0b0300;
+$color-orange: #fd731b;
+$color-red: #ea3d1b;
+$color-green: #558e07;
 
 // Semantic Tokens
-$bg-main: $color-retro-cream;
-$bg-surface: $color-retro-gray;
-$color-accent: $color-retro-red;
+$bg-main: $color-light-grey;
+$bg-surface: $color-white;
+$color-accent: $color-orange;
+$color-grey-accent: $color-dark-grey;
 
-$text-primary-color: $color-retro-black;
-$text-secondary-color: $color-retro-shadow;
-$text-accent-color: $color-retro-red;
+$text-primary-color: $color-black;
+$text-secondary-color: $color-white;
+$text-accent-color: $color-orange;
 
-$border-main-color: $color-retro-black;
-$border-second-color: $color-retro-shadow;
+$border-main-color: $color-black;
+$border-second-color: $color-dark-grey;
 
-$color-error: $color-retro-red;
-$color-success: $color-retro-green;
+$color-error: $color-red;
+$color-success: $color-green;
+$color-disabled: $color-dark-grey;
+$color-warning: $color-orange;
 
 // Typography
-$font-family-base: 'Univa', 'Arial', sans-serif;
+$font-family-base: 'ProtoNerd', 'Arial', sans-serif;
+$font-family-ui: 'AnonymousPro', 'Arial', sans-serif;
+$font-family-heading: 'CyberAlert', 'Alert', 'sans-serif';
 $font-size-base: 16px;
 $font-size-sm: 0.875rem;
 $font-size-lg: 1.25rem;
 
-$font-weight-thin: 100;
 $font-weight-normal: 400;
-$font-weight-semi-bold: 600;
 $font-weight-bold: 700;
 
 // Spacing

@@ -3,16 +3,16 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ICONS } from '../../constants/icons.constant';
 
 @Component({
-  selector: 'tndm-button-component',
+  selector: 'tndm-button',
   imports: [AngularSvgIconModule],
-  templateUrl: './tndm-button-component.html',
-  styleUrl: './tndm-button-component.scss',
+  templateUrl: './tndm-button.html',
+  styleUrl: './tndm-button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmButtonComponent {
+export class TndmButton {
   readonly btnConfig = input.required<ButtonConfig>();
   readonly clicked = output<MouseEvent>();
-  private defaultConfig: ButtonCommon = {
+  private defaultConfig: Partial<ButtonConfig> = {
     variant: 'primary',
     size: 'md',
     isDisabled: false,
@@ -26,8 +26,8 @@ export class TndmButtonComponent {
   }));
 
   readonly buttonClass = computed(() => {
-    const { variant, size, place } = this.config();
-    return `button_variant_${variant} button_size_${size}${place ? ' button_place_' + place : ''}`;
+    const { variant, size } = this.config();
+    return `button_variant_${variant} button_size_${size}`;
   });
 
   readonly isDisabled = computed(() => this.config().isDisabled ?? false);
@@ -37,7 +37,7 @@ export class TndmButtonComponent {
     if (!label) {
       return null;
     }
-    return label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+    return `${this.config().variant === 'primary' && !this.config().icon ? '> ' : ''} ${label}`;
   });
 
   onClick(event: MouseEvent): void {
@@ -47,22 +47,29 @@ export class TndmButtonComponent {
   }
 }
 
-export type ButtonConfig = ButtonCommon & (ButtonWithText | ButtonWithIcon);
-
-type ButtonCommon = {
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md';
+type ButtonBase = {
+  size?: 'sm' | 'md' | 'lg';
   place?: string;
   isDisabled?: boolean;
   type?: 'button' | 'submit';
 };
 
-type ButtonWithText = {
+type SecondaryButton = ButtonBase & {
+  variant: 'secondary';
+  label: string;
+  icon?: never;
+};
+
+type IconButton = ButtonBase & {
+  variant: 'icon';
+  icon: keyof typeof ICONS;
+  label?: never;
+};
+
+type StandardButton = ButtonBase & {
+  variant?: 'primary' | 'black';
   label: string;
   icon?: keyof typeof ICONS;
 };
 
-type ButtonWithIcon = {
-  label?: string;
-  icon: keyof typeof ICONS;
-};
+export type ButtonConfig = StandardButton | SecondaryButton | IconButton;

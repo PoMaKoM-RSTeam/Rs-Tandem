@@ -76,6 +76,7 @@ ng build
 
 ## Deploy and CI/CD
 
+[Deploy link](https://luminous-biscuit-6fec26.netlify.app/)  
 ...
 
 ## To do
