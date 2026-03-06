@@ -59,8 +59,10 @@ export class TndmRegisterForm extends TndmAuthFormCore {
 
     const user = await this.authService.register(login, email, password);
 
-    if (user) {
-      await this.navigateToMain();
+    if (!user) {
+      return;
     }
+
+    await this.navigateToMain();
   }
 }
