@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { TndmInputComponent } from '../../../shared/ui/tndm-input-component/tndm-input-component';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
 import { AUTH_ROUTES } from '@auth';
+import { ToastService } from '../../../core/toast/toast-service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,6 +15,8 @@ import { AUTH_ROUTES } from '@auth';
   styleUrl: './tndm-update-password-form.scss',
 })
 export class TndmUpdatePasswordForm extends TndmAuthFormCore {
+  protected readonly toastService: ToastService = inject(ToastService);
+
   protected readonly updatePasswordBtnConfig: Signal<ButtonConfig> = computed(() => ({
     variant: 'secondary',
     label: 'Update Password',
