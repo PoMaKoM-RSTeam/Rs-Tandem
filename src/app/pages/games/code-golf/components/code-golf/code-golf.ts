@@ -5,7 +5,7 @@ import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-component/tndm-button-component';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
-import { Challenge } from '../../types/challenge';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tndm-code-golf',
@@ -18,50 +18,39 @@ import { Challenge } from '../../types/challenge';
 export class TndmCodeGolf {
   private readonly fetcherService = inject(CodeGolfFetcherService);
 
-  readonly ranks = signal<GolfRank[]>([]);
-  readonly currentChallenge = signal<Challenge | null>(null);
+  readonly ranksResource = rxResource({
+    stream: () => this.fetcherService.getGolfRanks(),
+  });
+  readonly challengeResource = rxResource({
+    stream: () => this.fetcherService.getRandomChallenge(),
+  });
+
   readonly rawCode = signal('');
+
+  readonly currentChallenge = computed(() => this.challengeResource.value());
 
   protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
-  constructor() {
-    this.initData();
-  }
-
   readonly byteCount = computed(() => {
-    const cleaned = this.rawCode()
+    const code = this.rawCode();
+    if (!code) {
+      return 0;
+    }
+    return code
       .replace(REGEX_RULES.MultiComment, '')
       .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '');
-    return cleaned.length;
+      .replace(REGEX_RULES.AllWhitespace, '').length;
   });
 
-  readonly rank = computed((): GolfRank => {
+  readonly currentRank = computed((): GolfRank => {
     const bytes = this.byteCount();
-    const allRanks = this.ranks();
-
+    const allRanks = this.ranksResource.value() ?? [];
     return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
   });
 
-  protected async loadRandomChallenge(): Promise<void> {
-    try {
-      this.currentChallenge.set(null);
-      this.rawCode.set('');
-
-      const data = await this.fetcherService.getRandomChallenge();
-      if (data) {
-        this.currentChallenge.set(data);
-      }
-    } catch (err) {
-      //TODO handle error
-      console.error('CodeGolf Error:', err);
-    }
-  }
-
-  private async initData(): Promise<void> {
-    const ranksData = await this.fetcherService.getGolfRanks();
-    this.ranks.set(ranksData.sort((a, b) => a.maxBytes - b.maxBytes));
-    this.loadRandomChallenge();
+  protected async nextChallenge(): Promise<void> {
+    this.rawCode.set('');
+    this.challengeResource.reload();
   }
 }

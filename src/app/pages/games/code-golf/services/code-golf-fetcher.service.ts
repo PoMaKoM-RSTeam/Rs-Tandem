@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Challenge } from '../types/challenge';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { GolfRank } from '../types/golf-rank';
+import { catchError, from, map, Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CodeGolfFetcherService {
@@ -16,24 +17,33 @@ export class CodeGolfFetcherService {
     this.supabase = createClient(this.supabaseUrl, this.supabaseKey);
   }
 
-  async getRandomChallenge(lang: 'ru' | 'en' = 'en'): Promise<Challenge | null> {
-    //TODO add checking datatype from DB
-    const { data, error } = await this.supabase.rpc(this.GET_CHALLENGE, { lang });
-
-    if (error) {
-      //TODO handle error
-      console.error('Error fetching random challenge:', error);
-    }
-    return data?.[0] ?? null;
+  getRandomChallenge(lang: 'ru' | 'en' = 'en'): Observable<Challenge | undefined> {
+    return from(this.supabase.rpc(this.GET_CHALLENGE, { lang })).pipe(
+      map(({ data, error }) => {
+        if (error) {
+          throw error;
+        }
+        return data?.[0] ?? undefined;
+      }),
+      catchError(err => {
+        console.error('Error fetching challenge:', err);
+        return of(undefined);
+      })
+    );
   }
 
-  async getGolfRanks(): Promise<GolfRank[]> {
-    //TODO add checking datatype from DB
-    const { data, error } = await this.supabase.rpc(this.GET_RANKS);
-    if (error) {
-      //TODO handle error
-      console.error('Error fetching ranks:', error);
-    }
-    return data;
+  getGolfRanks(): Observable<GolfRank[]> {
+    return from(this.supabase.rpc(this.GET_RANKS)).pipe(
+      map(({ data, error }) => {
+        if (error) {
+          throw error;
+        }
+        return data ?? [];
+      }),
+      catchError(err => {
+        console.error('Error fetching ranks:', err);
+        return of([]);
+      })
+    );
   }
 }
