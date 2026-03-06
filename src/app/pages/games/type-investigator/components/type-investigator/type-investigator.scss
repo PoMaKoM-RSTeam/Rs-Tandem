@@ -1,0 +1,52 @@
+.ti-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #a29d9a;
+  color: #292828;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.ti-header {
+  text-align: center;
+}
+
+.ti-title__accent {
+  color: #1c78e0;
+}
+
+.ti-subtitle {
+  color: #ffffff;
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+.ti-progress {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ti-progress__label {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.ti-progress__bar {
+  height: 6px;
+  background: #21262d;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ti-progress__fill {
+  height: 100%;
+  background: linear-gradient(-90deg, #fd731b, #ffffff);
+  border-radius: 3px;
+  transition: width 0.4s ease-in-out;
+}
