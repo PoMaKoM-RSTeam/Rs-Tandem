@@ -32,6 +32,7 @@ export class TndmAuthService {
 
   readonly jwt: Signal<string | null> = computed((): string | null => this.session()?.access_token ?? null);
   readonly user: Signal<User | null> = computed((): User | null => this.session()?.user ?? null);
+  private readonly checkEmailExistsRPC = 'check_email_exists';
 
   constructor() {
     this.supabase.auth.onAuthStateChange((_, session: Session | null): void => {
@@ -78,7 +79,7 @@ export class TndmAuthService {
   }
 
   async checkEmailExists(email: string): Promise<void> {
-    const { data } = await this.supabase.rpc('check_email_exists', { p_email: email });
+    const { data } = await this.supabase.rpc(this.checkEmailExistsRPC, { p_email: email });
 
     if (data.exists) {
       throw new AuthError(AUTH_ERROR_KEYS.UserAlreadyExists, 400);
