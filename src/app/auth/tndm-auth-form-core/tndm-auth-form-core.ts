@@ -87,7 +87,7 @@ export abstract class TndmAuthFormCore implements OnInit {
     try {
       await this.authService.signWithOAuth(provider);
 
-      if (this.authService.isAuthenticated) {
+      if (this.authService.isAuthenticated()) {
         await this.navigateToMain();
       }
     } finally {

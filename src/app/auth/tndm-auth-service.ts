@@ -28,6 +28,7 @@ export class TndmAuthService {
   readonly loading: WritableSignal<boolean> = signal(false);
   readonly session: WritableSignal<Session | null> = signal<Session | null>(null);
   readonly error: WritableSignal<string | null> = signal<string | null>(null);
+  readonly isAuthenticated: Signal<boolean> = computed((): boolean => !!this.jwt());
   private initialized = false;
 
   readonly jwt: Signal<string | null> = computed((): string | null => this.session()?.access_token ?? null);
@@ -47,14 +48,6 @@ export class TndmAuthService {
         setTimeout((): void => this.error.set(null), 5000);
       }
     });
-  }
-
-  get isAuthenticated(): boolean {
-    return !!this.jwt();
-  }
-
-  get currentUser(): User | null {
-    return this.user();
   }
 
   private async authBody<T>(callback: () => Promise<T>): Promise<T | null> {
