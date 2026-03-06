@@ -3,14 +3,14 @@ import { GolfRank } from '../../types/golf-rank';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
-import { TndmButtonComponent } from '../../../../../shared/ui/tndm-button-component/tndm-button-component';
+import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tndm-code-golf',
   standalone: true,
-  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButtonComponent],
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
