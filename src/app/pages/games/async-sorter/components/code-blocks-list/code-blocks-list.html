@@ -1,6 +1,11 @@
 <h3>Code Blocks</h3>
 
-<ul cdkDropList class="initial-code-blocks-list" (cdkDropListDropped)="drop($event)">
+<ul
+  cdkDropList
+  cdkDropListSortingDisabled
+  class="initial-code-blocks-list"
+  [cdkDropListData]="codeBlocks"
+  [cdkDropListEnterPredicate]="noReturnPredicate">
   @for (block of codeBlocks; track block) {
   <li class="list-item" tndm-code-block>
     <pre>{{ block }}</pre>
