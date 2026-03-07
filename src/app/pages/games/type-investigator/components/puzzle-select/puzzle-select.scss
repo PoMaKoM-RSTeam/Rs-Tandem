@@ -1,0 +1,81 @@
+.puzzle-select_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+}
+.puzzle-select_card {
+  background: #c7c4c3;
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    transform 0.25s;
+  color: inherit;
+  font-family: inherit;
+}
+
+.puzzle-select_card:hover,
+.puzzle-select_card:focus-visible {
+  transform: translateY(-3px);
+}
+
+.puzzle-select_card:focus-visible {
+  outline: 2px solid #1c7be9;
+  outline-offset: 2px;
+}
+
+.puzzle-select_card--easy:hover {
+  border-color: #558e07;
+}
+
+.puzzle-select_card--medium:hover {
+  border-color: #fd731b;
+}
+
+.puzzle-select_card--hard:hover {
+  border-color: #ea3d1b;
+}
+
+.puzzle-select_card__badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.puzzle-select_card--easy .puzzle-select_card__badge {
+  background: #558e07;
+  color: #f6f6f6;
+}
+
+.puzzle-select_card--medium .puzzle-select_card__badge {
+  background: #fd731b;
+  color: #f6f6f6;
+}
+
+.puzzle-select_card--hard .puzzle-select_card__badge {
+  background: #ea3d1b;
+  color: #f6f6f6;
+}
+
+.puzzle-select_card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f6f6f6;
+}
+
+.puzzle-select_card__desc {
+  font-size: 0.78rem;
+  color: #272523;
+  line-height: 1.5;
+}
