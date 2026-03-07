@@ -22,7 +22,7 @@
 
 .tndm-input-wrapper:has(.input__field:disabled) {
   .label {
-    color: v.$color-retro-shadow;
+    color: v.$color-dark-grey;
   }
 }
 
@@ -58,12 +58,12 @@
   }
 
   &:has(.input__field:disabled) {
-    color: v.$color-retro-shadow;
-    background-color: v.$color-retro-gray;
+    color: v.$color-dark-grey;
+    background-color: v.$color-dark-grey;
     cursor: not-allowed;
 
     &:has(.input__field:hover) {
-      border-color: v.$color-retro-gray;
+      border-color: v.$color-dark-grey;
     }
   }
 
@@ -89,12 +89,12 @@
   }
 
   &:disabled {
-    color: v.$color-retro-shadow;
+    color: v.$color-dark-grey;
     cursor: not-allowed;
   }
 
   &::placeholder {
-    color: v.$color-retro-gray;
+    color: v.$color-dark-grey;
   }
 }
 

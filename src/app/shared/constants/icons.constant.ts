@@ -6,4 +6,9 @@ export const ICONS = {
   email: `${BASE_PATH}email.svg`,
   user: `${BASE_PATH}user.svg`,
   password: `${BASE_PATH}password.svg`,
+  info: `${BASE_PATH}info.svg`,
+  danger: `${BASE_PATH}danger.svg`,
+  success: `${BASE_PATH}success.svg`,
+  warning: `${BASE_PATH}warning.svg`,
+  close: `${BASE_PATH}close.svg`,
 } as const;
