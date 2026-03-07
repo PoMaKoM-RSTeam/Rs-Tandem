@@ -12,7 +12,6 @@ import { handleSupabaseAuthError } from './helpers/supabase-error-messages';
 import { AUTH_ERROR_KEYS } from './enums/auth-error-key';
 import { AuthProvider } from './types/types';
 import { ToastService } from '../core/toast/toast-service';
-import { Router } from '@angular/router';
 import { AUTH_ROUTES } from '@auth/constants/router';
 import { SupabaseService } from '../core/supabase/supabase-service';
 
@@ -20,7 +19,6 @@ import { SupabaseService } from '../core/supabase/supabase-service';
   providedIn: 'root',
 })
 export class TndmAuthService {
-  private readonly router: Router = inject(Router);
   private readonly toastService: ToastService = inject(ToastService);
   private readonly supabaseService: SupabaseService = inject(SupabaseService);
   private readonly supabase: SupabaseClient = this.supabaseService.client;
