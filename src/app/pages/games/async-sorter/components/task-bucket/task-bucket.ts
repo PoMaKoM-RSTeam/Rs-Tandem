@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { TndmCodeBlock } from '../code-block/code-block';
 
 @Component({
   selector: 'li[tndm-task-bucket]',
   templateUrl: './task-bucket.html',
   styleUrl: './task-bucket.scss',
-  imports: [CdkDropList],
+  imports: [CdkDropList, TndmCodeBlock],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmTaskBucket {
@@ -15,16 +16,9 @@ export class TndmTaskBucket {
 
   drop(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
-      // 1. The user dropped it in the same list they dragged it from (Reordering)
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      // 2. The user dropped it into a different list (Transferring)
-      transferArrayItem(
-        event.previousContainer.data, // The array the item came from
-        event.container.data, // The array the item is going to
-        event.previousIndex, // The index it was at
-        event.currentIndex // The index it was dropped at
-      );
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
   }
 }
