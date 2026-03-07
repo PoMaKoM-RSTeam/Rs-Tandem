@@ -1,190 +1,70 @@
-import { computed, effect, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import {
-  AuthError,
-  AuthResponse,
-  AuthTokenResponsePassword,
-  Session,
-  SupabaseClient,
-  User,
-} from '@supabase/supabase-js';
-import { environment } from '../../environments/environment';
-import { handleSupabaseAuthError } from './helpers/supabase-error-messages';
-import { AUTH_ERROR_KEYS } from './enums/auth-error-key';
-import { AuthProvider } from './types/types';
-import { ToastService } from '../core/toast/toast-service';
-import { AUTH_ROUTES } from '@auth/constants/router';
-import { SupabaseService } from '../core/supabase/supabase-service';
+import { inject, Injectable } from '@angular/core';
+import { TndmAuthStateStoreService } from '@auth/tndm-auth-state-store-service';
+import { TndmAuthApiService } from '@auth/tndm-auth-api-service';
+import { AuthError, User } from '@supabase/supabase-js';
+import { handleSupabaseAuthError } from '@auth/helpers/supabase-error-messages';
+import { AuthProvider } from '@auth/types/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TndmAuthService {
-  private readonly toastService: ToastService = inject(ToastService);
-  private readonly supabaseService: SupabaseService = inject(SupabaseService);
-  private readonly supabase: SupabaseClient = this.supabaseService.client;
+  private readonly authState: TndmAuthStateStoreService = inject(TndmAuthStateStoreService);
+  private readonly authApi: TndmAuthApiService = inject(TndmAuthApiService);
 
-  readonly loading: WritableSignal<boolean> = signal(false);
-  readonly session: WritableSignal<Session | null> = signal<Session | null>(null);
-  readonly error: WritableSignal<string | null> = signal<string | null>(null);
-  readonly isAuthenticated: Signal<boolean> = computed((): boolean => !!this.jwt());
-  private initialized = false;
-
-  readonly jwt: Signal<string | null> = computed((): string | null => this.session()?.access_token ?? null);
-  readonly user: Signal<User | null> = computed((): User | null => this.session()?.user ?? null);
-  private readonly checkEmailExistsRPC = 'check_email_exists';
-
-  constructor() {
-    this.supabase.auth.onAuthStateChange((_, session: Session | null): void => {
-      this.session.set(session ?? null);
-    });
-
-    effect((): void => {
-      const errorMessage: string | null = this.error();
-
-      if (errorMessage) {
-        this.toastService.warning('error', errorMessage);
-        setTimeout((): void => this.error.set(null), 5000);
-      }
-    });
-  }
-
-  private async authBody<T>(callback: () => Promise<T>): Promise<T | null> {
-    this.loading.set(true);
-    this.error.set(null);
-
-    try {
-      return await callback();
-    } catch (error) {
-      if (error instanceof AuthError) {
-        this.error.set(handleSupabaseAuthError(error));
-      } else if (error instanceof Error) {
-        this.error.set(error.message);
-      } else {
-        this.error.set('Unknown error');
-      }
-
-      return null;
-    } finally {
-      this.loading.set(false);
-    }
-  }
-
-  async checkEmailExists(email: string): Promise<void> {
-    const { data } = await this.supabase.rpc(this.checkEmailExistsRPC, { p_email: email });
-
-    if (data.exists) {
-      throw new AuthError(AUTH_ERROR_KEYS.UserAlreadyExists, 400);
-    }
-  }
-
-  async register(login: string, email: string, password: string): Promise<User | null> {
-    return this.authBody<User | null>(async (): Promise<User | null> => {
-      await this.checkEmailExists(email);
-
-      const {
-        data: { user },
-        error,
-      }: AuthResponse = await this.supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            login,
-          },
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      return user;
-    });
-  }
-
-  async login(email: string, password: string): Promise<User | null> {
-    return this.authBody<User | null>(async (): Promise<User | null> => {
-      const {
-        data: { user },
-        error,
-      }: AuthTokenResponsePassword = await this.supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      return user;
-    });
-  }
-
-  async logout(): Promise<void | null> {
-    return this.authBody(async (): Promise<void | null> => {
-      const { error } = await this.supabase.auth.signOut();
-
-      if (error) {
-        throw error;
-      }
-    });
-  }
-
-  async signWithOAuth(provider: AuthProvider): Promise<void> {
-    await this.authBody(async (): Promise<void> => {
-      const { error } = await this.supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${environment.redirectUrl}`,
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-    });
-  }
-
-  async sendPasswordResetEmail(email: string): Promise<boolean> {
-    const response: boolean | null = await this.authBody<boolean | null>(async (): Promise<boolean> => {
-      const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${environment.redirectUrl}${AUTH_ROUTES.UPDATE_PASSWORD}`,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      return true;
-    });
-
-    return response ?? false;
-  }
-
-  async updatePassword(newPassword: string): Promise<boolean> {
-    const response: boolean | null = await this.authBody<boolean>(async (): Promise<boolean> => {
-      const { data, error } = await this.supabase.auth.updateUser({ password: newPassword });
-
-      if (error) {
-        throw error;
-      }
-
-      return !!data;
-    });
-
-    return response ?? false;
+  get isAuthenticated(): boolean {
+    return this.authState.isAuthenticated();
   }
 
   async initSession(): Promise<void> {
-    if (this.initialized) {
-      return;
+    return this.authState.initSession();
+  }
+
+  async register(username: string, email: string, password: string): Promise<User | null> {
+    return this.withErrorHandling((): Promise<User | null> => this.authApi.register(username, email, password));
+  }
+
+  async login(username: string, password: string): Promise<User | null> {
+    return this.withErrorHandling((): Promise<User | null> => this.authApi.login(username, password));
+  }
+
+  async logout(): Promise<void | null> {
+    return this.withErrorHandling((): Promise<void> => this.authApi.logout());
+  }
+
+  async signWithOAuth(provider: AuthProvider): Promise<void | null> {
+    return this.withErrorHandling((): Promise<void> => this.authApi.signWithOAuth(provider));
+  }
+
+  async sendPasswordResetEmail(email: string): Promise<boolean> {
+    const response: boolean | null = await this.withErrorHandling(
+      (): Promise<boolean> => this.authApi.sendPasswordResetEmail(email)
+    );
+
+    return response !== null;
+  }
+
+  async updatePassword(password: string): Promise<boolean> {
+    const response: boolean | null = await this.withErrorHandling(
+      (): Promise<boolean> => this.authApi.updatePassword(password)
+    );
+
+    return response !== null;
+  }
+
+  private async withErrorHandling<T>(fn: () => Promise<T>): Promise<T | null> {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error instanceof AuthError) {
+        throw new Error(handleSupabaseAuthError(error));
+      }
+
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      throw new Error('Something went wrong');
     }
-
-    const {
-      data: { session },
-    } = await this.supabase.auth.getSession();
-
-    this.session.set(session ?? null);
-    this.initialized = true;
   }
 }
