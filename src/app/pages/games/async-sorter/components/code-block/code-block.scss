@@ -1,8 +1,11 @@
 :host {
-  border: 1px solid transparent;
-  padding: 2px;
-  &:hover {
-    border-color: green;
-    cursor: pointer;
-  }
+  padding-inline: 10px;
+  border-bottom: solid 1px #ccc;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
 }

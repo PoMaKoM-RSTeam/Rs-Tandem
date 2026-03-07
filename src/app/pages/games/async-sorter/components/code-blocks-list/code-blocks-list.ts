@@ -2,18 +2,19 @@ import { Component } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmCodeBlock } from '../code-block/code-block';
 import codeBlocksJson from './code-blocks.json';
+import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'ul[tndm-code-blocks-list]',
-  imports: [TndmCodeBlock],
+  selector: 'tndm-code-blocks-list',
   templateUrl: './code-blocks-list.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './code-blocks-list.scss',
+  imports: [CdkDropList, TndmCodeBlock],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeBlocksList {
   readonly codeBlocks = codeBlocksJson;
 
-  isChain(item: unknown): item is string[] {
-    return Array.isArray(item);
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.codeBlocks, event.previousIndex, event.currentIndex);
   }
 }

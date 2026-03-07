@@ -1,15 +1,9 @@
 <h3>Code Blocks</h3>
 
-@for (block of codeBlocks; track block) {
-  @if (isChain(block)) {
-    @for (subBlock of block; track subBlock) {
-      <li tndm-code-block>
-        <pre>{{ subBlock }}</pre>
-      </li>
-    }
-  } @else {
-    <li tndm-code-block>
-      <pre>{{ block }}</pre>
-    </li>
+<ul cdkDropList class="initial-code-blocks-list" (cdkDropListDropped)="drop($event)">
+  @for (block of codeBlocks; track block) {
+  <li class="list-item" tndm-code-block>
+    <pre>{{ block }}</pre>
+  </li>
   }
-}
+</ul>
