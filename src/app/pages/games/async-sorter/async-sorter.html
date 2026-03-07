@@ -1,8 +1,8 @@
 <h2>Async sorter</h2>
 
 <tndm-button [btnConfig]="{ label: 'Run loop' }" />
-<section class="fields-wrapper">
-  <ul tndm-code-blocks-list></ul>
-  <ul tndm-task-bucket-list></ul>
+<section cdkDropListGroup class="fields-wrapper">
+  <tndm-code-blocks-list />
+  <tndm-task-bucket-list />
   <ul tndm-final-call-stack></ul>
 </section>
