@@ -7,7 +7,7 @@ import { AuthProvider } from '../types/types';
 import { loginValidator } from '@auth/validators/login-validator';
 import { TndmAuthService } from '@auth/tndm-auth-service';
 import { ToastService } from '../../core/toast/toast-service';
-import {AUTH_ROUTES} from '@auth';
+import { AUTH_ROUTES } from '@auth';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {

@@ -1,16 +1,16 @@
 import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { inject } from '@angular/core';
-import { TndmAuthService } from '@auth';
+import { TndmAuthStateStoreService } from './tndm-auth-state-store-service';
 
 export const tndmAuthInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService: TndmAuthService = inject(TndmAuthService);
+  const authStoreService: TndmAuthStateStoreService = inject(TndmAuthStateStoreService);
 
   if (!req.url.includes(environment.supabaseUrl)) {
     return next(req);
   }
 
-  const jwt: string | null = authService.jwt();
+  const jwt: string | null = authStoreService.jwt();
 
   if (!jwt) {
     return next(req);
