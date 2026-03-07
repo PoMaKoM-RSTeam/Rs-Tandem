@@ -3,9 +3,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { toSignal } from '@angular/core/rxjs-interop';
 import { passwordValidator } from '../validators/password-validator';
 import { Router } from '@angular/router';
-import { AUTH_ROUTES, TndmAuthService } from '@auth';
 import { AuthProvider } from '../types/types';
 import { loginValidator } from '@auth/validators/login-validator';
+import { TndmAuthService } from '@auth/tndm-auth-service';
+import { ToastService } from '../../core/toast/toast-service';
+import {AUTH_ROUTES} from '@auth';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {
@@ -14,6 +16,8 @@ export abstract class TndmAuthFormCore implements OnInit {
   protected readonly router: Router = inject(Router);
 
   protected readonly authService: TndmAuthService = inject(TndmAuthService);
+
+  protected readonly toastService: ToastService = inject(ToastService);
 
   protected readonly form: FormGroup = this.fb.group({});
 
@@ -61,6 +65,12 @@ export abstract class TndmAuthFormCore implements OnInit {
     this.isLoading.set(true);
     try {
       await this.handleSubmit();
+    } catch (e) {
+      if (e instanceof Error) {
+        this.toastService.warning('error', e.message);
+      } else {
+        this.toastService.warning('error', 'Something went wrong');
+      }
     } finally {
       this.isLoading.set(false);
     }
@@ -87,7 +97,7 @@ export abstract class TndmAuthFormCore implements OnInit {
     try {
       await this.authService.signWithOAuth(provider);
 
-      if (this.authService.isAuthenticated()) {
+      if (this.authService.isAuthenticated) {
         await this.navigateToMain();
       }
     } finally {

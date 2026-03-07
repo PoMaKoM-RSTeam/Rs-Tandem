@@ -57,11 +57,7 @@ export class TndmRegisterForm extends TndmAuthFormCore {
     const email: string = this.emailControl.value;
     const password: string = this.passwordControl.value;
 
-    const user = await this.authService.register(login, email, password);
-
-    if (!user) {
-      return;
-    }
+    await this.authService.register(login, email, password);
 
     await this.navigateToMain();
   }

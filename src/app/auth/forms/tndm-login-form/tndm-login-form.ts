@@ -52,10 +52,7 @@ export class TndmLoginForm extends TndmAuthFormCore {
   }
 
   protected override async handleSubmit(): Promise<void> {
-    const user = await this.authService.login(this.emailControl.value, this.passwordControl.value);
-    if (!user) {
-      return;
-    }
+    await this.authService.login(this.emailControl.value, this.passwordControl.value);
 
     await this.navigateToMain();
   }
