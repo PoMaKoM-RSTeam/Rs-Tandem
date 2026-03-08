@@ -29,11 +29,11 @@
   font-size: v.$font-size-sm;
 }
 
-@mixin text-ui($color: v.$text-primary-color) {
+@mixin text-ui($color: v.$text-primary-color, $size: v.$font-size-base, $weight: v.$font-weight-bold) {
   color: $color;
   font-family: v.$font-family-ui;
-  font-weight: v.$font-weight-bold;
-  font-size: v.$font-size-base;
+  font-weight: $weight;
+  font-size: $size;
 }
 
 @mixin text-accent {

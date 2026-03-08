@@ -8,10 +8,10 @@ A library of reusable, high-performance UI components for the TNDM project. Buil
 
 - [Form Components](#form-components)
   - [General Principles](#general-principles)
-  - [TndmInputComponent](#tndminputcomponent)
-  - [TndmCheckboxComponent](#tndmcheckboxcomponent)
+  - [TndmInput](#tndminputcomponent)
+  - [TndmCheckbox](#tndmcheckboxcomponent)
 - [Action Components](#action-components)
-  - [TndmButtonComponent](#tndmbuttoncomponent)
+  - [TndmButton](#tndmbuttoncomponent)
   - [TndmToaster & ToastService](#tndmtoaster-&-toastservice)
 - [Shared Types](#shared-types)
 
@@ -38,28 +38,23 @@ protected profileForm = new FormGroup({
 
 ```html
 <form [formGroup]="profileForm" (ngSubmit)="save()">
-  <tndm-input-component formControlName="userName" id="user" name="username" label="User Account">
-  </tndm-input-component>
+  <tndm-input formControlName="userName" id="user" name="username" label="User Account"> </tndm-input>
 
-  <tndm-checkbox-component
-    formControlName="agreeToTerms"
-    id="terms"
-    name="terms"
-    label="I accept the terms and conditions">
-  </tndm-checkbox-component>
+  <tndm-checkbox formControlName="agreeToTerms" id="terms" name="terms" label="I accept the terms and conditions">
+  </tndm-checkbox>
 
   <!-- Button automatically reacts to form status -->
-  <tndm-button-component
+  <tndm-button
     [btnConfig]="{ 
       label: 'Submit Profile', 
       isDisabled: profileForm.invalid || profileForm.pending 
     }"
     type="submit">
-  </tndm-button-component>
+  </tndm-button>
 </form>
 ```
 
-### TndmInputComponent
+### TndmInput
 
 A versatile text field supporting various HTML5 input types and validation states.
 
@@ -72,33 +67,62 @@ Error messages are resolved in the following order:
 
 #### Visual States
 
-| Default                                                | With Icon                                                | Focus/Hover                                                | Error State                                               | Disabled                                                |
-| :----------------------------------------------------- | :------------------------------------------------------- | :--------------------------------------------------------- | :-------------------------------------------------------- | :------------------------------------------------------ |
-| <img src="./docs/input/input-default.png" width="180"> | <img src="./docs/input/input-with-icon.png" width="180"> | <img src="./docs/input/input-focus-hover.png" width="180"> | <img src="./docs/input/input-with-error.png" width="180"> | <img src="./docs/input/input-disabled.png" width="180"> |
+| Default                                                | With Label                                                | With Icon                                                | Typed                                                | Focus/Hover                                          | Error State                                          | Disabled                                                |
+| :----------------------------------------------------- | :-------------------------------------------------------- | :------------------------------------------------------- | :--------------------------------------------------- | :--------------------------------------------------- | :--------------------------------------------------- | :------------------------------------------------------ |
+| <img src="./docs/input/input-default.png" width="180"> | <img src="./docs/input/input-with-label.png" width="180"> | <img src="./docs/input/input-with-icon.png" width="180"> | <img src="./docs/input/input-typed.png" width="180"> | <img src="./docs/input/input-hover.png" width="180"> | <img src="./docs/input/input-error.png" width="180"> | <img src="./docs/input/input-disabled.png" width="180"> |
 
 #### API (Inputs)
 
-| Property        | Type                         | Required | Default | Description                                   |
-| --------------- | ---------------------------- | -------- | ------- | --------------------------------------------- |
-| `id`            | `string`                     | ✅       | —       | Unique identifier for label/input binding     |
-| `name`          | `string`                     | ✅       | —       | Field name used for generating error messages |
-| `label`         | `string`                     | ❌       | `null`  | Text label displayed above the input          |
-| `type`          | [`InputType`](#shared-types) | ❌       | `text`  | HTML input type (email, password, etc.)       |
-| `placeholder`   | `string`                     | ❌       | `null`  | Ghost text displayed inside the field         |
-| `icon`          | [`IconType`](#shared-types)  | ❌       | `null`  | Icon name from the internal library           |
-| `errorMessages` | `Record<string, string>`     | ❌       | `{}`    | Custom error message overrides                |
+| Property        | Type                                     | Required | Default | Description                                                                |
+| --------------- | ---------------------------------------- | -------- | ------- | -------------------------------------------------------------------------- |
+| `id`            | `string`                                 | ✅       | —       | Unique identifier for label/input binding                                  |
+| `name`          | `string`                                 | ✅       | —       | Field name used for generating error messages                              |
+| `label`         | `string`                                 | ❌       | `null`  | Text label displayed above the input                                       |
+| `type`          | [`InputType`](#shared-types)             | ❌       | `text`  | HTML input type (email, password, etc.)                                    |
+| `placeholder`   | `string`                                 | ❌       | `null`  | Ghost text displayed inside the field                                      |
+| `icon`          | [`IconType`](#shared-types)              | ❌       | `null`  | Icon name from the internal library                                        |
+| `errorMessages` | [`ValidationMessages<T>`](#shared-types) | ❌       | `{}`    | Custom error overrides (Static string or ErrorGenerator<T>)                |
+| `trimmed`       | `boolean`                                | ❌       | `false` | If true, automatically removes leading/trailing whitespace on every change |
+
+#### API (Reactive Forms)
+
+The component implements ControlValueAccessor, meaning it integrates directly with formControlName or [formControl]. When trimmed is enabled, the underlying form control will always receive a sanitized string
 
 #### Usage
 
 ```html
-<tndm-input-component
-  formControlName="email"
-  id="user-email"
-  name="email"
-  type="email"
-  icon="email"
-  [errorMessages]="{ required: 'email is mandatory' }">
-</tndm-input-component>
+<tndm-input formControlName="email" id="user-email" name="email" type="email" icon="email" [trimmed]="true">
+</tndm-input>
+```
+
+### Advanced Validation Usage
+
+The component supports dynamic error messages via `ErrorGenerator`. This allows you to use data returned by validators (like `requiredLength` or custom `requirements`).
+
+1. Define your Error Map:
+
+```typescript
+interface CustomContext {
+  requirements: string[];
+}
+
+const PASS_ERRORS: ValidationMessages<CustomContext> = {
+  // context is typed based on the Generic
+  passwordWeak: (name, ctx) => `${name} must contain: ${ctx.requirements.join(', ')}`,
+  required: 'Password is required', // Static strings are also supported
+};
+```
+
+2. Pass it to the Component:
+
+```typescript
+<tndm-input
+  [formControl]="passwordControl"
+  id="user-pass"
+  name="Password"
+  type="password"
+  [errorMessages]="PASS_ERRORS">
+</tndm-input>
 ```
 
 ### TndmCheckboxComponent
@@ -315,4 +339,6 @@ this.toast.warning('low battery', '', {
 ## Shared Types
 
 **InputType:** `email | password | search | tel | text | url`  
-**IconType:** `keyof typeof ICONS` (specific keys from the internal icon library)
+**IconType:** `keyof typeof ICONS` (specific keys from the internal icon library)  
+**ErrorGenerator**: `ErrorGenerator<T = unknown> = (name: string, context: T) => string`  
+**ValidationMessages**: `ValidationMessages<T = unknown> = Record<string, ErrorGenerator<T> | string>`

@@ -4,6 +4,7 @@ import { DEFAULT_ERROR_MESSAGES } from '../../constants/error-messages.constant'
 import { ICONS } from '../../constants/icons.constant';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ValidationMessages } from '../../types/validation.types';
 
 export const typeInput = {
   email: 'email',
@@ -17,13 +18,13 @@ export const typeInput = {
 export type InputType = keyof typeof typeInput;
 
 @Component({
-  selector: 'tndm-input-component',
+  selector: 'tndm-input',
   imports: [ReactiveFormsModule, SvgIconComponent],
-  templateUrl: './tndm-input-component.html',
-  styleUrl: './tndm-input-component.scss',
+  templateUrl: './tndm-input.html',
+  styleUrl: './tndm-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmInputComponent implements ControlValueAccessor {
+export class TndmInput<T = unknown> implements ControlValueAccessor {
   private readonly controlDir = inject(NgControl, { self: true, optional: true });
   private readonly destroyRef = inject(DestroyRef);
   readonly control = new FormControl('');
@@ -34,7 +35,8 @@ export class TndmInputComponent implements ControlValueAccessor {
   readonly label = input<string | null>(null);
   readonly type = input<InputType>('text');
   readonly placeholder = input<string | null>(null);
-  readonly errorMessages = input<Record<string, string>>({});
+  readonly errorMessages = input<ValidationMessages<T>>({});
+  readonly trimmed = input<boolean>(false);
 
   readonly icon = input<keyof typeof ICONS | null>(null);
   readonly ICONS = ICONS;
@@ -43,7 +45,16 @@ export class TndmInputComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   constructor() {
-    this.control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => this.onChange(value));
+    this.control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      let finalValue = value;
+      if (this.trimmed() && typeof value === 'string') {
+        finalValue = value.trim();
+        if (finalValue !== value) {
+          this.control.setValue(finalValue, { emitEvent: false });
+        }
+      }
+      this.onChange(finalValue);
+    });
     if (this.controlDir) {
       this.controlDir.valueAccessor = this;
     }
@@ -76,25 +87,23 @@ export class TndmInputComponent implements ControlValueAccessor {
 
   textError(): string | null {
     const control = this.controlDir?.control;
-
     if (!control || !control.errors) {
       return null;
     }
 
     const errorKeys = Object.keys(control.errors);
-    if (errorKeys.length === 0) {
-      return null;
-    }
-
     const errorName = errorKeys[0];
-    const customMessage = this.errorMessages()[errorName];
+    const errorContext = control.errors[errorName];
 
-    if (customMessage) {
-      return customMessage.toLowerCase();
+    const custom = this.errorMessages();
+    const defaults = DEFAULT_ERROR_MESSAGES;
+
+    const handler = custom[errorName] || defaults[errorName];
+
+    if (handler) {
+      return typeof handler === 'function' ? handler(this.name(), errorContext).toLowerCase() : handler.toLowerCase();
     }
 
-    const defaultMsg = DEFAULT_ERROR_MESSAGES[errorName];
-
-    return defaultMsg ? defaultMsg(this.name(), control.errors[errorName]).toLowerCase() : 'invalid value';
+    return `error: ${errorName}`;
   }
 }
