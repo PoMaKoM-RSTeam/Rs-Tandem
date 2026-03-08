@@ -1,7 +1,7 @@
 <h3>Task Buckets</h3>
 
-<div class="task-buckets-list-content">
-  @for (bucket of buckets; track bucket.id) {
-  <li tndm-task-bucket [heading]="bucket.heading"></li>
-  }
-</div>
+<ul class="task-buckets-list-content">
+  <li tndm-task-bucket [heading]="'Synchronous (Call Stack)'"></li>
+  <li tndm-task-bucket [heading]="'Micro Tasks'"></li>
+  <li tndm-task-bucket [heading]="'Macro Tasks'"></li>
+</ul>
