@@ -5,7 +5,12 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
   selector: 'li[tndm-code-block]',
   templateUrl: './code-block.html',
   styleUrl: './code-block.scss',
-  hostDirectives: [CdkDrag],
+  hostDirectives: [
+    {
+      directive: CdkDrag,
+      inputs: ['cdkDragData'],
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeBlock {}

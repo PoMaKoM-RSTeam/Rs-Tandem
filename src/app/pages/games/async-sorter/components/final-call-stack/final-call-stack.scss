@@ -1,7 +1,7 @@
 @use '../../shared/drag-drop' as dragDrop;
 
 .final-stack-content {
-  @include dragDrop.drag-drop-list;
-  width: 100px;
-  height: 200px;
+  @include dragDrop.drag-drop-container;
+  min-width: 100px;
+  min-height: 200px;
 }

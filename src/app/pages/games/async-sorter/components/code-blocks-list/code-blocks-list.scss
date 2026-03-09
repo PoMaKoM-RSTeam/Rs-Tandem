@@ -1,5 +1,7 @@
 @use '../../shared/drag-drop' as dragDrop;
 
 .initial-code-blocks-list {
-  @include dragDrop.drag-drop-list;
+  @include dragDrop.drag-drop-container;
 }
+
+@include dragDrop.drag-drop-animations;

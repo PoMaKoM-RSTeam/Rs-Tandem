@@ -7,5 +7,7 @@
 }
 
 .bucket-content {
-  @include dragDrop.drag-drop-list;
+  @include dragDrop.drag-drop-container;
 }
+
+@include dragDrop.drag-drop-animations;

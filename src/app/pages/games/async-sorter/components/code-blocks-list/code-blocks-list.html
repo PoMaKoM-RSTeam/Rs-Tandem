@@ -7,8 +7,8 @@
   [cdkDropListData]="codeBlocks"
   [cdkDropListEnterPredicate]="noReturnPredicate">
   @for (block of codeBlocks; track block) {
-  <li class="list-item" tndm-code-block>
-    <pre>{{ block }}</pre>
+  <li class="list-item" tndm-code-block [cdkDragData]="block">
+    <pre>{{ block.code }}</pre>
   </li>
   }
 </ul>
