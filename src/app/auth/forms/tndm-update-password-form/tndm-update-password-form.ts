@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { TndmInputComponent } from '../../../shared/ui/tndm-input-component/tndm-input-component';
+import { TndmInput } from '../../../shared/ui/tndm-input/tndm-input';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
 import { AUTH_ROUTES } from '@auth';
@@ -9,7 +9,7 @@ import { AUTH_ROUTES } from '@auth';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-update-password-form',
-  imports: [TndmButton, TndmInputComponent, ReactiveFormsModule],
+  imports: [TndmButton, TndmInput, ReactiveFormsModule],
   templateUrl: './tndm-update-password-form.html',
   styleUrl: './tndm-update-password-form.scss',
 })

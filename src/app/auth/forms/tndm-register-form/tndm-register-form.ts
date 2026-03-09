@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TndmInputComponent } from '../../../shared/ui/tndm-input-component/tndm-input-component';
+import { TndmInput } from '../../../shared/ui/tndm-input/tndm-input';
 import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AUTH_ROUTES } from '../../';
 import { RouterLink } from '@angular/router';
@@ -10,7 +10,7 @@ import { FormField } from '../../enums/auth-field-types';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-register-form',
-  imports: [TndmButton, TndmInputComponent, ReactiveFormsModule, RouterLink],
+  imports: [TndmButton, TndmInput, ReactiveFormsModule, RouterLink],
   templateUrl: './tndm-register-form.html',
   styleUrl: './tndm-register-form.scss',
 })
