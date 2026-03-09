@@ -1,12 +1,14 @@
+@use '../../../../../../styles/variables' as *;
+
 :host {
   padding-inline: 10px;
-  border-bottom: solid 1px #ccc;
+  border-bottom: solid 1px $color-grey;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  background: white;
+  background: $color-white;
   overflow: hidden;
 }
