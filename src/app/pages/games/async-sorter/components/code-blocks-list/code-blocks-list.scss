@@ -1,32 +1,5 @@
-.initial-code-blocks-list {
-  padding: 0;
-  max-width: 100%;
-  border: solid 1px #ccc;
-  min-height: 60px;
-  display: block;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-}
+@use '../../shared/drag-drop' as dragDrop;
 
-.cdk-drag-preview {
-  border: none;
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow:
-    0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
-.cdk-drag-placeholder {
-  opacity: 0;
-}
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-.list-item:last-child {
-  border: none;
-}
-.initial-code-blocks-list.cdk-drop-list-dragging .list-item:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.initial-code-blocks-list {
+  @include dragDrop.drag-drop-list;
 }
