@@ -1,5 +1,7 @@
+@use '../../shared/drag-drop' as dragDrop;
+
 .final-stack-content {
-  border: 1px solid blueviolet;
+  @include dragDrop.drag-drop-list;
   width: 100px;
-  height: 300px;
+  height: 200px;
 }
