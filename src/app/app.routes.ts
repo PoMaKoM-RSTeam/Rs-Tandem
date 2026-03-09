@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { TndmAsyncSorter } from './pages/games/async-sorter/async-sorter';
-import { TndmCodeGolf } from './pages/games/code-golf/components/code-golf/code-golf';
 import { AUTH_ROUTES_SEGMENTS, authRoutes, tndmAuthGuard } from '@auth';
 import { TndmAuthPage } from './pages/tndm-auth-page/tndm-auth-page';
 
