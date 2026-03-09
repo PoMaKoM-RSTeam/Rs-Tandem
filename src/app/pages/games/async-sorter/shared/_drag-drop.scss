@@ -1,10 +1,12 @@
+@use '../../../../../styles/variables' as *;
+
 @mixin drag-drop-container {
   padding: 0;
   max-width: 100%;
-  border: solid 1px #ccc;
+  border: solid 1px $color-grey;
   min-height: 45px;
   display: block;
-  background: white;
+  background: $color-white;
   border-radius: 4px;
   overflow: hidden;
 
