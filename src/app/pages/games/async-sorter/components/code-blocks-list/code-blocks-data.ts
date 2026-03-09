@@ -1,6 +1,8 @@
+import { taskType } from '../../shared/types';
+
 export type CodeBlockData = {
   code: string;
-  taskType: 'micro' | 'macro' | 'sync';
+  taskType: taskType;
   executionOrder: number;
 };
 
