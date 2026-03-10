@@ -2,10 +2,10 @@
 <ul
   cdkDropList
   class="bucket-content"
-  [cdkDropListData]="bucketItems"
+  [cdkDropListData]="codeBlocks()"
   [cdkDropListEnterPredicate]="taskTypePredicate"
   (cdkDropListDropped)="drop($event)">
-  @for (item of bucketItems; track item) {
+  @for (item of codeBlocks(); track item) {
   <li class="list-item" tndm-code-block [cdkDragData]="item">
     <pre>{{ item.code }}</pre>
   </li>

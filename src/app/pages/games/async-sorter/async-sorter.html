@@ -3,6 +3,12 @@
 <tndm-button [btnConfig]="{ label: 'Run loop' }" />
 <section cdkDropListGroup class="fields-wrapper">
   <tndm-code-blocks-list />
-  <tndm-task-bucket-list />
-  <ul tndm-final-call-stack></ul>
+  <tndm-task-bucket-list
+    [macroBucket]="macroBucket()"
+    [microBucket]="microBucket()"
+    [syncBucket]="syncBucket()"
+    (macroBucketChanged)="macroBucket.set($event)"
+    (microBucketChanged)="microBucket.set($event)"
+    (syncBucketChanged)="syncBucket.set($event)" />
+  <ul tndm-final-call-stack [codeBlocks]="finalCallStack()"></ul>
 </section>
