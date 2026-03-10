@@ -1,3 +1,9 @@
 <h3>Final Call Stack</h3>
 
-<div class="final-stack-content"></div>
+<ul class="final-stack-content">
+  @for (item of codeBlocks(); track item.executionOrder) {
+  <li class="list-item" tndm-code-block [cdkDragData]="item" [executionOrder]="item.executionOrder">
+    <pre>{{ item.code }}</pre>
+  </li>
+  }
+</ul>

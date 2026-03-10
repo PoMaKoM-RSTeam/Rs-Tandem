@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -11,6 +11,11 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
       inputs: ['cdkDragData'],
     },
   ],
+  host: {
+    '[attr.data-execution-order]': 'executionOrder()',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmCodeBlock {}
+export class TndmCodeBlock {
+  readonly executionOrder = input.required<number>();
+}
