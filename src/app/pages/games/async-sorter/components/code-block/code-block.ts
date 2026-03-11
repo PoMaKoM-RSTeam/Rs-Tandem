@@ -8,14 +8,16 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
   hostDirectives: [
     {
       directive: CdkDrag,
-      inputs: ['cdkDragData'],
+      inputs: ['cdkDragData', 'cdkDragDisabled'],
     },
   ],
   host: {
     '[attr.data-execution-order]': 'executionOrder()',
+    '[class.in-final-stack]': 'inFinalStack()',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeBlock {
   readonly executionOrder = input.required<number>();
+  readonly inFinalStack = input<boolean>(false);
 }

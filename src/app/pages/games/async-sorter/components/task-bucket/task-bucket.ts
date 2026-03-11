@@ -28,6 +28,5 @@ export class TndmTaskBucket {
     this.codeBlockDropped.emit([...event.container.data]);
   }
 
-  taskTypePredicate = (item: CdkDrag<CodeBlockData>): boolean =>
-    item.data.taskType === this.taskType() ? true : false;
+  taskTypePredicate = (item: CdkDrag<CodeBlockData>): boolean => item.data.taskType === this.taskType();
 }

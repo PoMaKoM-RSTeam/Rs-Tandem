@@ -6,8 +6,10 @@
     class="list-item"
     tndm-code-block
     [cdkDragData]="item"
+    [cdkDragDisabled]="true"
     [class.is-hidden]="invisibleCodeBlocks().includes(item)"
-    [executionOrder]="item.executionOrder">
+    [executionOrder]="item.executionOrder"
+    [inFinalStack]="true">
     <pre>{{ item.code }}</pre>
   </li>
   }

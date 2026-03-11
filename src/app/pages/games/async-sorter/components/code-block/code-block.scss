@@ -11,4 +11,7 @@
   cursor: move;
   background: $color-white;
   overflow: hidden;
+  &.in-final-stack {
+    cursor: default;
+  }
 }
