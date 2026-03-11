@@ -2,6 +2,10 @@
 
 .final-stack-content {
   @include dragDrop.drag-drop-container;
-  min-width: 100px;
+  min-width: 321px;
   min-height: 200px;
+}
+
+.is-hidden {
+  visibility: hidden;
 }

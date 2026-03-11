@@ -1,6 +1,6 @@
 <h2>Async sorter</h2>
 
-<tndm-button [btnConfig]="{ label: 'Run loop' }" />
+<tndm-button [btnConfig]="{ label: 'Run loop' }" (clicked)="runLoop()" />
 <section cdkDropListGroup class="fields-wrapper">
   <tndm-code-blocks-list />
   <tndm-task-bucket-list
@@ -10,5 +10,5 @@
     (macroBucketChanged)="macroBucket.set($event)"
     (microBucketChanged)="microBucket.set($event)"
     (syncBucketChanged)="syncBucket.set($event)" />
-  <ul tndm-final-call-stack [codeBlocks]="finalCallStack()"></ul>
+  <ul tndm-final-call-stack [codeBlocks]="finalCallStack()" [invisibleCodeBlocks]="invisibleCodeBlocks()"></ul>
 </section>

@@ -12,4 +12,5 @@ import { TndmCodeBlock } from '../code-block/code-block';
 })
 export class TndmFinalCallStack {
   readonly codeBlocks = input.required<CodeBlockData[]>();
+  readonly invisibleCodeBlocks = input.required<CodeBlockData[]>();
 }

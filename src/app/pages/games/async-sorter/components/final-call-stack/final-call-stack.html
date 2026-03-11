@@ -2,7 +2,12 @@
 
 <ul class="final-stack-content">
   @for (item of codeBlocks(); track item.executionOrder) {
-  <li class="list-item" tndm-code-block [cdkDragData]="item" [executionOrder]="item.executionOrder">
+  <li
+    class="list-item"
+    tndm-code-block
+    [cdkDragData]="item"
+    [class.is-hidden]="invisibleCodeBlocks().includes(item)"
+    [executionOrder]="item.executionOrder">
     <pre>{{ item.code }}</pre>
   </li>
   }
