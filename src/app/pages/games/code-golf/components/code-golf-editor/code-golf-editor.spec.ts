@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [TndmCodeGolfEditor],
   template: `<tndm-code-golf-editor [(value)]="testValue" />`,
 })
@@ -35,7 +36,7 @@ describe('TndmCodeGolfEditor', () => {
     fixture.componentRef.setInput('value', newValue);
     fixture.detectChanges();
 
-      await fixture.whenStable();
+    await fixture.whenStable();
 
     const textarea: HTMLTextAreaElement = fixture.nativeElement.querySelector('textarea');
     expect(textarea.value).toBe(newValue);
@@ -46,7 +47,7 @@ describe('TndmCodeGolfEditor', () => {
     const typedText = 'console.log("hello");';
 
     textarea.value = typedText;
-    textarea.dispatchEvent(new Event('input')); // Имитируем ввод пользователя
+    textarea.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     await fixture.whenStable();
