@@ -8,6 +8,7 @@ import { loginValidator } from '@auth/validators/login-validator';
 import { TndmAuthService } from '@auth/tndm-auth-service';
 import { ToastService } from '../../core/toast/toast-service';
 import { AUTH_ROUTES } from '@auth';
+import { AUTH_ERROR_MESSAGES } from '../constants/auth-error-messages';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {
@@ -51,20 +52,17 @@ export abstract class TndmAuthFormCore implements OnInit {
     return this.formStatus() === this.validFormStatus && this.form.dirty && !this.isLoading();
   });
 
+  protected readonly AUTH_ERROR_MESSAGES = AUTH_ERROR_MESSAGES;
+
   protected constructor() {}
 
   protected abstract buildForm(): void;
   protected abstract handleSubmit(): Promise<void>;
 
-  protected async onSubmit(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
+  private async handleActionWithFeedback<T>(cb: () => Promise<T>): Promise<T | void> {
     this.isLoading.set(true);
     try {
-      await this.handleSubmit();
+      return await cb();
     } catch (e) {
       if (e instanceof Error) {
         this.toastService.warning('error', e.message);
@@ -74,6 +72,14 @@ export abstract class TndmAuthFormCore implements OnInit {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  protected async onSubmit(): Promise<void> {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    await this.handleActionWithFeedback(() => this.handleSubmit());
   }
 
   ngOnInit(): void {
@@ -93,15 +99,12 @@ export abstract class TndmAuthFormCore implements OnInit {
   }
 
   protected async signWithOAuth(provider: AuthProvider): Promise<void> {
-    this.isLoading.set(true);
-    try {
+    await this.handleActionWithFeedback(async () => {
       await this.authService.signWithOAuth(provider);
 
       if (this.authService.isAuthenticated) {
         await this.navigateToMain();
       }
-    } finally {
-      this.isLoading.set(false);
-    }
+    });
   }
 }

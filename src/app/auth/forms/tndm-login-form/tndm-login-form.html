@@ -3,6 +3,7 @@
     <tndm-input
       label="Email"
       name="email"
+      [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="emailControl"
       [id]="'email'"
       [placeholder]="'Enter email'"
@@ -10,6 +11,7 @@
     <tndm-input
       label="Password"
       name="password"
+      [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="passwordControl"
       [id]="'password'"
       [placeholder]="'Enter password'"

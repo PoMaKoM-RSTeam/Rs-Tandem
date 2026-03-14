@@ -3,6 +3,7 @@
     <tndm-input
       label="Login"
       name="login"
+      [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="loginControl"
       [id]="'login'"
       [placeholder]="'Enter your login'"
@@ -17,12 +18,12 @@
     <tndm-input
       label="Password"
       name="password"
+      [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="passwordControl"
       [id]="'password'"
       [placeholder]="'Enter password'"
       [type]="'password'" />
   </div>
-
   <div class="form__footer">
     <tndm-button [btnConfig]="signUpBtnConfig()" />
     <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
