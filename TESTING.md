@@ -48,3 +48,23 @@ PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/44
 
 
 PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/38
+
+### @anatolirub
+
+Что тестирую: сервис‑обёртку над Supabase Auth, который выполняет все auth‑запросы (регистрация, логин, logout, OAuth, reset/update пароля) и централизует обработку ошибок Supabase.
+
+| Файл                                          | Описание                                                                                                                                                                                                                |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `src/app/auth/tndm-auth-api-service.spec.ts"` | Проверяю RPC-процедуру проверки email, регистрацию, обработку ошибок, логин через пароль, выход из аккаунта, OAuth-авторизацию с redirectUrl, отправка письма для сброса пароля и обновление пароля через Supabase Auth |
+
+PR c тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/48
+
+#### @mark-pribylnov
+
+Что тестирую: логика сортировки, анимация, отображение блоков с кодом в финальном стэке вызовов.
+
+| Файл | Описание |
+| ---- | -------- |
+| `src/app/pages/games/async-sorter/async-sorter.spec.ts` | <ol><li>Рендер родительского компонента и блоков с кодом.</li><li>`runLoop` собирает блоки из всех бакетов, сортирует их по свойству `executionOrder` и передаёт в `animateBlocks()` в правильном порядке и с корректным типом задачи (sync/micro/macro).</li><li>Если все три бакета пустые то `animateBlocks()` не вызывается.</li><li>`animateBlocks()` перемещает блоки из бакетов `finalCallStack`</li><li>Элементы в `finalCallStack` скрываются когда находятся в списке `invisibleCodeBlocks`.</li></ol> |
+
+PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/42
