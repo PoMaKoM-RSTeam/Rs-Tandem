@@ -36,3 +36,13 @@ PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/41
 | `src/app/pages/games/type-investigator/components/puzzle-board/validate-solution`    | правильно ли отрабатывает валидация, если все блоки подставлены корректно (в таком случае пазл считается решённым верно), а также если один из слотов заполнен неверно (в таком случае пазл считается нерешённым) |
 
 PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/44
+
+#### @mark-pribylnov
+
+Что тестирую: логика сортировки, анимация, отображение блоков с кодом в финальном стэке вызовов.
+
+| Файл | Описание |
+| ---- | -------- |
+| `src/app/pages/games/async-sorter/async-sorter.spec.ts` | <ol><li>Рендер родительского компонента и блоков с кодом.</li><li>`runLoop` собирает блоки из всех бакетов, сортирует их по свойству `executionOrder` и передаёт в `animateBlocks()` в правильном порядке и с корректным типом задачи (sync/micro/macro).</li><li>Если все три бакета пустые то `animateBlocks()` не вызывается.</li><li>`animateBlocks()` перемещает блоки из бакетов `finalCallStack`</li><li>Элементы в `finalCallStack` скрываются когда находятся в списке `invisibleCodeBlocks`.</li></ol> |
+
+PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/42
