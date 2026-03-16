@@ -1,16 +1,11 @@
 name: GitHub Actions
-run-name: Production deployment triggered by ${{ github.actor }}
+run-name: Build and Test triggered by ${{ github.actor }}
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build_and_test:
@@ -39,20 +34,5 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Upload Build Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist/rs-tandem/browser
-
-  deploy:
-    needs: build_and_test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Run Unit tests
+        run: npm run test
