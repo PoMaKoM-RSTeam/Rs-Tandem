@@ -42,6 +42,10 @@ export class TndmAsyncSorter {
       (a, b) => a.executionOrder - b.executionOrder
     );
 
+    if (!animationQueue.length) {
+      return;
+    }
+
     this.animateBlocks(animationQueue);
   }
 
@@ -74,7 +78,7 @@ export class TndmAsyncSorter {
 
         const newElement = document.querySelector(`[data-execution-order="${currentMovingBlock.executionOrder}"]`);
         if (!(newElement instanceof HTMLElement)) {
-          throw new Error('Expected HTMLElement');
+          return;
         }
 
         const newRect = newElement.getBoundingClientRect();
