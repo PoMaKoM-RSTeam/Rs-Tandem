@@ -20,3 +20,18 @@ npm test
 | `src/shared/ui/tndm-toaster/tndm-toaster.spec.ts` | Управление состоянием `openedToastId`, обработка `stopPropagation`, закрытие через click outside, плавный скролл контейнера |
 
 PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/41
+
+#### @shoblinsky
+
+Что тестирую: функции
+- нужную для парсинга пазла из data;
+- помогающую создать пустой борд с корректно заполненной палеткой;
+- использующуюся для валидации решения игрока
+
+| Файл                                              | Описание                                                                                                                    |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/pages/games/type-investigator/components/puzzle-board/build-initial-state"`            | все ли попадают блоки в палитру, правильно ли инициализируются слоты в "нейтральном" положении                                |
+| `src/app/pages/games/type-investigator/components/puzzle-board/get-block` | корректно ли блок получает айди, что будет, если вдруг компонент запросит блок с несуществующим айди |
+| `src/app/pages/games/type-investigator/components/puzzle-board/validate-solution` | правильно ли отрабатывает валидация, если все блоки подставлены корректно (в таком случае пазл считается решённым верно), а также если один из слотов заполнен неверно (в таком случае пазл считается нерешённым) |
+
+PR с тестами: https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/44
