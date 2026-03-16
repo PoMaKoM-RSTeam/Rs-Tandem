@@ -32,7 +32,7 @@ The application features a set of interactive games designed to focus on specifi
 
 ## Deploy
 
-[Deploy link](https://luminous-biscuit-6fec26.netlify.app/)  
+[Deploy link](https://luminous-biscuit-6fec26.netlify.app/)
 
 ## Team Processes
 
@@ -63,9 +63,9 @@ The application features a set of interactive games designed to focus on specifi
 | Software | Version |
 | -------- | ------- |
 | Angular  | 21.1.4  |
-| Husky  | 21.1.4  |
-| Prettier  | 3.8.1  |
-| Vitest   | 4.0.8  |
+| Husky    | 21.1.4  |
+| Prettier | 3.8.1   |
+| Vitest   | 4.0.8   |
 
 ## Development
 
