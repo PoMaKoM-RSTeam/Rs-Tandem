@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { TndmAsyncSorter } from './pages/games/async-sorter/async-sorter';
 import { TndmCodeGolf } from './pages/games/code-golf/components/code-golf/code-golf';
-import { TndmTypeInvestigator } from './pages/games/type-investigator/components/type-investigator/type-investigator';
 
 export const routes: Routes = [
   {
@@ -15,7 +14,10 @@ export const routes: Routes = [
   },
   {
     path: 'type-investigator',
-    component: TndmTypeInvestigator,
+    loadComponent: () =>
+      import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+        m => m.TndmTypeInvestigator
+      ),
     title: 'Type Investigator',
   },
 ];
