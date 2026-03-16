@@ -6,6 +6,7 @@ import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { CodeValidatorService } from '../../services/code-validator.service';
 
 @Component({
   selector: 'tndm-code-golf',
@@ -17,6 +18,41 @@ import { rxResource } from '@angular/core/rxjs-interop';
 })
 export class TndmCodeGolf {
   private readonly fetcherService = inject(CodeGolfFetcherService);
+  private readonly validatorService = inject(CodeValidatorService);
+
+  readonly isChecking = this.validatorService.isChecking;
+  readonly lastResult = this.validatorService.lastResult;
+
+  protected checkSolution(): void {
+    const code = this.rawCode();
+    const challenge = this.currentChallenge();
+
+    if (code && challenge) {
+      this.validatorService.check(code, {
+        input: [
+          [3, 2],
+          [5, 6],
+        ],
+      });
+    }
+  }
+  /*
+  protected checkSolution(): void {
+    const code = this.rawCode();
+    const challenge = this.currentChallenge();
+
+    if (this.worker && code && challenge) {
+      this.isChecking.set(true);
+
+      this.worker.postMessage({
+        code,
+        testCases: [
+          [3, 2],
+          [5, 6],
+        ],
+      });
+    }
+  }*/
 
   readonly ranksResource = rxResource({
     stream: () => this.fetcherService.getGolfRanks(),
