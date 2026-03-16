@@ -9,12 +9,12 @@ export const PUZZLES_DATA: Puzzle[] = [
     description: 'Make T readonly. So, make mapped type readonly.', // TODO transloco
     hintText: 'Mapped type: [K in keyof T]. Set modifiers, such as infer, before brackets. .', // TODO transloco
     availableBlocks: [
-      { id: 'b-readonly', label: 'readonly', type: 'keyword' },
-      { id: 'b-K1', label: 'K', type: 'identifier' },
-      { id: 'b-K2', label: 'K', type: 'identifier' },
-      { id: 'b-T', label: 'T', type: 'identifier' },
-      { id: 'b-extends', label: 'extends', type: 'keyword' },
-      { id: 'b-infer', label: 'infer', type: 'keyword' },
+      { id: 'one', label: 'readonly', type: 'keyword' },
+      { id: 'two', label: 'K', type: 'identifier' },
+      { id: 'three', label: 'K', type: 'identifier' },
+      { id: 'four', label: 'T', type: 'identifier' },
+      { id: 'five', label: 'extends', type: 'keyword' },
+      { id: 'six', label: 'infer', type: 'keyword' },
     ],
     lines: [
       {
@@ -50,28 +50,28 @@ export const PUZZLES_DATA: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['b-T'],
+        acceptedBlockIds: ['four'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s2: {
         id: 's2',
-        acceptedBlockIds: ['b-readonly'],
+        acceptedBlockIds: ['one'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s3: {
         id: 's3',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s4: {
         id: 's4',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
@@ -86,12 +86,12 @@ export const PUZZLES_DATA: Puzzle[] = [
     description: 'Transform params into optional.', // transloco
     hintText: 'Parial. Put `?` after second bracket.', // transloco
     availableBlocks: [
-      { id: 'b-T', label: 'T', type: 'identifier' },
-      { id: 'b-K1', label: 'K', type: 'identifier' },
-      { id: 'b-K2', label: 'K', type: 'identifier' },
-      { id: 'b-opt', label: '?', type: 'operator' },
-      { id: 'b-readonly', label: 'readonly', type: 'keyword' },
-      { id: 'b-extends', label: 'extends', type: 'keyword' },
+      { id: 'one', label: 'T', type: 'identifier' },
+      { id: 'two', label: 'K', type: 'identifier' },
+      { id: 'three', label: 'K', type: 'identifier' },
+      { id: 'four', label: '?', type: 'operator' },
+      { id: 'five', label: 'readonly', type: 'keyword' },
+      { id: 'six', label: 'extends', type: 'keyword' },
     ],
     lines: [
       {
@@ -127,28 +127,28 @@ export const PUZZLES_DATA: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['b-T'],
+        acceptedBlockIds: ['one'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s2: {
         id: 's2',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s3: {
         id: 's3',
-        acceptedBlockIds: ['b-opt'],
+        acceptedBlockIds: ['four'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s4: {
         id: 's4',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
@@ -163,11 +163,11 @@ export const PUZZLES_DATA: Puzzle[] = [
     description: 'Write Conditional Type that removes null and undefined from T.', //transloco
     hintText: 'Conditional Type: T extends null | undefined ? never : T', //transloco
     availableBlocks: [
-      { id: 'b-T', label: 'T', type: 'identifier' },
-      { id: 'b-extends', label: 'extends', type: 'keyword' },
-      { id: 'b-never', label: 'never', type: 'keyword' },
-      { id: 'b-unknown', label: 'unknown', type: 'keyword' },
-      { id: 'b-any', label: 'any', type: 'keyword' },
+      { id: 'one', label: 'T', type: 'identifier' },
+      { id: 'two', label: 'extends', type: 'keyword' },
+      { id: 'three', label: 'never', type: 'keyword' },
+      { id: 'four', label: 'unknown', type: 'keyword' },
+      { id: 'five', label: 'any', type: 'keyword' },
     ],
     lines: [
       {
@@ -197,21 +197,21 @@ export const PUZZLES_DATA: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['b-T'],
+        acceptedBlockIds: ['one'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s2: {
         id: 's2',
-        acceptedBlockIds: ['b-extends'],
+        acceptedBlockIds: ['two'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s3: {
         id: 's3',
-        acceptedBlockIds: ['b-never'],
+        acceptedBlockIds: ['three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
@@ -227,12 +227,12 @@ export const PUZZLES_DATA: Puzzle[] = [
     hintText:
       'infer R allows you to "capture" the type in a conditional expression. It follows the pattern (...:[]) => R', //tl
     availableBlocks: [
-      { id: 'b-T', label: 'T', type: 'identifier' },
-      { id: 'b-R1', label: 'R', type: 'identifier' },
-      { id: 'b-R2', label: 'R', type: 'identifier' },
-      { id: 'b-extends', label: 'extends', type: 'keyword' },
-      { id: 'b-infer', label: 'infer', type: 'keyword' },
-      { id: 'b-never', label: 'never', type: 'keyword' },
+      { id: 'one', label: 'T', type: 'identifier' },
+      { id: 'two', label: 'R', type: 'identifier' },
+      { id: 'three', label: 'R', type: 'identifier' },
+      { id: 'four', label: 'extends', type: 'keyword' },
+      { id: 'five', label: 'infer', type: 'keyword' },
+      { id: 'six', label: 'never', type: 'keyword' },
     ],
     lines: [
       {
@@ -265,35 +265,35 @@ export const PUZZLES_DATA: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['b-T'],
+        acceptedBlockIds: ['one'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s2: {
         id: 's2',
-        acceptedBlockIds: ['b-extends'],
+        acceptedBlockIds: ['four'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s3: {
         id: 's3',
-        acceptedBlockIds: ['b-infer'],
+        acceptedBlockIds: ['five'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s4: {
         id: 's4',
-        acceptedBlockIds: ['b-R1', 'b-R2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s5: {
         id: 's5',
-        acceptedBlockIds: ['b-R1', 'b-R2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
@@ -308,13 +308,13 @@ export const PUZZLES_DATA: Puzzle[] = [
     description: 'Create a type that makes all properties of object T both readonly and optional.',
     hintText: 'Both modifiers can be applied together: readonly [K in keyof T]?',
     availableBlocks: [
-      { id: 'b-T', label: 'T', type: 'identifier' },
-      { id: 'b-K1', label: 'K', type: 'identifier' },
-      { id: 'b-K2', label: 'K', type: 'identifier' },
-      { id: 'b-readonly', label: 'readonly', type: 'keyword' },
-      { id: 'b-opt', label: '?', type: 'operator' },
-      { id: 'b-extends', label: 'extends', type: 'keyword' },
-      { id: 'b-never', label: 'never', type: 'keyword' },
+      { id: 'one', label: 'T', type: 'identifier' },
+      { id: 'two', label: 'K', type: 'identifier' },
+      { id: 'three', label: 'K', type: 'identifier' },
+      { id: 'four', label: 'readonly', type: 'keyword' },
+      { id: 'five', label: '?', type: 'operator' },
+      { id: 'six', label: 'extends', type: 'keyword' },
+      { id: 'seven', label: 'never', type: 'keyword' },
     ],
     lines: [
       {
@@ -351,35 +351,35 @@ export const PUZZLES_DATA: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['b-T'],
+        acceptedBlockIds: ['one'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s2: {
         id: 's2',
-        acceptedBlockIds: ['b-readonly'],
+        acceptedBlockIds: ['four'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s3: {
         id: 's3',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s4: {
         id: 's4',
-        acceptedBlockIds: ['b-opt'],
+        acceptedBlockIds: ['five'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
       },
       s5: {
         id: 's5',
-        acceptedBlockIds: ['b-K1', 'b-K2'],
+        acceptedBlockIds: ['two', 'three'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
