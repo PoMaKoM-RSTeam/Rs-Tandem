@@ -1,12 +1,14 @@
 <tndm-code-golf-rank [byteCount]="byteCount()" [rank]="currentRank()" />
 
-@if (currentChallenge(); as challenge) {
+@if (challengeResource.isLoading()) {
+<p class="challenge-info">Loading Challenge...</p>
+} @else if (currentChallenge(); as challenge) {
 <div class="challenge-wrapper">
   <h2 class="challenge-title">{{ challenge.title }}</h2>
   <p class="challenge-description">{{ challenge.description }}</p>
 </div>
-} @else if (challengeResource.isLoading()) {
-<p>Loading Challenge...</p>
+} @else {
+<p class="challenge-info">No challenges available at the moment.</p>
 }
 
 <tndm-code-golf-editor [(value)]="rawCode" />

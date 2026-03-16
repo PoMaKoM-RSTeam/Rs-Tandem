@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Challenge } from '../types/challenge';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { GolfRank } from '../types/golf-rank';
 import { catchError, from, map, Observable, of } from 'rxjs';
+import { ToastService } from '../../../../core/toast/toast-service';
 
 @Injectable({ providedIn: 'root' })
 export class CodeGolfFetcherService {
@@ -10,6 +11,7 @@ export class CodeGolfFetcherService {
   private readonly supabaseKey = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
   private readonly GET_CHALLENGE = 'get_localized_challenge';
   private readonly GET_RANKS = 'get_golf_ranks';
+  private readonly toastService = inject(ToastService);
 
   private supabase: SupabaseClient;
 
@@ -25,8 +27,8 @@ export class CodeGolfFetcherService {
         }
         return data?.[0] ?? undefined;
       }),
-      catchError(err => {
-        console.error('Error fetching challenge:', err);
+      catchError(() => {
+        this.toastService.danger('Oops, something went wrong!', `Please refresh the page or try again later.`);
         return of(undefined);
       })
     );
@@ -40,8 +42,8 @@ export class CodeGolfFetcherService {
         }
         return data ?? [];
       }),
-      catchError(err => {
-        console.error('Error fetching ranks:', err);
+      catchError(() => {
+        this.toastService.danger('Oops, something went wrong!', `Please refresh the page or try again later.`);
         return of([]);
       })
     );
