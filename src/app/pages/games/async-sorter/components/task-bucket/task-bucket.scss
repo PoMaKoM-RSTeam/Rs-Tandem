@@ -1,5 +1,9 @@
 @use '../../shared/drag-drop' as dragDrop;
 
+:host(:first-child) .bucket-heading {
+  margin-top: 0;
+}
+
 .bucket-heading {
   margin-top: 5px;
   margin-bottom: 5px;

@@ -1,5 +1,8 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
   padding-inline: 20px;
 }
 
@@ -11,4 +14,6 @@ ul {
 .fields-wrapper {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  gap: 20px;
 }
