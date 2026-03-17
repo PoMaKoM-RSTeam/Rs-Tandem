@@ -3,11 +3,11 @@ import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cd
 import { CodeBlock, Puzzle } from '../../models/puzzle.model';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { BoardState } from '../../models/board.state.model';
-import { buildInitialState } from './build-initial-state';
-import { getBlock } from './get-block';
-import { applySlotDrop } from './apply-slot-drop';
-import { applyPaletteDrop } from './apply-palette-drop';
-import { validateSolution } from './validate-solution';
+import { buildInitialState } from './build-initial-state.utils';
+import { getBlock } from './get-block.utils';
+import { applySlotDrop } from './apply-slot-drop.utils';
+import { applyPaletteDrop } from './apply-palette-drop.utils';
+import { validateSolution } from './validate-solution.utils';
 
 @Component({
   selector: 'tndm-puzzle-board',
