@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, viewChild, WritableSignal } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-list';
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
@@ -16,12 +16,15 @@ import { TndmTimer } from './components/timer/timer';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAsyncSorter {
+  readonly codeBlocksList = viewChild.required(TndmCodeBlocksList);
+
   readonly syncBucket = signal<CodeBlockData[]>([]);
   readonly microBucket = signal<CodeBlockData[]>([]);
   readonly macroBucket = signal<CodeBlockData[]>([]);
 
   readonly finalCallStack = signal<CodeBlockData[]>([]);
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
+  readonly buttonDisabled = signal<boolean>(true);
 
   private getBucketByType(type: taskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
@@ -48,6 +51,14 @@ export class TndmAsyncSorter {
     }
 
     this.animateBlocks(animationQueue);
+  }
+
+  onCodeBlockDropped(data: CodeBlockData): void {
+    this.codeBlocksList().removeCodeBlock(data.executionOrder);
+  }
+
+  onSourceListIsEmpty(): void {
+    this.buttonDisabled.set(false);
   }
 
   private animateBlocks(queue: CodeBlockData[]): void {

@@ -6,17 +6,20 @@
     [codeBlocks]="syncBucket()"
     [heading]="'Synchronous (Call Stack)'"
     [taskType]="'sync'"
-    (codeBlockDropped)="syncBucketChanged.emit($event)"></li>
+    (bucketContentUpdated)="syncBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
   <li
     tndm-task-bucket
     [codeBlocks]="microBucket()"
     [heading]="'Micro Tasks'"
     [taskType]="'micro'"
-    (codeBlockDropped)="microBucketChanged.emit($event)"></li>
+    (bucketContentUpdated)="microBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
   <li
     tndm-task-bucket
     [codeBlocks]="macroBucket()"
     [heading]="'Macro Tasks'"
     [taskType]="'macro'"
-    (codeBlockDropped)="macroBucketChanged.emit($event)"></li>
+    (bucketContentUpdated)="macroBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
 </ul>

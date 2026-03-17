@@ -16,7 +16,8 @@ export class TndmTaskBucket {
   readonly taskType = input.required<taskType>();
   readonly codeBlocks = input.required<CodeBlockData[]>();
 
-  readonly codeBlockDropped = output<CodeBlockData[]>();
+  readonly bucketContentUpdated = output<CodeBlockData[]>();
+  readonly codeBlockDropped = output<CodeBlockData>();
 
   drop(event: CdkDragDrop<CodeBlockData[]>): void {
     if (event.previousContainer === event.container) {
@@ -25,7 +26,8 @@ export class TndmTaskBucket {
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
 
-    this.codeBlockDropped.emit([...event.container.data]);
+    this.bucketContentUpdated.emit([...event.container.data]);
+    this.codeBlockDropped.emit(event.item.data);
   }
 
   taskTypePredicate = (item: CdkDrag<CodeBlockData>): boolean => item.data.taskType === this.taskType();

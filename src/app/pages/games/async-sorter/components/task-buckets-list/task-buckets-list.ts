@@ -18,4 +18,6 @@ export class TndmTaskBucketsList {
   readonly syncBucketChanged = output<CodeBlockData[]>();
   readonly microBucketChanged = output<CodeBlockData[]>();
   readonly macroBucketChanged = output<CodeBlockData[]>();
+
+  readonly codeBlockDropped = output<CodeBlockData>();
 }

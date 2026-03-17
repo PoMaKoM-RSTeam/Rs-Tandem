@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, effect, output, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmCodeBlock } from '../code-block/code-block';
-import { codeBlocks } from './code-blocks-data';
+import { CodeBlockData, codeBlocks } from './code-blocks-data';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -12,9 +12,22 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeBlocksList {
-  readonly codeBlocks = codeBlocks;
+  readonly codeBlocks = signal<CodeBlockData[]>([...codeBlocks]);
+  readonly isEmpty = output<void>();
+
+  constructor() {
+    effect(() => {
+      if (this.codeBlocks().length === 0) {
+        this.isEmpty.emit();
+      }
+    });
+  }
 
   noReturnPredicate(): false {
     return false;
+  }
+
+  removeCodeBlock(executionOrder: number): void {
+    this.codeBlocks.update(array => array.filter(block => block.executionOrder !== executionOrder));
   }
 }
