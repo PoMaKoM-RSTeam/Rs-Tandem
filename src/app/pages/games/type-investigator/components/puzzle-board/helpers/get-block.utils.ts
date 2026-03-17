@@ -1,4 +1,4 @@
-import { CodeBlock, Puzzle } from '../../models/puzzle.model';
+import { CodeBlock, Puzzle } from '../../../models/puzzle.model';
 
 export function getBlock(puzzle: Puzzle, id: string | null): CodeBlock | undefined {
   if (!id) {

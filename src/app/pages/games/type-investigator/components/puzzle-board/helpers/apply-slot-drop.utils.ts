@@ -1,4 +1,4 @@
-import { BoardState } from '../../models/board.state.model';
+import { BoardState } from '../../../models/board.state.model';
 
 export function applySlotDrop(
   state: BoardState,

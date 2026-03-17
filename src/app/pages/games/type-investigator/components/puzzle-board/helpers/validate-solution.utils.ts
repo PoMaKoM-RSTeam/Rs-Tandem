@@ -1,4 +1,4 @@
-import { DropSlot, ValidationState } from '../../models/puzzle.model';
+import { DropSlot, ValidationState } from '../../../models/puzzle.model';
 
 export type ValidationResult = {
   slots: Record<string, DropSlot>;

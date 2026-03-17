@@ -1,8 +1,8 @@
 import { Puzzle } from '../../models/puzzle.model';
 import { PuzzleDifficulty } from '../../models/puzzle-difficulty.enum';
-import { buildInitialState } from './build-initial-state.utils';
-import { getBlock } from './get-block.utils';
-import { validateSolution } from './validate-solution.utils';
+import { buildInitialState } from './helpers/build-initial-state.utils';
+import { getBlock } from './helpers/get-block.utils';
+import { validateSolution } from './helpers/validate-solution.utils';
 
 const mockPuzzle: Puzzle = {
   id: 'test1',

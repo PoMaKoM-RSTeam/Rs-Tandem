@@ -1,5 +1,5 @@
-import { DropSlot, Puzzle } from '../../models/puzzle.model';
-import { BoardState } from '../../models/board.state.model';
+import { DropSlot, Puzzle } from '../../../models/puzzle.model';
+import { BoardState } from '../../../models/board.state.model';
 
 export function buildInitialState(puzzle: Puzzle): BoardState {
   const slots: Record<string, DropSlot> = {};

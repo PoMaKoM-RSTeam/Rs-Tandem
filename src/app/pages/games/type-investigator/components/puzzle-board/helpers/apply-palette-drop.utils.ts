@@ -1,4 +1,4 @@
-import { BoardState } from '../../models/board.state.model';
+import { BoardState } from '../../../models/board.state.model';
 
 export function applyPaletteDrop(state: BoardState, blockId: string, fromSlot: string | null): BoardState {
   if (!fromSlot) {
