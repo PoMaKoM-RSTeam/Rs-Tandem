@@ -6,12 +6,13 @@ import { TndmFinalCallStack } from './components/final-call-stack/final-call-sta
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
 import { taskType } from './shared/types';
+import { TndmTimer } from './components/timer/timer';
 
 @Component({
   selector: 'tndm-async-sorter',
   templateUrl: 'async-sorter.html',
   styleUrl: 'async-sorter.scss',
-  imports: [TndmButton, TndmCodeBlocksList, TndmTaskBucketsList, TndmFinalCallStack, CdkDropListGroup],
+  imports: [TndmButton, TndmCodeBlocksList, TndmTaskBucketsList, TndmFinalCallStack, CdkDropListGroup, TndmTimer],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAsyncSorter {

@@ -1,7 +1,7 @@
 @use '../../../../../../styles/variables' as *;
 
 :host {
-  padding-inline: 10px;
+  padding: 10px;
   border-bottom: solid 1px $color-grey;
   display: flex;
   flex-direction: row;
