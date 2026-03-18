@@ -1,0 +1,51 @@
+.page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #a29d9a;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.page_header {
+  text-align: center;
+}
+
+.page_title {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #292828;
+}
+
+.page_subtitle {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.page_layout {
+  display: flex;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 1060px;
+  align-items: flex-start;
+}
+
+.page_main {
+  flex: 1;
+  min-width: 0;
+}
+
+.page_placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #dad9d9;
+  border: 1px dashed #30363d;
+  border-radius: 8px;
+  color: #484f58;
+  font-size: 0.85rem;
+}
