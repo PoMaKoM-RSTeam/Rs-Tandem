@@ -1,17 +1,9 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../../../environments/environment';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { inject, Injectable } from '@angular/core';
+import { SupabaseService } from '../../../../core/supabase/supabase-service';
 
 @Injectable({ providedIn: 'root' })
 export class AsyncSorterFetcherService {
-  private readonly supabaseUrl = environment.supabaseUrl;
-  private readonly supabaseKey = environment.supabaseKey;
-
-  private supabase: SupabaseClient;
-
-  constructor() {
-    this.supabase = createClient(this.supabaseUrl, this.supabaseKey);
-  }
+  private readonly supabase = inject(SupabaseService).client;
 
   async uploadGameTime(seconds: number): Promise<void> {
     const { error } = await this.supabase.from('async_sorter').insert([{ time_seconds: seconds }]);
