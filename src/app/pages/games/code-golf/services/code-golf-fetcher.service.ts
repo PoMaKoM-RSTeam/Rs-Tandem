@@ -9,7 +9,7 @@ import { ToastService } from '../../../../core/toast/toast-service';
 export class CodeGolfFetcherService {
   private readonly supabaseUrl = 'https://bqfoaeuuwilliipmpovu.supabase.co';
   private readonly supabaseKey = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
-  private readonly GET_CHALLENGE = 'get_localized_challenge';
+  private readonly GET_CHALLENGE = 'get_random_challenge';
   private readonly GET_RANKS = 'get_golf_ranks';
   private readonly toastService = inject(ToastService);
 
@@ -20,12 +20,12 @@ export class CodeGolfFetcherService {
   }
 
   getRandomChallenge(lang: 'ru' | 'en' = 'en'): Observable<Challenge | undefined> {
-    return from(this.supabase.rpc(this.GET_CHALLENGE, { lang })).pipe(
+    return from(this.supabase.rpc(this.GET_CHALLENGE, { lang_code: lang })).pipe(
       map(({ data, error }) => {
         if (error) {
           throw error;
         }
-        return data?.[0] ?? undefined;
+        return data?.[0];
       }),
       catchError(() => {
         this.toastService.danger('Oops, something went wrong!', `Please refresh the page or try again later.`);

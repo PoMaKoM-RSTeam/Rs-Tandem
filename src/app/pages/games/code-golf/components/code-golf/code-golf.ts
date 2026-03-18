@@ -28,31 +28,10 @@ export class TndmCodeGolf {
     const challenge = this.currentChallenge();
 
     if (code && challenge) {
-      this.validatorService.check(code, {
-        input: [
-          [3, 2],
-          [5, 6],
-        ],
-      });
+      this.validatorService.check(code, challenge.test_cases);
+      console.log(challenge);
     }
   }
-  /*
-  protected checkSolution(): void {
-    const code = this.rawCode();
-    const challenge = this.currentChallenge();
-
-    if (this.worker && code && challenge) {
-      this.isChecking.set(true);
-
-      this.worker.postMessage({
-        code,
-        testCases: [
-          [3, 2],
-          [5, 6],
-        ],
-      });
-    }
-  }*/
 
   readonly ranksResource = rxResource({
     stream: () => this.fetcherService.getGolfRanks(),

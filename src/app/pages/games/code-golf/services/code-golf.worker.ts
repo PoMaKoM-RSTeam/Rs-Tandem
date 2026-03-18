@@ -1,18 +1,29 @@
 /// <reference lib="webworker" />
 
+type TestResult = {
+  input: unknown;
+  output: unknown;
+  passed: boolean;
+};
+
 addEventListener('message', ({ data }) => {
   const { code, testCases } = data;
-  const results = [];
+  const results: TestResult[] = [];
+  let allPassed = true;
 
   const userFn = createSafeFunction(code);
   try {
     for (const test of testCases) {
-      const output = userFn(...test);
+      const args = Array.isArray(test.input) ? test.input : [test.input];
+      const output = userFn(...args);
       const passed = JSON.stringify(output) === JSON.stringify(test.expected);
-      results.push({ input: test, output, passed });
+      if (!passed) {
+        allPassed = false;
+      }
+      results.push({ input: test.input, output, passed });
     }
 
-    postMessage({ success: true, results });
+    postMessage({ results, allPassed });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown execution error';
     postMessage({ success: false, errorMessage });

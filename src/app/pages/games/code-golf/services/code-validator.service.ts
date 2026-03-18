@@ -1,23 +1,18 @@
 import { Injectable, OnDestroy, signal } from '@angular/core';
-
-export type TestCase = {
-  input: unknown;
-  expected: unknown;
-}
+import { TestCase } from '../types/challenge';
 
 export type TestResult = {
   input: unknown;
   output: unknown;
   expected: unknown;
   passed: boolean;
-}
+};
 
 export type WorkerResponse = {
   success: boolean;
   results?: TestResult[];
   error?: string;
-}
-
+};
 
 @Injectable({ providedIn: 'root' })
 export class CodeValidatorService implements OnDestroy {
@@ -37,6 +32,7 @@ export class CodeValidatorService implements OnDestroy {
       this.worker.onmessage = ({ data }: MessageEvent<WorkerResponse>): void => {
         this.isChecking.set(false);
         this.lastResult.set(data);
+        console.log(data);
       };
 
       this.worker.onerror = (): void => {
