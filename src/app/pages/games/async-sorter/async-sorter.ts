@@ -64,22 +64,17 @@ export class TndmAsyncSorter {
   }
 
   onSourceListIsEmpty(): void {
-    const allBuckets = {
-      [TASK_TYPES.sync]: this.syncBucket(),
-      [TASK_TYPES.micro]: this.microBucket(),
-      [TASK_TYPES.macro]: this.macroBucket(),
-    };
-    const isAllBucketsCorrect = Object.entries(allBuckets).every(bucket => {
-      const bucketTaskType = bucket[0];
-      const blocks = bucket[1];
-
-      const correctBlocks = blocks.every(block => block.taskType === bucketTaskType);
-      return correctBlocks;
-    });
-
-    if (isAllBucketsCorrect) {
+    if (this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(false);
     }
+  }
+
+  private areAllBlocksPlacedCorrectly(): boolean {
+    return (
+      this.syncBucket().every(block => block.taskType === TASK_TYPES.sync) &&
+      this.microBucket().every(block => block.taskType === TASK_TYPES.micro) &&
+      this.macroBucket().every(block => block.taskType === TASK_TYPES.macro)
+    );
   }
 
   private animateBlocks(queue: CodeBlockData[]): void {
