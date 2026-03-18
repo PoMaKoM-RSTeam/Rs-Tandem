@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal, viewChild, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChild, WritableSignal } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-list';
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
@@ -7,6 +7,7 @@ import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
 import { taskType } from './shared/types';
 import { TndmTimer } from './components/timer/timer';
+import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
 
 @Component({
   selector: 'tndm-async-sorter',
@@ -18,6 +19,7 @@ import { TndmTimer } from './components/timer/timer';
 export class TndmAsyncSorter {
   readonly codeBlocksList = viewChild.required(TndmCodeBlocksList);
   readonly timer = viewChild.required(TndmTimer);
+  private readonly fetcherService = inject(AsyncSorterFetcherService);
 
   readonly syncBucket = signal<CodeBlockData[]>([]);
   readonly microBucket = signal<CodeBlockData[]>([]);
@@ -54,6 +56,7 @@ export class TndmAsyncSorter {
     this.animateBlocks(animationQueue);
     this.timer().stop();
     this.buttonDisabled.set(true);
+    this.fetcherService.uploadGameTime(this.timer().seconds());
   }
 
   onCodeBlockDropped(data: CodeBlockData): void {
