@@ -6,7 +6,8 @@
     tndm-code-block
     [cdkDragData]="item"
     [executionOrder]="item.executionOrder"
-    [inWrongBucket]="item.taskType !== taskType()">
+    [inWrongBucket]="item.taskType !== taskType()"
+    [isPlacedCorrectly]="item.taskType === taskType()">
     <pre>{{ item.code }}</pre>
   </li>
   }

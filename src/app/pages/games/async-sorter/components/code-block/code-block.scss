@@ -1,5 +1,14 @@
 @use '../../../../../../styles/variables' as *;
 
+@mixin status-icon($symbol) {
+  content: $symbol;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 :host {
   position: relative;
   padding: 10px;
@@ -13,13 +22,12 @@
   background: $color-white;
   overflow: hidden;
   &.in-wrong-bucket::after {
-    content: '❌';
-    display: block;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    @include status-icon('❌');
   }
+  &.is-placed-correctly::after {
+    @include status-icon('✅');
+  }
+
   &.in-final-stack {
     cursor: default;
   }
