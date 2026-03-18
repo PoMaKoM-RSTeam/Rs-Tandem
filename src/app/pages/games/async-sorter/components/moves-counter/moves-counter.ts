@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 @Component({
   selector: 'tndm-move-counter',
   imports: [],
-  templateUrl: './move-counter.html',
-  styleUrl: './move-counter.scss',
+  templateUrl: './moves-counter.html',
+  styleUrl: './moves-counter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmMoveCounter {

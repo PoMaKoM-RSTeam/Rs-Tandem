@@ -8,7 +8,7 @@ import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
 import { TASK_TYPES, TaskType } from './shared/types';
 import { TndmTimer } from './components/timer/timer';
 import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
-import { TndmMoveCounter } from './components/move-counter/move-counter';
+import { TndmMoveCounter } from './components/moves-counter/moves-counter';
 
 @Component({
   selector: 'tndm-async-sorter',
