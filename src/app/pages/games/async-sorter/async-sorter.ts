@@ -73,7 +73,7 @@ export class TndmAsyncSorter {
     this.buttonDisabled.set(true);
     this.isDraggingDisabled.set(true);
     this.isButtonPressed.set(true);
-    this.fetcherService.uploadGameTime(this.timer().seconds());
+    this.fetcherService.uploadGameStats(this.timer().seconds(), this.moves());
   }
 
   onCodeBlockDropped(data: CodeBlockData): void {
