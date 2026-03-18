@@ -3,6 +3,7 @@
 type TestResult = {
   input: unknown;
   output: unknown;
+ expected: unknown;
   passed: boolean;
 };
 
@@ -20,7 +21,7 @@ addEventListener('message', ({ data }) => {
       if (!passed) {
         allPassed = false;
       }
-      results.push({ input: test.input, output, passed });
+      results.push({ input: test.input, output, expected: test.expected, passed });
     }
 
     postMessage({ results, allPassed });

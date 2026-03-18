@@ -9,7 +9,7 @@ export type TestResult = {
 };
 
 export type WorkerResponse = {
-  success: boolean;
+  allPassed: boolean;
   results?: TestResult[];
   error?: string;
 };
@@ -32,12 +32,11 @@ export class CodeValidatorService implements OnDestroy {
       this.worker.onmessage = ({ data }: MessageEvent<WorkerResponse>): void => {
         this.isChecking.set(false);
         this.lastResult.set(data);
-        console.log(data);
       };
 
       this.worker.onerror = (): void => {
         this.isChecking.set(false);
-        this.lastResult.set({ success: false, error: 'Critical Worker Error' });
+        this.lastResult.set({ allPassed: false, error: 'Critical Worker Error' });
       };
     }
   }

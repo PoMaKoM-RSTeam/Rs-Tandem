@@ -1,68 +1,147 @@
+@use 'sass:color';
+
 $color-bg-main: #ffffff;
 $color-bg-secondary: #f6f8fa;
 $color-border: #e1e4e8;
 $color-shadow: rgba(0, 0, 0, 0.08);
+
 $color-text-primary: #24292e;
-$color-text-secondary: #444;
+$color-text-secondary: #586069;
 $color-text-title: #1a1a1a;
 
+$color-success: #28a745;
+$color-danger: #d73a49;
+$color-success-bg: #f0fff4;
+$color-danger-bg: #ffeef0;
+
 $radius-main: 12px;
-$radius-inner: 6px;
-$gap-main: 20px;
+$radius-inner: 8px;
 $padding-main: 24px;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 :host {
   display: flex;
   flex-direction: column;
-  gap: $gap-main;
-  margin: 0 auto;
-  padding: $padding-main;
+  gap: 20px;
   max-width: 1440px;
   height: 100%;
+  margin: 0 auto;
+  padding: $padding-main;
   box-sizing: border-box;
   background: $color-bg-main;
-  border-radius: $radius-main;
   border: 1px solid $color-border;
+  border-radius: $radius-main;
   box-shadow: 0 10px 40px $color-shadow;
   color: $color-text-primary;
 }
 
 .challenge-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 16px;
-  min-height: 60px;
   background-color: $color-bg-secondary;
   border-radius: $radius-inner;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 
   .challenge-title {
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     font-size: 1.25rem;
-    font-weight: 700;
     color: $color-text-title;
   }
 
   .challenge-description {
     margin: 0;
-    font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.6;
     color: $color-text-secondary;
   }
 }
 
 .challenge-info {
-  font-size: 1rem;
-  padding: 16px;
+  padding: 24px;
   text-align: center;
-  color: $color-text-secondary;
-  border: 1px dashed $color-border;
+  border: 2px dashed $color-border;
   border-radius: $radius-inner;
+  color: $color-text-secondary;
 }
 
 .controls {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
+  gap: 12px;
   margin-top: auto;
+}
+
+.modal-overlay {
+  @include flex-center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  color: $color-text-primary;
+  padding: 2rem;
+  border-radius: $radius-main;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  ul {
+    padding: 0;
+    margin: 1.5rem 0;
+    border: 1px solid $color-border;
+    border-radius: $radius-inner;
+    overflow: hidden;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr 1fr 60px;
+    gap: 12px;
+    padding: 12px 16px;
+    align-items: center;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.table-header {
+      background: $color-bg-secondary;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: $color-text-secondary;
+    }
+
+    &.passed {
+      background-color: $color-success-bg;
+      color: color.scale($color-success, $lightness: -30%);
+    }
+    &.failed {
+      background-color: $color-danger-bg;
+      color: color.scale($color-danger, $lightness: -30%);
+    }
+  }
+}
+
+.error-text {
+  margin: 1.5rem 0;
+  color: $color-danger;
+  padding: 1rem;
+  background: $color-danger-bg;
+  border-radius: $radius-inner;
+  text-align: center;
 }

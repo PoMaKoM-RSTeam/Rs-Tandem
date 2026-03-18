@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
@@ -23,13 +23,28 @@ export class TndmCodeGolf {
   readonly isChecking = this.validatorService.isChecking;
   readonly lastResult = this.validatorService.lastResult;
 
+  readonly showModal = signal(false);
+
+  constructor() {
+    effect(() => {
+      const result = this.lastResult();
+      console.log(result);
+      if (result) {
+        this.showModal.set(true);
+      }
+    });
+  }
+
+  protected closeModal(): void {
+    this.showModal.set(false);
+  }
+
   protected checkSolution(): void {
     const code = this.rawCode();
     const challenge = this.currentChallenge();
 
     if (code && challenge) {
       this.validatorService.check(code, challenge.test_cases);
-      console.log(challenge);
     }
   }
 
@@ -44,6 +59,7 @@ export class TndmCodeGolf {
 
   readonly currentChallenge = computed(() => this.challengeResource.value());
 
+  protected readonly okBtnConfig = { label: 'Ok' };
   protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
