@@ -1,8 +1,9 @@
 import { Component, effect, output, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmCodeBlock } from '../code-block/code-block';
-import { CodeBlockData, codeBlocks } from './code-blocks-data';
+import { codeBlocks } from './code-blocks-data';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { CodeBlockData } from '../../shared/types';
 
 @Component({
   selector: 'tndm-code-blocks-list',

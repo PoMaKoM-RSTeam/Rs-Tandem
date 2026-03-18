@@ -4,11 +4,11 @@ import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-li
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
-import { TASK_TYPES, TaskType } from './shared/types';
+import { CodeBlockData, CodeBlockDroppedPayload, TASK_TYPES, TaskType } from './shared/types';
 import { TndmTimer } from './components/timer/timer';
 import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
-import { TndmMoveCounter } from './components/moves-counter/moves-counter';
+import { TndmMovesCounter } from './components/moves-counter/moves-counter';
+import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-counter';
 
 @Component({
   selector: 'tndm-async-sorter',
@@ -21,7 +21,8 @@ import { TndmMoveCounter } from './components/moves-counter/moves-counter';
     TndmFinalCallStack,
     CdkDropListGroup,
     TndmTimer,
-    TndmMoveCounter,
+    TndmMovesCounter,
+    TndmMistakesCounter,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,6 +40,7 @@ export class TndmAsyncSorter {
   readonly buttonDisabled = signal(true);
 
   readonly moves = signal(0);
+  readonly mistakes = signal(0);
 
   private isSourceListEmtpy = false;
   readonly isDraggingDisabled = signal(false);
@@ -73,11 +75,22 @@ export class TndmAsyncSorter {
     this.buttonDisabled.set(true);
     this.isDraggingDisabled.set(true);
     this.isButtonPressed.set(true);
-    this.fetcherService.uploadGameStats(this.timer().seconds(), this.moves());
+    this.fetcherService.uploadGameStats({
+      seconds: this.timer().seconds(),
+      moves: this.moves(),
+      mistakes: this.mistakes(),
+    });
   }
 
-  onCodeBlockDropped(data: CodeBlockData): void {
-    this.codeBlocksList().removeCodeBlock(data.executionOrder);
+  onCodeBlockDropped(payload: CodeBlockDroppedPayload): void {
+    const { codeBlockData, bucketTaskType } = payload;
+
+    const isCorrectBucket = codeBlockData.taskType === bucketTaskType;
+    if (!isCorrectBucket) {
+      this.mistakes.update(mistakes => (mistakes += 1));
+    }
+
+    this.codeBlocksList().removeCodeBlock(codeBlockData.executionOrder);
 
     this.moves.update(number => (number += 1));
 

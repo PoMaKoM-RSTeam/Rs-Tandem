@@ -1,8 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmTaskBucket } from '../task-bucket/task-bucket';
-import { CodeBlockData } from '../code-blocks-list/code-blocks-data';
-import { TASK_TYPES } from '../../shared/types';
+import { CodeBlockData, CodeBlockDroppedPayload, TASK_TYPES } from '../../shared/types';
 
 @Component({
   selector: 'tndm-task-bucket-list',
@@ -25,5 +24,5 @@ export class TndmTaskBucketsList {
   readonly microBucketChanged = output<CodeBlockData[]>();
   readonly macroBucketChanged = output<CodeBlockData[]>();
 
-  readonly codeBlockDropped = output<CodeBlockData>();
+  readonly codeBlockDropped = output<CodeBlockDroppedPayload>();
 }
