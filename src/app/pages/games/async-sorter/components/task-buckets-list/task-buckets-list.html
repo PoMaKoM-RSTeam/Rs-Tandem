@@ -5,21 +5,21 @@
     tndm-task-bucket
     [codeBlocks]="syncBucket()"
     [heading]="'Synchronous (Call Stack)'"
-    [taskType]="'sync'"
+    [taskType]="TASK_TYPES.sync"
     (bucketContentUpdated)="syncBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
   <li
     tndm-task-bucket
     [codeBlocks]="microBucket()"
     [heading]="'Micro Tasks'"
-    [taskType]="'micro'"
+    [taskType]="TASK_TYPES.micro"
     (bucketContentUpdated)="microBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
   <li
     tndm-task-bucket
     [codeBlocks]="macroBucket()"
     [heading]="'Macro Tasks'"
-    [taskType]="'macro'"
+    [taskType]="TASK_TYPES.macro"
     (bucketContentUpdated)="macroBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
 </ul>

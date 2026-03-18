@@ -5,7 +5,7 @@ import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
-import { taskType } from './shared/types';
+import { TASK_TYPES, TaskType } from './shared/types';
 import { TndmTimer } from './components/timer/timer';
 import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
 
@@ -29,13 +29,13 @@ export class TndmAsyncSorter {
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
   readonly buttonDisabled = signal<boolean>(true);
 
-  private getBucketByType(type: taskType): WritableSignal<CodeBlockData[]> {
+  private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
-      case 'sync':
+      case TASK_TYPES.sync:
         return this.syncBucket;
-      case 'micro':
+      case TASK_TYPES.micro:
         return this.microBucket;
-      case 'macro':
+      case TASK_TYPES.macro:
         return this.macroBucket;
       default:
         throw new Error(
@@ -64,7 +64,11 @@ export class TndmAsyncSorter {
   }
 
   onSourceListIsEmpty(): void {
-    const allBuckets = { sync: this.syncBucket(), micro: this.microBucket(), macro: this.macroBucket() };
+    const allBuckets = {
+      [TASK_TYPES.sync]: this.syncBucket(),
+      [TASK_TYPES.micro]: this.microBucket(),
+      [TASK_TYPES.macro]: this.macroBucket(),
+    };
     const isAllBucketsCorrect = Object.entries(allBuckets).every(bucket => {
       const bucketTaskType = bucket[0];
       const blocks = bucket[1];

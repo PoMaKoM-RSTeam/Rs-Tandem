@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TndmCodeBlock } from '../code-block/code-block';
 import { CodeBlockData } from '../code-blocks-list/code-blocks-data';
-import { taskType } from '../../shared/types';
+import { TaskType } from '../../shared/types';
 
 @Component({
   selector: 'li[tndm-task-bucket]',
@@ -13,7 +13,7 @@ import { taskType } from '../../shared/types';
 })
 export class TndmTaskBucket {
   readonly heading = input.required<string>();
-  readonly taskType = input.required<taskType>();
+  readonly taskType = input.required<TaskType>();
   readonly codeBlocks = input.required<CodeBlockData[]>();
 
   readonly bucketContentUpdated = output<CodeBlockData[]>();

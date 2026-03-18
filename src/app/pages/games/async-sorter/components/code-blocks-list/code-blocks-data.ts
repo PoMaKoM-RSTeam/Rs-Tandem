@@ -1,8 +1,8 @@
-import { taskType } from '../../shared/types';
+import { TaskType } from '../../shared/types';
 
 export type CodeBlockData = {
   code: string;
-  taskType: taskType;
+  taskType: TaskType;
   executionOrder: number;
 };
 
