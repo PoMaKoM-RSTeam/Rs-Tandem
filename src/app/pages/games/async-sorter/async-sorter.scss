@@ -6,6 +6,11 @@
   padding-inline: 20px;
 }
 
+.stats-wrapper {
+  display: flex;
+  gap: 30px;
+}
+
 ul {
   padding-left: 0;
   list-style-type: none;

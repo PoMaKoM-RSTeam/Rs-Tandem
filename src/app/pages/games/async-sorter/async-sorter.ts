@@ -8,12 +8,21 @@ import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
 import { TASK_TYPES, TaskType } from './shared/types';
 import { TndmTimer } from './components/timer/timer';
 import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
+import { TndmMoveCounter } from './components/move-counter/move-counter';
 
 @Component({
   selector: 'tndm-async-sorter',
   templateUrl: 'async-sorter.html',
   styleUrl: 'async-sorter.scss',
-  imports: [TndmButton, TndmCodeBlocksList, TndmTaskBucketsList, TndmFinalCallStack, CdkDropListGroup, TndmTimer],
+  imports: [
+    TndmButton,
+    TndmCodeBlocksList,
+    TndmTaskBucketsList,
+    TndmFinalCallStack,
+    CdkDropListGroup,
+    TndmTimer,
+    TndmMoveCounter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAsyncSorter {
@@ -28,6 +37,8 @@ export class TndmAsyncSorter {
   readonly finalCallStack = signal<CodeBlockData[]>([]);
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
   readonly buttonDisabled = signal<boolean>(true);
+
+  readonly moves = signal<number>(0);
 
   private isSourceListEmtpy = false;
 
@@ -63,6 +74,8 @@ export class TndmAsyncSorter {
 
   onCodeBlockDropped(data: CodeBlockData): void {
     this.codeBlocksList().removeCodeBlock(data.executionOrder);
+
+    this.moves.update(number => (number += 1));
 
     if (this.isSourceListEmtpy && !this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(true);
