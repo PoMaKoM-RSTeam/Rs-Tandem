@@ -9,4 +9,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class TndmMovesCounter {
   readonly moves = input.required<number>();
+  readonly movesBeforeFirstMistake = input.required<number>();
 }

@@ -5,8 +5,7 @@ import { TndmAsyncSorter } from './async-sorter';
 import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-list';
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
-import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
-import { TASK_TYPES } from './shared/types';
+import { CodeBlockData, TASK_TYPES } from './shared/types';
 
 describe('TndmAsyncSorter', () => {
   let component: TndmAsyncSorter;

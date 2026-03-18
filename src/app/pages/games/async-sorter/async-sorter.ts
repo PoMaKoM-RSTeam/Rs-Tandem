@@ -41,10 +41,12 @@ export class TndmAsyncSorter {
 
   readonly moves = signal(0);
   readonly mistakes = signal(0);
+  readonly movesBeforeFirstMistake = signal(0);
 
   private isSourceListEmtpy = false;
   readonly isDraggingDisabled = signal(false);
   readonly isButtonPressed = signal(false);
+  private isMistakeHappened = false;
 
   private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
@@ -69,16 +71,18 @@ export class TndmAsyncSorter {
     if (!animationQueue.length) {
       return;
     }
-
     this.animateBlocks(animationQueue);
+
     this.timer().stop();
     this.buttonDisabled.set(true);
     this.isDraggingDisabled.set(true);
     this.isButtonPressed.set(true);
+
     this.fetcherService.uploadGameStats({
       seconds: this.timer().seconds(),
       moves: this.moves(),
       mistakes: this.mistakes(),
+      movesBeforeFirstMistake: this.movesBeforeFirstMistake(),
     });
   }
 
@@ -88,6 +92,7 @@ export class TndmAsyncSorter {
     const isCorrectBucket = codeBlockData.taskType === bucketTaskType;
     if (!isCorrectBucket) {
       this.mistakes.update(mistakes => (mistakes += 1));
+      this.isMistakeHappened = true;
     }
 
     this.codeBlocksList().removeCodeBlock(codeBlockData.executionOrder);
@@ -96,6 +101,10 @@ export class TndmAsyncSorter {
 
     if (this.isSourceListEmtpy && !this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(true);
+    }
+
+    if (!this.isMistakeHappened) {
+      this.movesBeforeFirstMistake.update(moves => (moves += 1));
     }
   }
 

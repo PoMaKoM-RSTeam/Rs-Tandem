@@ -4,6 +4,9 @@
   gap: 20px;
   align-items: flex-start;
   padding-inline: 20px;
+  & .heading {
+    margin-top: 20px;
+  }
 }
 
 .stats-wrapper {

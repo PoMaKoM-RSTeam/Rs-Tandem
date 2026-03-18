@@ -1,7 +1,7 @@
-<h2>Async sorter</h2>
+<h2 class="heading">Async sorter</h2>
 <div class="stats-wrapper">
   <tndm-timer />
-  <tndm-moves-counter [moves]="moves()" />
+  <tndm-moves-counter [moves]="moves()" [movesBeforeFirstMistake]="movesBeforeFirstMistake()" />
   <tndm-mistakes-counter [mistakes]="mistakes()" />
 </div>
 <tndm-button [btnConfig]="{ label: 'Run loop', isDisabled: buttonDisabled()}" (clicked)="runLoop()" />
