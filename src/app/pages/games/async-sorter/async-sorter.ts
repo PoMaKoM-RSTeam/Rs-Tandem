@@ -17,6 +17,7 @@ import { TndmTimer } from './components/timer/timer';
 })
 export class TndmAsyncSorter {
   readonly codeBlocksList = viewChild.required(TndmCodeBlocksList);
+  readonly timer = viewChild.required(TndmTimer);
 
   readonly syncBucket = signal<CodeBlockData[]>([]);
   readonly microBucket = signal<CodeBlockData[]>([]);
@@ -51,6 +52,8 @@ export class TndmAsyncSorter {
     }
 
     this.animateBlocks(animationQueue);
+    this.timer().stop();
+    this.buttonDisabled.set(true);
   }
 
   onCodeBlockDropped(data: CodeBlockData): void {
