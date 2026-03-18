@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TndmCodeBlock } from '../code-block/code-block';
 import { CodeBlockData } from '../code-blocks-list/code-blocks-data';
 import { taskType } from '../../shared/types';
@@ -29,6 +29,4 @@ export class TndmTaskBucket {
     this.bucketContentUpdated.emit([...event.container.data]);
     this.codeBlockDropped.emit(event.item.data);
   }
-
-  taskTypePredicate = (item: CdkDrag<CodeBlockData>): boolean => item.data.taskType === this.taskType();
 }

@@ -1,12 +1,12 @@
 <h4 class="bucket-heading">{{ heading() }}</h4>
-<ul
-  cdkDropList
-  class="bucket-content"
-  [cdkDropListData]="codeBlocks()"
-  [cdkDropListEnterPredicate]="taskTypePredicate"
-  (cdkDropListDropped)="drop($event)">
+<ul cdkDropList class="bucket-content" [cdkDropListData]="codeBlocks()" (cdkDropListDropped)="drop($event)">
   @for (item of codeBlocks(); track item) {
-  <li class="list-item" tndm-code-block [cdkDragData]="item" [executionOrder]="item.executionOrder">
+  <li
+    class="list-item"
+    tndm-code-block
+    [cdkDragData]="item"
+    [executionOrder]="item.executionOrder"
+    [inWrongBucket]="item.taskType !== taskType()">
     <pre>{{ item.code }}</pre>
   </li>
   }
