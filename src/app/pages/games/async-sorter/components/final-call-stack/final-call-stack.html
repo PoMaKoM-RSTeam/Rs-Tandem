@@ -9,7 +9,7 @@
     [cdkDragDisabled]="true"
     [class.is-hidden]="invisibleCodeBlocks().includes(item)"
     [executionOrder]="item.executionOrder"
-    [inFinalStack]="true">
+    [isButtonPressed]="true">
     <pre>{{ item.code }}</pre>
   </li>
   }

@@ -15,6 +15,8 @@ export class TndmTaskBucket {
   readonly heading = input.required<string>();
   readonly taskType = input.required<TaskType>();
   readonly codeBlocks = input.required<CodeBlockData[]>();
+  readonly isDraggingDisabled = input.required<boolean>();
+  readonly isButtonPressed = input.required<boolean>();
 
   readonly bucketContentUpdated = output<CodeBlockData[]>();
   readonly codeBlockDropped = output<CodeBlockData>();

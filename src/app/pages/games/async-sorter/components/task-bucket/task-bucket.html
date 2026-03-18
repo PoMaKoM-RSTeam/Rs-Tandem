@@ -5,8 +5,10 @@
     class="list-item"
     tndm-code-block
     [cdkDragData]="item"
+    [cdkDragDisabled]="isDraggingDisabled()"
     [executionOrder]="item.executionOrder"
     [inWrongBucket]="item.taskType !== taskType()"
+    [isButtonPressed]="isButtonPressed()"
     [isPlacedCorrectly]="item.taskType === taskType()">
     <pre>{{ item.code }}</pre>
   </li>

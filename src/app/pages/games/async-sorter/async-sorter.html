@@ -7,6 +7,8 @@
 <section cdkDropListGroup class="fields-wrapper">
   <tndm-code-blocks-list (isEmpty)="onSourceListIsEmpty()" />
   <tndm-task-bucket-list
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
     [macroBucket]="macroBucket()"
     [microBucket]="microBucket()"
     [syncBucket]="syncBucket()"

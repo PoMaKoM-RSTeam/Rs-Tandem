@@ -13,7 +13,7 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
   ],
   host: {
     '[attr.data-execution-order]': 'executionOrder()',
-    '[class.in-final-stack]': 'inFinalStack()',
+    '[class.non-draggable]': 'isButtonPressed()',
     '[class.in-wrong-bucket]': 'inWrongBucket()',
     '[class.is-placed-correctly]': 'isPlacedCorrectly()',
   },
@@ -22,7 +22,7 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
 export class TndmCodeBlock {
   readonly executionOrder = input.required<number>();
 
-  readonly inFinalStack = input<boolean>(false);
+  readonly isButtonPressed = input<boolean>(false);
 
   readonly inWrongBucket = input<boolean>(false);
   readonly isPlacedCorrectly = input<boolean>(false);

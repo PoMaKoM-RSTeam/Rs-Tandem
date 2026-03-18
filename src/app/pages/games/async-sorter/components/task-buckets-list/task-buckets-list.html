@@ -5,6 +5,8 @@
     tndm-task-bucket
     [codeBlocks]="syncBucket()"
     [heading]="'Synchronous (Call Stack)'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
     [taskType]="TASK_TYPES.sync"
     (bucketContentUpdated)="syncBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
@@ -12,6 +14,8 @@
     tndm-task-bucket
     [codeBlocks]="microBucket()"
     [heading]="'Micro Tasks'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
     [taskType]="TASK_TYPES.micro"
     (bucketContentUpdated)="microBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
@@ -19,6 +23,8 @@
     tndm-task-bucket
     [codeBlocks]="macroBucket()"
     [heading]="'Macro Tasks'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
     [taskType]="TASK_TYPES.macro"
     (bucketContentUpdated)="macroBucketChanged.emit($event)"
     (codeBlockDropped)="codeBlockDropped.emit($event)"></li>

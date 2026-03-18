@@ -14,6 +14,9 @@ import { TASK_TYPES } from '../../shared/types';
 export class TndmTaskBucketsList {
   readonly TASK_TYPES = TASK_TYPES;
 
+  readonly isDraggingDisabled = input.required<boolean>();
+  readonly isButtonPressed = input.required<boolean>();
+
   readonly syncBucket = input.required<CodeBlockData[]>();
   readonly microBucket = input.required<CodeBlockData[]>();
   readonly macroBucket = input.required<CodeBlockData[]>();

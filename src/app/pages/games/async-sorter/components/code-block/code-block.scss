@@ -28,7 +28,7 @@
     @include status-icon('✅');
   }
 
-  &.in-final-stack {
+  &.non-draggable {
     cursor: default;
   }
 }

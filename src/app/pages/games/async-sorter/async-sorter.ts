@@ -36,11 +36,13 @@ export class TndmAsyncSorter {
 
   readonly finalCallStack = signal<CodeBlockData[]>([]);
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
-  readonly buttonDisabled = signal<boolean>(true);
+  readonly buttonDisabled = signal(true);
 
-  readonly moves = signal<number>(0);
+  readonly moves = signal(0);
 
   private isSourceListEmtpy = false;
+  readonly isDraggingDisabled = signal(false);
+  readonly isButtonPressed = signal(false);
 
   private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
@@ -69,6 +71,8 @@ export class TndmAsyncSorter {
     this.animateBlocks(animationQueue);
     this.timer().stop();
     this.buttonDisabled.set(true);
+    this.isDraggingDisabled.set(true);
+    this.isButtonPressed.set(true);
     this.fetcherService.uploadGameTime(this.timer().seconds());
   }
 
