@@ -29,6 +29,8 @@ export class TndmAsyncSorter {
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
   readonly buttonDisabled = signal<boolean>(true);
 
+  private isSourceListEmtpy = false;
+
   private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
       case TASK_TYPES.sync:
@@ -61,9 +63,15 @@ export class TndmAsyncSorter {
 
   onCodeBlockDropped(data: CodeBlockData): void {
     this.codeBlocksList().removeCodeBlock(data.executionOrder);
+
+    if (this.isSourceListEmtpy && !this.areAllBlocksPlacedCorrectly()) {
+      this.buttonDisabled.set(true);
+    }
   }
 
   onSourceListIsEmpty(): void {
+    this.isSourceListEmtpy = true;
+
     if (this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(false);
     }
