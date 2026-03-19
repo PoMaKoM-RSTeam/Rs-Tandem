@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { TndmAsyncSorter } from './pages/games/async-sorter/async-sorter';
 import { AUTH_ROUTES_SEGMENTS, authRoutes, tndmAuthGuard } from '@auth';
 import { TndmAuthPage } from './pages/tndm-auth-page/tndm-auth-page';
+import { TndmAiExam } from './pages/games/ai-exam/ai-exam';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'code-golf', pathMatch: 'full' },
@@ -13,6 +14,11 @@ export const routes: Routes = [
   {
     path: 'async-sorter',
     component: TndmAsyncSorter,
+    canActivate: [tndmAuthGuard],
+  },
+  {
+    path: 'ai-exam',
+    component: TndmAiExam,
     canActivate: [tndmAuthGuard],
   },
   {
