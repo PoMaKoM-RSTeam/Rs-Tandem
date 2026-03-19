@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CodeBlock, Puzzle } from '../../models/puzzle.model';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
@@ -16,7 +16,7 @@ import { validateSolution } from './helpers/validate-solution.utils';
   styleUrl: './puzzle-board.scss',
   templateUrl: './puzzle-board.html',
 })
-export class TndmPuzzleBoard implements OnInit {
+export class TndmPuzzleBoard {
   readonly puzzle = input.required<Puzzle>();
   readonly solved = output<void>();
   readonly back = output<void>();
@@ -27,8 +27,13 @@ export class TndmPuzzleBoard implements OnInit {
 
   readonly allSlotsFilled = computed(() => Object.values(this.state().slots).every(s => s.currentBlockId !== null));
 
-  ngOnInit(): void {
-    this.resetPuzzle();
+  constructor() {
+    effect(() => {
+      const puzzle = this.puzzle();
+      this.state.set(buildInitialState(puzzle));
+      this.isSolved.set(false);
+      this.showHint.set(false);
+    });
   }
 
   toggleHint(): void {
