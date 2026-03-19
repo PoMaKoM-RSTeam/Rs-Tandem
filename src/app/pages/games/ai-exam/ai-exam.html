@@ -1,0 +1,20 @@
+<h2>AI Exam</h2>
+
+<h3>Description and instruction:</h3>
+<p>
+  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut, a quod ab, sed quaerat aspernatur iure accusantium
+  praesentium minima reprehenderit aliquid obcaecati numquam similique! Veritatis odit aliquam in id hic!
+</p>
+
+<div class="button-wrapper">
+  <tndm-button [btnConfig]="{ label: 'Generate question' }" />
+  <tndm-button [btnConfig]="{ label: 'Skip question' }" />
+</div>
+
+<p class="ai-question">AI's question goes here ...</p>
+
+<form action="">
+  <label for="user-answer">Write your answer to the question:</label>
+  <textarea cols="10" id="answer" name="answer" placeholder="Your answer" rows="4"></textarea>
+  <tndm-button [btnConfig]="{label: 'Send review'}" />
+</form>
