@@ -7,7 +7,7 @@
 </p>
 
 <div class="button-wrapper">
-  <tndm-button [btnConfig]="{ label: 'Generate question' }" />
+  <tndm-button [btnConfig]="{ label: 'Generate question' }" (clicked)="generateQuestion()" />
   <tndm-button [btnConfig]="{ label: 'Skip question' }" />
 </div>
 
