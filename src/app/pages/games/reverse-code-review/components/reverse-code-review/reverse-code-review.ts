@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { TndmCaseSidebar } from '../case-sidebar/case-sidebar';
 import { ReviewCase } from '../../models/review-case.model';
 import { REVIEW_CASES_DATA } from '../../data/review-cases.data';
 
 @Component({
   selector: 'tndm-reverse-code-review',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TndmCaseSidebar],
   templateUrl: './reverse-code-review.html',
   styleUrl: './reverse-code-review.scss',
 })

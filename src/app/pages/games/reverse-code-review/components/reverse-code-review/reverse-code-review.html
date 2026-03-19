@@ -4,5 +4,10 @@
     <p class="page_subtitle"></p>
   </header>
 
-  <div class="page_layout"></div>
+  <div class="page_layout">
+    <tndm-case-sidebar
+      [activeCaseId]="activeCase()?.id ?? null"
+      [cases]="allCases()"
+      (caseSelected)="activeCase.set($event)" />
+  </div>
 </div>
