@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { OllamaService } from './ollama.service';
+import { AiExamOllamaService } from './ollama.service';
 
 @Component({
   selector: 'tndm-ai-exam',
@@ -10,9 +10,11 @@ import { OllamaService } from './ollama.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam {
-  readonly ollama = new OllamaService();
+  private readonly ollama = inject(AiExamOllamaService);
+  readonly currentQuestion = signal('');
 
-  generateQuestion(): void {
-    this.ollama.ask('3+3');
+  async generateQuestion(): Promise<void> {
+    const answer = await this.ollama.ask('3+3');
+    console.log(answer);
   }
 }
