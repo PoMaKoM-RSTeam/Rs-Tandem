@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
 import { REGEX_RULES } from '../../types/regex-pattern';
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
@@ -20,20 +20,31 @@ export class TndmCodeGolf {
   private readonly fetcherService = inject(CodeGolfFetcherService);
   private readonly validatorService = inject(CodeValidatorService);
 
+  readonly showModal = signal(false);
+  readonly rawCode = signal('');
+
   readonly isChecking = this.validatorService.isChecking;
   readonly lastResult = this.validatorService.lastResult;
 
-  readonly showModal = signal(false);
+  readonly ranksResource = rxResource({
+    stream: () => this.fetcherService.getGolfRanks(),
+  });
+  readonly challengeResource = rxResource({
+    stream: () => this.fetcherService.getRandomChallenge(),
+  });
 
-  constructor() {
-    effect(() => {
-      const result = this.lastResult();
-      console.log(result);
-      if (result) {
-        this.showModal.set(true);
-      }
-    });
-  }
+  readonly currentChallenge = computed(() => this.challengeResource.value());
+  readonly byteCount = computed(() => this.calculateBytes(this.rawCode()));
+
+  protected readonly okBtnConfig = { label: 'Ok' };
+  protected readonly checkBtnConfig = { label: 'Check Solution' };
+  protected readonly nextBtnConfig = { label: 'Next Challenge' };
+
+  readonly currentRank = computed((): GolfRank => {
+    const bytes = this.byteCount();
+    const allRanks = this.ranksResource.value() ?? [];
+    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
+  });
 
   protected closeModal(): void {
     this.showModal.set(false);
@@ -45,26 +56,16 @@ export class TndmCodeGolf {
 
     if (code && challenge) {
       this.validatorService.check(code, challenge.test_cases);
+      this.showModal.set(true);
     }
   }
 
-  readonly ranksResource = rxResource({
-    stream: () => this.fetcherService.getGolfRanks(),
-  });
-  readonly challengeResource = rxResource({
-    stream: () => this.fetcherService.getRandomChallenge(),
-  });
+  protected async nextChallenge(): Promise<void> {
+    this.rawCode.set('');
+    this.challengeResource.reload();
+  }
 
-  readonly rawCode = signal('');
-
-  readonly currentChallenge = computed(() => this.challengeResource.value());
-
-  protected readonly okBtnConfig = { label: 'Ok' };
-  protected readonly checkBtnConfig = { label: 'Check Solution' };
-  protected readonly nextBtnConfig = { label: 'Next Challenge' };
-
-  readonly byteCount = computed(() => {
-    const code = this.rawCode();
+  private calculateBytes(code: string): number {
     if (!code) {
       return 0;
     }
@@ -72,16 +73,5 @@ export class TndmCodeGolf {
       .replace(REGEX_RULES.MultiComment, '')
       .replace(REGEX_RULES.SingleComment, '')
       .replace(REGEX_RULES.AllWhitespace, '').length;
-  });
-
-  readonly currentRank = computed((): GolfRank => {
-    const bytes = this.byteCount();
-    const allRanks = this.ranksResource.value() ?? [];
-    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
-  });
-
-  protected async nextChallenge(): Promise<void> {
-    this.rawCode.set('');
-    this.challengeResource.reload();
   }
 }

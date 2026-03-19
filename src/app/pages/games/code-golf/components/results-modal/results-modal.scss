@@ -1,0 +1,67 @@
+@use 'sass:color';
+
+$color-border: #e1e4e8;
+$color-bg-secondary: #f6f8fa;
+$color-success: #28a745;
+$color-danger: #d73a49;
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+
+  ul {
+    padding: 0;
+    margin: 20px 0;
+    list-style: none;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr 1fr 50px;
+    gap: 10px;
+    padding: 12px;
+    align-items: center;
+    border-bottom: 1px solid $color-border;
+
+    &.table-header {
+      background: $color-bg-secondary;
+      font-weight: bold;
+    }
+
+    &.passed {
+      background-color: #e6ffed;
+      color: color.scale($color-success, $lightness: -20%);
+    }
+    &.failed {
+      background-color: #ffeef0;
+      color: color.scale($color-danger, $lightness: -20%);
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.error-text {
+  color: $color-danger;
+  font-weight: bold;
+}
