@@ -41,7 +41,9 @@ export class CodeGolfService implements OnDestroy {
 
   readonly byteCount = computed(() => {
     const code = this.rawCode();
-    if (!code) {return 0;}
+    if (!code) {
+      return 0;
+    }
     return code
       .replace(REGEX_RULES.MultiComment, '')
       .replace(REGEX_RULES.SingleComment, '')
@@ -75,12 +77,22 @@ export class CodeGolfService implements OnDestroy {
     this.challengeResource.reload();
   }
 
+  saveResult(challengeKey: string, userId: string, bytes: number): void {
+    this.fetcher.saveResult(challengeKey, userId, bytes);
+  }
+
   private initWorker(): void {
     if (typeof Worker !== 'undefined') {
       this.worker = new Worker(new URL('./code-golf.worker', import.meta.url));
 
       this.worker.onmessage = ({ data }: MessageEvent<WorkerResponse>): void => {
         this.result.set(data);
+
+        const challenge = this.currentChallenge();
+        const userId = this.userId();
+        if (data.allPassed && challenge && userId) {
+          this.saveResult(challenge.challenge_key, userId, this.byteCount());
+        }
       };
 
       this.worker.onerror = (): void => {

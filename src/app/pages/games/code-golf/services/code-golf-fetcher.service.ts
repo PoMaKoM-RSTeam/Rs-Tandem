@@ -10,6 +10,7 @@ export class CodeGolfFetcherService {
   private readonly supabaseUrl = 'https://bqfoaeuuwilliipmpovu.supabase.co';
   private readonly supabaseKey = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
   private readonly GET_CHALLENGE = 'get_random_challenge';
+  private readonly SAVE_CHALLENGE = 'save_golf_result';
   private readonly GET_RANKS = 'get_golf_ranks';
   private readonly toastService = inject(ToastService);
 
@@ -45,6 +46,27 @@ export class CodeGolfFetcherService {
       catchError(() => {
         this.toastService.danger('Oops, something went wrong!', `Please refresh the page or try again later.`);
         return of([]);
+      })
+    );
+  }
+
+  saveResult(challengeKey: string, userId: string, bytes: number): Observable<void> {
+    return from(
+      this.supabase.rpc(this.SAVE_CHALLENGE, {
+        p_challenge_key: challengeKey,
+        p_user_id: userId,
+        p_byte_count: bytes,
+      })
+    ).pipe(
+      map(({ error }) => {
+        if (error) {
+          throw error;
+        }
+        return;
+      }),
+      catchError(error => {
+        this.toastService.danger('Error saving result', error.message);
+        throw error;
       })
     );
   }
