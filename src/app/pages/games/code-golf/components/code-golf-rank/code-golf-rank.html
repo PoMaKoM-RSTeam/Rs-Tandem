@@ -1,3 +1,16 @@
+<div class="best-result">
+  @if (previousBest(); as best) {
+  <div class="record-badge">
+    <span class="label">Your best result:</span>
+    <span class="value">{{ best }} Bytes</span>
+  </div>
+  @if (byteDiff(); as diff) {
+  <div class="diff-indicator" [class.progress]="diff > 0" [class.regress]="diff < 0">
+    {{ diff }} Bytes
+    <span class="diff-label"> ({{ diff > 0 ? 'progress' : 'regress' }}) </span>
+  </div>
+  } }
+</div>
 <div class="game-info">
   @if (rank(); as rank) {
   <div class="rank-info">

@@ -1,9 +1,10 @@
 import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { CodeGolfFetcherService } from './code-golf-fetcher.service';
 import { TndmAuthStateStoreService } from '@auth';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
+import { of, switchMap } from 'rxjs';
 
 export type TestResult = {
   input: unknown;
@@ -35,6 +36,22 @@ export class CodeGolfService implements OnDestroy {
   readonly challengeResource = rxResource({
     stream: () => this.fetcher.getRandomChallenge(),
   });
+
+  private readonly userResult = toObservable(
+    computed(() => ({
+      key: this.currentChallenge()?.challenge_key,
+      uid: this.userId(),
+    }))
+  ).pipe(
+    switchMap(({ key, uid }) => {
+      if (!key || !uid) {
+        return of(null);
+      }
+      return this.fetcher.getUserChallengeResult(key, uid);
+    })
+  );
+
+  readonly previousBest = toSignal(this.userResult, { initialValue: null });
 
   readonly currentChallenge = computed(() => this.challengeResource.value());
   readonly userId = computed(() => this.authStore.user()?.id);

@@ -4,8 +4,67 @@
 
 :host {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-start;
   min-height: 100px;
+  width: 100%;
+}
+
+.best-result {
+  flex: 1;
+  max-width: 300px;
+}
+
+.record-badge {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$space-xs;
+  padding: vars.$space-sm vars.$space-md;
+  background-color: vars.$bg-surface;
+  border: 1px solid vars.$border-second-color;
+  border-left: 4px solid vars.$color-warning;
+  border-radius: vars.$radius-sm;
+  box-shadow: 2px 2px 0px vars.$border-main-color;
+
+  .label {
+    @include mx.text-ui(vars.$color-grey-accent, 0.7rem, vars.$font-weight-normal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .value {
+    @include mx.text-ui(vars.$text-primary-color, vars.$font-size-base, vars.$font-weight-bold);
+  }
+}
+
+.diff-indicator {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-xs;
+  margin-top: vars.$space-xs;
+  @include mx.text-ui(vars.$color-grey-accent, vars.$font-size-sm, vars.$font-weight-bold);
+
+  &.progress {
+    color: vars.$color-success;
+    &::before {
+      content: '▼';
+      font-size: 10px;
+    }
+  }
+
+  &.regress {
+    color: vars.$color-error;
+    &::before {
+      content: '▲';
+      font-size: 10px;
+    }
+  }
+
+  .diff-label {
+    font-size: 0.65rem;
+    font-weight: vars.$font-weight-normal;
+    opacity: 0.8;
+  }
 }
 
 .game-info {
