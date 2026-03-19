@@ -1,11 +1,15 @@
-import ollama from 'ollama';
+import { inject, Injectable } from '@angular/core';
+import { OllamaService } from '../../../core/ollama/ollama-service';
 
-export class OllamaService {
-  async ask(question: string): Promise<void> {
-    const response = await ollama.chat({
+@Injectable({ providedIn: 'root' })
+export class AiExamOllamaService {
+  private readonly ollama = inject(OllamaService).client;
+
+  async ask(question: string): Promise<string> {
+    const response = await this.ollama.chat({
       model: 'phi3',
       messages: [{ role: 'user', content: question }],
     });
-    console.log(response.message.content);
+    return response.message.content;
   }
 }
