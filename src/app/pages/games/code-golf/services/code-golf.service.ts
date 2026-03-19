@@ -1,5 +1,7 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { TestCase } from '../types/challenge';
+import { CodeGolfFetcherService } from './code-golf-fetcher.service';
+import { TndmAuthStateStoreService } from '@auth';
 
 export type TestResult = {
   input: unknown;
@@ -15,11 +17,12 @@ export type WorkerResponse = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class CodeValidatorService implements OnDestroy {
+export class CodeGolfService implements OnDestroy {
+  private readonly fetcher = inject(CodeGolfFetcherService);
+  private readonly authStore = inject(TndmAuthStateStoreService);
   private worker: Worker | undefined;
 
-  readonly isChecking = signal(false);
-  readonly lastResult = signal<WorkerResponse | null>(null);
+  readonly result = signal<WorkerResponse | null>(null);
 
   constructor() {
     this.initWorker();
@@ -30,13 +33,11 @@ export class CodeValidatorService implements OnDestroy {
       this.worker = new Worker(new URL('./code-golf.worker', import.meta.url));
 
       this.worker.onmessage = ({ data }: MessageEvent<WorkerResponse>): void => {
-        this.isChecking.set(false);
-        this.lastResult.set(data);
+        this.result.set(data);
       };
 
       this.worker.onerror = (): void => {
-        this.isChecking.set(false);
-        this.lastResult.set({ allPassed: false, error: 'Critical Worker Error' });
+        this.result.set({ allPassed: false, error: 'Critical Worker Error' });
       };
     }
   }
@@ -46,8 +47,6 @@ export class CodeValidatorService implements OnDestroy {
       console.error('Web Worker is not supported');
       return;
     }
-
-    this.isChecking.set(true);
     this.worker.postMessage({ code, testCases });
   }
 

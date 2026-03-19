@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
-import { WorkerResponse } from '../../services/code-validator.service';
+import { WorkerResponse } from '../../services/code-golf.service';
 
 @Component({
   selector: 'tndm-code-golf-results',

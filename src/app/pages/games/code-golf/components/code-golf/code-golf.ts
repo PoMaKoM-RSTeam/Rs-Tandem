@@ -6,8 +6,9 @@ import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { CodeValidatorService } from '../../services/code-validator.service';
 import { TndmCodeGolfResults } from '../results-modal/results-modal';
+import { TndmAuthStateStoreService } from '@auth';
+import { CodeGolfService } from '../../services/code-golf.service';
 
 @Component({
   selector: 'tndm-code-golf',
@@ -19,17 +20,19 @@ import { TndmCodeGolfResults } from '../results-modal/results-modal';
 })
 export class TndmCodeGolf {
   private readonly fetcherService = inject(CodeGolfFetcherService);
-  private readonly validatorService = inject(CodeValidatorService);
+  private readonly validatorService = inject(CodeGolfService);
+  private authStore = inject(TndmAuthStateStoreService);
 
   readonly showModal = signal(false);
   readonly rawCode = signal('');
+ // readonly userId: string | undefined = this.authStore.user()?.id;
 
-  readonly isChecking = this.validatorService.isChecking;
-  readonly lastResult = this.validatorService.lastResult;
+  readonly result = this.validatorService.result;
 
   readonly ranksResource = rxResource({
     stream: () => this.fetcherService.getGolfRanks(),
   });
+
   readonly challengeResource = rxResource({
     stream: () => this.fetcherService.getRandomChallenge(),
   });

@@ -11,7 +11,7 @@
 </div>
 } @else {
 <p class="challenge-info">No challenges available at the moment.</p>
-} @if (showModal() && lastResult(); as result) {
+} @if (showModal() && result(); as result) {
 <tndm-code-golf-results [result]="result" (closeModal)="closeModal()" />
 }
 
