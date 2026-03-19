@@ -1,7 +1,9 @@
-import { inject, Injectable, OnDestroy, signal } from '@angular/core';
-import { TestCase } from '../types/challenge';
+import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { CodeGolfFetcherService } from './code-golf-fetcher.service';
 import { TndmAuthStateStoreService } from '@auth';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { REGEX_RULES } from '../types/regex-pattern';
+import { GolfRank } from '../types/golf-rank';
 
 export type TestResult = {
   input: unknown;
@@ -22,10 +24,55 @@ export class CodeGolfService implements OnDestroy {
   private readonly authStore = inject(TndmAuthStateStoreService);
   private worker: Worker | undefined;
 
+  readonly rawCode = signal('');
+  readonly showResults = signal(false);
   readonly result = signal<WorkerResponse | null>(null);
+
+  readonly ranksResource = rxResource({
+    stream: () => this.fetcher.getGolfRanks(),
+  });
+
+  readonly challengeResource = rxResource({
+    stream: () => this.fetcher.getRandomChallenge(),
+  });
+
+  readonly currentChallenge = computed(() => this.challengeResource.value());
+  readonly userId = computed(() => this.authStore.user()?.id);
+
+  readonly byteCount = computed(() => {
+    const code = this.rawCode();
+    if (!code) {return 0;}
+    return code
+      .replace(REGEX_RULES.MultiComment, '')
+      .replace(REGEX_RULES.SingleComment, '')
+      .replace(REGEX_RULES.AllWhitespace, '').length;
+  });
+
+  readonly currentRank = computed((): GolfRank => {
+    const bytes = this.byteCount();
+    const allRanks = this.ranksResource.value() ?? [];
+    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
+  });
 
   constructor() {
     this.initWorker();
+  }
+
+  checkSolution(): void {
+    const code = this.rawCode();
+    const challenge = this.currentChallenge();
+
+    if (code && challenge && this.worker) {
+      this.worker.postMessage({ code, testCases: challenge.test_cases });
+      this.showResults.set(true);
+    }
+  }
+
+  nextChallenge(): void {
+    this.rawCode.set('');
+    this.showResults.set(false);
+    this.result.set(null);
+    this.challengeResource.reload();
   }
 
   private initWorker(): void {
@@ -40,14 +87,6 @@ export class CodeGolfService implements OnDestroy {
         this.result.set({ allPassed: false, error: 'Critical Worker Error' });
       };
     }
-  }
-
-  check(code: string, testCases: TestCase[]): void {
-    if (!this.worker) {
-      console.error('Web Worker is not supported');
-      return;
-    }
-    this.worker.postMessage({ code, testCases });
   }
 
   ngOnDestroy(): void {

@@ -1,13 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { GolfRank } from '../../types/golf-rank';
-import { REGEX_RULES } from '../../types/regex-pattern';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
-import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
-import { rxResource } from '@angular/core/rxjs-interop';
+
 import { TndmCodeGolfResults } from '../results-modal/results-modal';
-import { TndmAuthStateStoreService } from '@auth';
+
 import { CodeGolfService } from '../../services/code-golf.service';
 
 @Component({
@@ -19,62 +17,19 @@ import { CodeGolfService } from '../../services/code-golf.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
-  private readonly fetcherService = inject(CodeGolfFetcherService);
-  private readonly validatorService = inject(CodeGolfService);
-  private authStore = inject(TndmAuthStateStoreService);
-
-  readonly showModal = signal(false);
-  readonly rawCode = signal('');
- // readonly userId: string | undefined = this.authStore.user()?.id;
-
-  readonly result = this.validatorService.result;
-
-  readonly ranksResource = rxResource({
-    stream: () => this.fetcherService.getGolfRanks(),
-  });
-
-  readonly challengeResource = rxResource({
-    stream: () => this.fetcherService.getRandomChallenge(),
-  });
-
-  readonly currentChallenge = computed(() => this.challengeResource.value());
-  readonly byteCount = computed(() => this.calculateBytes(this.rawCode()));
-
+  protected readonly service = inject(CodeGolfService);
   protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
-  readonly currentRank = computed((): GolfRank => {
-    const bytes = this.byteCount();
-    const allRanks = this.ranksResource.value() ?? [];
-    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
-  });
+  protected check(): void {
+    this.service.checkSolution();
+  }
+
+  protected next(): void {
+    this.service.nextChallenge();
+  }
 
   protected closeModal(): void {
-    this.showModal.set(false);
-  }
-
-  protected checkSolution(): void {
-    const code = this.rawCode();
-    const challenge = this.currentChallenge();
-
-    if (code && challenge) {
-      this.validatorService.check(code, challenge.test_cases);
-      this.showModal.set(true);
-    }
-  }
-
-  protected async nextChallenge(): Promise<void> {
-    this.rawCode.set('');
-    this.challengeResource.reload();
-  }
-
-  private calculateBytes(code: string): number {
-    if (!code) {
-      return 0;
-    }
-    return code
-      .replace(REGEX_RULES.MultiComment, '')
-      .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '').length;
+    this.service.showResults.set(false);
   }
 }
