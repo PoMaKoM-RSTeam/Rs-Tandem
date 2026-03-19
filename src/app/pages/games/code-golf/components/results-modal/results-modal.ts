@@ -3,14 +3,14 @@ import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { WorkerResponse } from '../../services/code-validator.service';
 
 @Component({
-  selector: 'tndm-results-modal',
+  selector: 'tndm-code-golf-results',
   standalone: true,
   imports: [TndmButton],
   templateUrl: './results-modal.html',
   styleUrl: './results-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmResultsModal {
+export class TndmCodeGolfResults {
   readonly result = input.required<WorkerResponse>();
   readonly closeModal = output<void>();
 

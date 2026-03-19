@@ -7,11 +7,12 @@ import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { CodeValidatorService } from '../../services/code-validator.service';
+import { TndmCodeGolfResults } from '../results-modal/results-modal';
 
 @Component({
   selector: 'tndm-code-golf',
   standalone: true,
-  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton, TndmCodeGolfResults],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,7 +37,6 @@ export class TndmCodeGolf {
   readonly currentChallenge = computed(() => this.challengeResource.value());
   readonly byteCount = computed(() => this.calculateBytes(this.rawCode()));
 
-  protected readonly okBtnConfig = { label: 'Ok' };
   protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 

@@ -3,7 +3,7 @@
 type TestResult = {
   input: unknown;
   output: unknown;
- expected: unknown;
+  expected: unknown;
   passed: boolean;
 };
 

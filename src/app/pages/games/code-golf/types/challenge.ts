@@ -8,4 +8,4 @@ export type Challenge = {
 export type TestCase = {
   input: unknown;
   expected: unknown;
-}
+};

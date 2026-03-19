@@ -1,3 +1,7 @@
+@use 'sass:color';
+@use './styles/typography' as mx;
+@use './styles/variables' as vars;
+
 :host {
   display: flex;
   justify-content: flex-end;
@@ -12,8 +16,8 @@
 .rank-info {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 12px;
+  gap: vars.$space-md;
+  margin-bottom: vars.$space-md;
 }
 
 .icon {
@@ -21,32 +25,32 @@
 }
 
 .rank {
-  font-weight: 800;
-  font-size: 1.2rem;
+  font-family: vars.$font-family-heading;
+  font-size: vars.$font-size-lg;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #1a1a1a;
+  color: vars.$text-primary-color;
 }
 
 .bytes-amount {
-  color: #6a737d;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
+  color: vars.$color-grey-accent;
+  font-family: vars.$font-family-ui;
+  font-size: vars.$font-size-sm;
 }
 
 .rank-progress {
   height: 8px;
-  background: #f1f3f5;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  background: vars.$bg-surface;
+  border-radius: vars.$radius-sm;
+  margin-bottom: vars.$space-lg;
   overflow: hidden;
-  border: 1px solid #e1e4e8;
+  border: 1px solid vars.$border-second-color;
 }
 
 .progress-fill {
   height: 100%;
-  background: #2ecc71;
+  background-color: vars.$color-success;
   transition:
     width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    background-color 0.3s;
+    background-color vars.$transition-base;
 }
