@@ -7,14 +7,17 @@
 </p>
 
 <div class="button-wrapper">
-  <tndm-button [btnConfig]="{ label: 'Generate question' }" (clicked)="generateQuestion()" />
-  <tndm-button [btnConfig]="{ label: 'Skip question' }" />
+  <tndm-button
+    [btnConfig]="{ label: 'Generate question' }"
+    [class.await-loading]="isLoading()"
+    (clicked)="generateQuestion()" />
+  <tndm-button [btnConfig]="{ label: 'Skip question' }" [class.await-loading]="isLoading()" />
 </div>
 
-<p class="ai-question">AI's question goes here ...</p>
+<p class="ai-question">{{currentQuestion()}}</p>
 
 <form action="">
   <label for="user-answer">Write your answer to the question:</label>
   <textarea cols="10" id="answer" name="answer" placeholder="Your answer" rows="4"></textarea>
-  <tndm-button [btnConfig]="{label: 'Send review'}" />
+  <tndm-button [btnConfig]="{label: 'Send review'}" [class.await-loading]="isLoading()" />
 </form>
