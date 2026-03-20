@@ -7,6 +7,7 @@ import { AiExamOllamaService } from './ollama.service';
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
   imports: [TndmButton],
+  providers: [AiExamOllamaService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam {
@@ -20,7 +21,7 @@ export class TndmAiExam {
     }
     this.isLoading.set(true);
 
-    const answer = await this.ollama.ask(`3+3 `);
+    const answer = await this.ollama.ask(`I'm ready. Ask me a question on JavaScript`);
     this.currentQuestion.set(answer);
     this.isLoading.set(false);
   }
