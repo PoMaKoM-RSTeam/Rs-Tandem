@@ -21,6 +21,6 @@
 <tndm-code-golf-editor [(value)]="service.rawCode" />
 
 <div class="controls">
-  <tndm-button [btnConfig]="checkBtnConfig" (click)="service.checkSolution()" />
+  <tndm-button [btnConfig]="checkBtnConfig()" (click)="service.checkSolution()" />
   <tndm-button [btnConfig]="nextBtnConfig" (click)="service.nextChallenge()" />
 </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
@@ -18,7 +18,14 @@ import { CodeGolfService } from '../../services/code-golf.service';
 })
 export class TndmCodeGolf {
   protected readonly service = inject(CodeGolfService);
-  protected readonly checkBtnConfig = { label: 'Check Solution' };
+
+  protected readonly isCodeEmpty = computed(() => this.service.rawCode().trim().length === 0);
+
+  protected readonly checkBtnConfig = computed(() => ({
+    label: 'Check Solution',
+    isDisabled: this.isCodeEmpty(),
+  }));
+
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
   protected check(): void {
