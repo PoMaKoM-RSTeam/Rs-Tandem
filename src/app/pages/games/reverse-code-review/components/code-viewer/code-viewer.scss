@@ -1,0 +1,142 @@
+:host {
+  display: contents;
+}
+
+.viewer {
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.viewer_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: #292e36;
+  border-bottom: 1px solid #21262d;
+}
+
+.viewer_filename {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e6edf3;
+}
+
+.viewer_category {
+  font-size: 0.68rem;
+  color: #8b949e;
+  background: #21262d;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.viewer_editor {
+  display: flex;
+  background: #0d1117;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 24px;
+}
+
+.viewer_gutter {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  min-width: 40px;
+  text-align: right;
+  user-select: none;
+  border-right: 1px solid #21262d;
+  flex-shrink: 0;
+}
+
+.viewer_line-num {
+  padding: 0 8px;
+  color: #484f58;
+  font-size: 0.75rem;
+  height: 24px;
+  line-height: 24px;
+}
+
+.viewer_code {
+  flex: 1;
+  padding: 10px 0;
+  min-width: 0;
+}
+
+.viewer_line {
+  padding: 0 12px;
+  height: 24px;
+}
+
+.viewer_text {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  font-size: inherit;
+  line-height: inherit;
+  color: #e6edf3;
+  white-space: pre;
+}
+
+:host ::ng-deep .viewer_text {
+  .hljs-keyword,
+  .hljs-selector-tag {
+    color: #ff7b72;
+  }
+
+  .hljs-string,
+  .hljs-doctag,
+  .hljs-template-variable,
+  .hljs-template-tag {
+    color: #a5d6ff;
+  }
+
+  .hljs-comment {
+    color: #8b949e;
+    font-style: italic;
+  }
+
+  .hljs-number,
+  .hljs-literal {
+    color: #79c0ff;
+  }
+
+  .hljs-meta,
+  .hljs-meta .hljs-keyword {
+    color: #d2a8ff;
+  }
+
+  .hljs-type,
+  .hljs-built_in,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__ {
+    color: #ffa657;
+  }
+
+  .hljs-title.function_ {
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute {
+    color: #79c0ff;
+  }
+
+  .hljs-variable,
+  .hljs-property {
+    color: #e6edf3;
+  }
+
+  .hljs-params {
+    color: #e6edf3;
+  }
+
+  .hljs-regexp {
+    color: #7ee787;
+  }
+
+  .hljs-symbol {
+    color: #79c0ff;
+  }
+}

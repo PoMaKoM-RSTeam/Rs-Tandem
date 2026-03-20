@@ -9,5 +9,15 @@
       [activeCaseId]="activeCase()?.id ?? null"
       [cases]="allCases()"
       (caseSelected)="activeCase.set($event)" />
+
+    <main class="page_main">
+      @if (activeCase()) {
+      <tndm-code-viewer [reviewCase]="activeCase()!" />
+      } @else {
+      <div class="page_placeholder">
+        <p>Select a case from the sidebar.</p>
+      </div>
+      }
+    </main>
   </div>
 </div>
