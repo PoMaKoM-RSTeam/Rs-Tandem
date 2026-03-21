@@ -43,10 +43,10 @@ export class TndmAsyncSorter {
   readonly mistakes = signal(0);
   readonly movesBeforeFirstMistake = signal(0);
 
-  private isSourceListEmpty = false;
+  private readonly isSourceListEmpty = signal(false);
   readonly isDraggingDisabled = signal(false);
   readonly isButtonPressed = signal(false);
-  private isMistakeHappened = false;
+  private readonly isMistakeHappened = signal(false);
 
   private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
@@ -92,14 +92,14 @@ export class TndmAsyncSorter {
     const isCorrectBucket = codeBlockData.taskType === bucketTaskType;
     if (!isCorrectBucket) {
       this.mistakes.update(mistakes => (mistakes += 1));
-      this.isMistakeHappened = true;
+      this.isMistakeHappened.set(true);
     }
 
     this.codeBlocksList().removeCodeBlock(codeBlockData.executionOrder);
 
     this.moves.update(number => (number += 1));
 
-    if (this.isSourceListEmpty && !this.areAllBlocksPlacedCorrectly()) {
+    if (this.isSourceListEmpty() && !this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(true);
     }
 
@@ -109,7 +109,7 @@ export class TndmAsyncSorter {
   }
 
   onSourceListIsEmpty(): void {
-    this.isSourceListEmpty = true;
+    this.isSourceListEmpty.set(true);
 
     if (this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(false);
