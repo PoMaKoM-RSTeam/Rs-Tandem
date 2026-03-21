@@ -112,7 +112,7 @@ export class TndmAsyncSorter {
       this.buttonDisabled.set(true);
     }
 
-    if (!this.isMistakeHappened) {
+    if (!this.isMistakeHappened()) {
       this.movesBeforeFirstMistake.update(moves => (moves += 1));
     }
   }
