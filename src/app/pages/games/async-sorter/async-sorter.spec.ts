@@ -5,7 +5,7 @@ import { TndmAsyncSorter } from './async-sorter';
 import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-list';
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
-import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
+import { CodeBlockData, TASK_TYPES } from './shared/types';
 
 describe('TndmAsyncSorter', () => {
   let component: TndmAsyncSorter;
@@ -40,16 +40,16 @@ describe('TndmAsyncSorter', () => {
 
   it('runLoop sorts blocks by executionOrder and calls animateBlocks', () => {
     const sync: CodeBlockData[] = [
-      { code: 'sync-2', taskType: 'sync', executionOrder: 2 },
-      { code: 'sync-1', taskType: 'sync', executionOrder: 1 },
+      { code: 'sync-2', taskType: TASK_TYPES.sync, executionOrder: 2 },
+      { code: 'sync-1', taskType: TASK_TYPES.sync, executionOrder: 1 },
     ];
     const micro: CodeBlockData[] = [
-      { code: 'micro-4', taskType: 'micro', executionOrder: 4 },
-      { code: 'micro-3', taskType: 'micro', executionOrder: 3 },
+      { code: 'micro-4', taskType: TASK_TYPES.micro, executionOrder: 4 },
+      { code: 'micro-3', taskType: TASK_TYPES.micro, executionOrder: 3 },
     ];
     const macro: CodeBlockData[] = [
-      { code: 'macro-6', taskType: 'macro', executionOrder: 6 },
-      { code: 'macro-5', taskType: 'macro', executionOrder: 5 },
+      { code: 'macro-6', taskType: TASK_TYPES.macro, executionOrder: 6 },
+      { code: 'macro-5', taskType: TASK_TYPES.macro, executionOrder: 5 },
     ];
 
     component.syncBucket.set(sync);
@@ -71,12 +71,12 @@ describe('TndmAsyncSorter', () => {
     const orders = queue.map((b: CodeBlockData) => b.executionOrder);
     expect(orders).toEqual([1, 2, 3, 4, 5, 6]);
 
-    expect(queue[0].taskType).toBe('sync');
-    expect(queue[1].taskType).toBe('sync');
-    expect(queue[2].taskType).toBe('micro');
-    expect(queue[3].taskType).toBe('micro');
-    expect(queue[4].taskType).toBe('macro');
-    expect(queue[5].taskType).toBe('macro');
+    expect(queue[0].taskType).toBe(TASK_TYPES.sync);
+    expect(queue[1].taskType).toBe(TASK_TYPES.sync);
+    expect(queue[2].taskType).toBe(TASK_TYPES.micro);
+    expect(queue[3].taskType).toBe(TASK_TYPES.micro);
+    expect(queue[4].taskType).toBe(TASK_TYPES.macro);
+    expect(queue[5].taskType).toBe(TASK_TYPES.macro);
   });
 
   it('runLoop does nothing when all buckets are empty', () => {
@@ -99,7 +99,7 @@ describe('TndmAsyncSorter', () => {
 
     const block: CodeBlockData = {
       code: 'console.log(1);',
-      taskType: 'sync',
+      taskType: TASK_TYPES.sync,
       executionOrder: 1,
     };
     component.syncBucket.set([block]);
@@ -139,8 +139,8 @@ describe('TndmAsyncSorter', () => {
     const fixture = TestBed.createComponent(TndmFinalCallStack);
 
     const blocks: CodeBlockData[] = [
-      { code: '1', taskType: 'sync', executionOrder: 1 },
-      { code: '2', taskType: 'sync', executionOrder: 2 },
+      { code: '1', taskType: TASK_TYPES.sync, executionOrder: 1 },
+      { code: '2', taskType: TASK_TYPES.sync, executionOrder: 2 },
     ];
 
     fixture.componentRef.setInput('codeBlocks', blocks);

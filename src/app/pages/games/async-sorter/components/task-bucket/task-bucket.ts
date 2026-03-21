@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TndmCodeBlock } from '../code-block/code-block';
-import { CodeBlockData } from '../code-blocks-list/code-blocks-data';
-import { taskType } from '../../shared/types';
+import { CodeBlockData, CodeBlockDroppedPayload, TaskType } from '../../shared/types';
 
 @Component({
   selector: 'li[tndm-task-bucket]',
@@ -13,10 +12,13 @@ import { taskType } from '../../shared/types';
 })
 export class TndmTaskBucket {
   readonly heading = input.required<string>();
-  readonly taskType = input.required<taskType>();
+  readonly taskType = input.required<TaskType>();
   readonly codeBlocks = input.required<CodeBlockData[]>();
+  readonly isDraggingDisabled = input.required<boolean>();
+  readonly isButtonPressed = input.required<boolean>();
 
-  readonly codeBlockDropped = output<CodeBlockData[]>();
+  readonly bucketContentUpdated = output<CodeBlockData[]>();
+  readonly codeBlockDropped = output<CodeBlockDroppedPayload>();
 
   drop(event: CdkDragDrop<CodeBlockData[]>): void {
     if (event.previousContainer === event.container) {
@@ -25,8 +27,7 @@ export class TndmTaskBucket {
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
     }
 
-    this.codeBlockDropped.emit([...event.container.data]);
+    this.bucketContentUpdated.emit([...event.container.data]);
+    this.codeBlockDropped.emit({ codeBlockData: event.item.data as CodeBlockData, bucketTaskType: this.taskType() });
   }
-
-  taskTypePredicate = (item: CdkDrag<CodeBlockData>): boolean => item.data.taskType === this.taskType();
 }

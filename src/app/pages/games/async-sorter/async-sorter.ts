@@ -1,34 +1,65 @@
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChild, WritableSignal } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-list';
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { CodeBlockData } from './components/code-blocks-list/code-blocks-data';
-import { taskType } from './shared/types';
+import { CodeBlockData, CodeBlockDroppedPayload, TASK_TYPES, TaskType } from './shared/types';
+import { TndmTimer } from './components/timer/timer';
+import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
+import { TndmMovesCounter } from './components/moves-counter/moves-counter';
+import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-counter';
+import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
+import { ToastService } from '../../../core/toast/toast-service';
 
 @Component({
   selector: 'tndm-async-sorter',
   templateUrl: 'async-sorter.html',
   styleUrl: 'async-sorter.scss',
-  imports: [TndmButton, TndmCodeBlocksList, TndmTaskBucketsList, TndmFinalCallStack, CdkDropListGroup],
+  imports: [
+    TndmButton,
+    TndmToaster,
+    TndmCodeBlocksList,
+    TndmTaskBucketsList,
+    TndmFinalCallStack,
+    CdkDropListGroup,
+    TndmTimer,
+    TndmMovesCounter,
+    TndmMistakesCounter,
+  ],
+  providers: [AsyncSorterFetcherService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAsyncSorter {
+  readonly codeBlocksList = viewChild.required(TndmCodeBlocksList);
+  readonly timer = viewChild.required(TndmTimer);
+  private readonly fetcherService = inject(AsyncSorterFetcherService);
+  private readonly toaster = inject(ToastService);
+
   readonly syncBucket = signal<CodeBlockData[]>([]);
   readonly microBucket = signal<CodeBlockData[]>([]);
   readonly macroBucket = signal<CodeBlockData[]>([]);
 
   readonly finalCallStack = signal<CodeBlockData[]>([]);
   readonly invisibleCodeBlocks = signal<CodeBlockData[]>([]);
+  readonly buttonDisabled = signal(true);
 
-  private getBucketByType(type: taskType): WritableSignal<CodeBlockData[]> {
+  readonly moves = signal(0);
+  readonly mistakes = signal(0);
+  readonly movesBeforeFirstMistake = signal(0);
+
+  private readonly isSourceListEmpty = signal(false);
+  readonly isDraggingDisabled = signal(false);
+  readonly isButtonPressed = signal(false);
+  private readonly isMistakeHappened = signal(false);
+
+  private getBucketByType(type: TaskType): WritableSignal<CodeBlockData[]> {
     switch (type) {
-      case 'sync':
+      case TASK_TYPES.sync:
         return this.syncBucket;
-      case 'micro':
+      case TASK_TYPES.micro:
         return this.microBucket;
-      case 'macro':
+      case TASK_TYPES.macro:
         return this.macroBucket;
       default:
         throw new Error(
@@ -37,7 +68,7 @@ export class TndmAsyncSorter {
     }
   }
 
-  runLoop(): void {
+  async runLoop(): Promise<void> {
     const animationQueue = [...this.syncBucket(), ...this.microBucket(), ...this.macroBucket()].sort(
       (a, b) => a.executionOrder - b.executionOrder
     );
@@ -45,8 +76,61 @@ export class TndmAsyncSorter {
     if (!animationQueue.length) {
       return;
     }
-
     this.animateBlocks(animationQueue);
+
+    this.timer().stop();
+    this.buttonDisabled.set(true);
+    this.isDraggingDisabled.set(true);
+    this.isButtonPressed.set(true);
+
+    const error = await this.fetcherService.uploadGameStats({
+      seconds: this.timer().seconds(),
+      moves: this.moves(),
+      mistakes: this.mistakes(),
+      movesBeforeFirstMistake: this.movesBeforeFirstMistake(),
+    });
+
+    if (error) {
+      this.toaster.warning(`Failed to save results to DB`, error.message);
+    }
+  }
+
+  onCodeBlockDropped(payload: CodeBlockDroppedPayload): void {
+    const { codeBlockData, bucketTaskType } = payload;
+
+    const isCorrectBucket = codeBlockData.taskType === bucketTaskType;
+    if (!isCorrectBucket) {
+      this.mistakes.update(mistakes => (mistakes += 1));
+      this.isMistakeHappened.set(true);
+    }
+
+    this.codeBlocksList().removeCodeBlock(codeBlockData.executionOrder);
+
+    this.moves.update(number => (number += 1));
+
+    if (this.isSourceListEmpty() && !this.areAllBlocksPlacedCorrectly()) {
+      this.buttonDisabled.set(true);
+    }
+
+    if (!this.isMistakeHappened()) {
+      this.movesBeforeFirstMistake.update(moves => (moves += 1));
+    }
+  }
+
+  onSourceListIsEmpty(): void {
+    this.isSourceListEmpty.set(true);
+
+    if (this.areAllBlocksPlacedCorrectly()) {
+      this.buttonDisabled.set(false);
+    }
+  }
+
+  private areAllBlocksPlacedCorrectly(): boolean {
+    return (
+      this.syncBucket().every(block => block.taskType === TASK_TYPES.sync) &&
+      this.microBucket().every(block => block.taskType === TASK_TYPES.micro) &&
+      this.macroBucket().every(block => block.taskType === TASK_TYPES.macro)
+    );
   }
 
   private animateBlocks(queue: CodeBlockData[]): void {

@@ -1,4 +1,5 @@
 @use '../../shared/drag-drop' as dragDrop;
+@use '../../shared/field-heading' as heading;
 
 .final-stack-content {
   @include dragDrop.drag-drop-container;
@@ -8,4 +9,8 @@
 
 .is-hidden {
   visibility: hidden;
+}
+
+.heading {
+  @include heading.field-heading;
 }

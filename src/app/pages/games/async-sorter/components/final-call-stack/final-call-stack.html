@@ -1,4 +1,4 @@
-<h3>Final Call Stack</h3>
+<h3 class="heading">Final Call Stack</h3>
 
 <ul class="final-stack-content">
   @for (item of codeBlocks(); track item.executionOrder) {
@@ -9,7 +9,7 @@
     [cdkDragDisabled]="true"
     [class.is-hidden]="invisibleCodeBlocks().includes(item)"
     [executionOrder]="item.executionOrder"
-    [inFinalStack]="true">
+    [isButtonPressed]="true">
     <pre>{{ item.code }}</pre>
   </li>
   }
