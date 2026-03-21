@@ -13,20 +13,24 @@ type GameStats = {
 export class AsyncSorterFetcherService {
   private readonly supabase = inject(SupabaseService).client;
 
-  async uploadGameStats(gameStats: GameStats): Promise<void | PostgrestError> {
+  async uploadGameStats(gameStats: GameStats): Promise<void | PostgrestError | Error> {
     const { seconds, moves, mistakes, movesBeforeFirstMistake } = gameStats;
 
-    const { error } = await this.supabase.from('async_sorter').insert([
-      {
-        time_seconds: seconds,
-        moves_count: moves,
-        mistakes_count: mistakes,
-        moves_before_first_mistake: movesBeforeFirstMistake,
-      },
-    ]);
+    try {
+      const { error } = await this.supabase.from('async_sorter').insert([
+        {
+          time_seconds: seconds,
+          moves_count: moves,
+          mistakes_count: mistakes,
+          moves_before_first_mistake: movesBeforeFirstMistake,
+        },
+      ]);
 
-    if (error) {
-      return error;
+      if (error) {
+        return error;
+      }
+    } catch (error) {
+      return error instanceof Error ? error : new Error(String(error));
     }
   }
 }
