@@ -43,7 +43,7 @@ export class TndmAsyncSorter {
   readonly mistakes = signal(0);
   readonly movesBeforeFirstMistake = signal(0);
 
-  private isSourceListEmtpy = false;
+  private isSourceListEmpty = false;
   readonly isDraggingDisabled = signal(false);
   readonly isButtonPressed = signal(false);
   private isMistakeHappened = false;
@@ -99,7 +99,7 @@ export class TndmAsyncSorter {
 
     this.moves.update(number => (number += 1));
 
-    if (this.isSourceListEmtpy && !this.areAllBlocksPlacedCorrectly()) {
+    if (this.isSourceListEmpty && !this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(true);
     }
 
@@ -109,7 +109,7 @@ export class TndmAsyncSorter {
   }
 
   onSourceListIsEmpty(): void {
-    this.isSourceListEmtpy = true;
+    this.isSourceListEmpty = true;
 
     if (this.areAllBlocksPlacedCorrectly()) {
       this.buttonDisabled.set(false);
