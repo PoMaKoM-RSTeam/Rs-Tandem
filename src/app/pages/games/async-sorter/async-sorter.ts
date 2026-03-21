@@ -24,6 +24,7 @@ import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-coun
     TndmMovesCounter,
     TndmMistakesCounter,
   ],
+  providers: [AsyncSorterFetcherService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAsyncSorter {

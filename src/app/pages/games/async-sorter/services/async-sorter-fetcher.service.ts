@@ -8,7 +8,7 @@ type GameStats = {
   movesBeforeFirstMistake: number;
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AsyncSorterFetcherService {
   private readonly supabase = inject(SupabaseService).client;
 
