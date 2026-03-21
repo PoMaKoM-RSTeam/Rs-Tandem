@@ -9,6 +9,8 @@ import { TndmTimer } from './components/timer/timer';
 import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.service';
 import { TndmMovesCounter } from './components/moves-counter/moves-counter';
 import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-counter';
+import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
+import { ToastService } from '../../../core/toast/toast-service';
 
 @Component({
   selector: 'tndm-async-sorter',
@@ -16,6 +18,7 @@ import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-coun
   styleUrl: 'async-sorter.scss',
   imports: [
     TndmButton,
+    TndmToaster,
     TndmCodeBlocksList,
     TndmTaskBucketsList,
     TndmFinalCallStack,
@@ -31,6 +34,7 @@ export class TndmAsyncSorter {
   readonly codeBlocksList = viewChild.required(TndmCodeBlocksList);
   readonly timer = viewChild.required(TndmTimer);
   private readonly fetcherService = inject(AsyncSorterFetcherService);
+  private readonly toaster = inject(ToastService);
 
   readonly syncBucket = signal<CodeBlockData[]>([]);
   readonly microBucket = signal<CodeBlockData[]>([]);
@@ -64,7 +68,7 @@ export class TndmAsyncSorter {
     }
   }
 
-  runLoop(): void {
+  async runLoop(): Promise<void> {
     const animationQueue = [...this.syncBucket(), ...this.microBucket(), ...this.macroBucket()].sort(
       (a, b) => a.executionOrder - b.executionOrder
     );
@@ -79,12 +83,16 @@ export class TndmAsyncSorter {
     this.isDraggingDisabled.set(true);
     this.isButtonPressed.set(true);
 
-    this.fetcherService.uploadGameStats({
+    const error = await this.fetcherService.uploadGameStats({
       seconds: this.timer().seconds(),
       moves: this.moves(),
       mistakes: this.mistakes(),
       movesBeforeFirstMistake: this.movesBeforeFirstMistake(),
     });
+
+    if (error) {
+      this.toaster.warning(`Failed to save results to DB`, error.message);
+    }
   }
 
   onCodeBlockDropped(payload: CodeBlockDroppedPayload): void {

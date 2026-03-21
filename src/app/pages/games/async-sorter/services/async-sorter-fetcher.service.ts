@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from '../../../../core/supabase/supabase-service';
+import { PostgrestError } from '@supabase/supabase-js';
 
 type GameStats = {
   seconds: number;
@@ -12,7 +13,7 @@ type GameStats = {
 export class AsyncSorterFetcherService {
   private readonly supabase = inject(SupabaseService).client;
 
-  async uploadGameStats(gameStats: GameStats): Promise<void> {
+  async uploadGameStats(gameStats: GameStats): Promise<void | PostgrestError> {
     const { seconds, moves, mistakes, movesBeforeFirstMistake } = gameStats;
 
     const { error } = await this.supabase.from('async_sorter').insert([
@@ -25,7 +26,7 @@ export class AsyncSorterFetcherService {
     ]);
 
     if (error) {
-      console.error('Failed to upload game time to DB:', error);
+      return error;
     }
   }
 }
