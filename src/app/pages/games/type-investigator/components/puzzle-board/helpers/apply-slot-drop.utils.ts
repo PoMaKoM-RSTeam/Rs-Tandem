@@ -21,5 +21,5 @@ export function applySlotDrop(
   }
 
   slots[targetSlotId] = { ...targetSlot, currentBlockId: blockId, validationState: 'idle' };
-  return { slots, paletteBlockIds };
+  return { slots, paletteBlockIds, blockMap: state.blockMap };
 }

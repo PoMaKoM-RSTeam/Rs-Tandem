@@ -7,5 +7,5 @@ export function applyPaletteDrop(state: BoardState, blockId: string, fromSlot: s
 
   const slots = { ...state.slots };
   slots[fromSlot] = { ...slots[fromSlot], currentBlockId: null, validationState: 'idle' };
-  return { slots, paletteBlockIds: [...state.paletteBlockIds, blockId] };
+  return { slots, paletteBlockIds: [...state.paletteBlockIds, blockId], blockMap: state.blockMap };
 }

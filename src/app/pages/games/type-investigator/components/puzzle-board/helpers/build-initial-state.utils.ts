@@ -1,4 +1,4 @@
-import { DropSlot, Puzzle } from '../../../models/puzzle.model';
+import { CodeBlock, DropSlot, Puzzle } from '../../../models/puzzle.model';
 import { BoardState } from '../../../models/board.state.model';
 
 export function buildInitialState(puzzle: Puzzle): BoardState {
@@ -6,5 +6,11 @@ export function buildInitialState(puzzle: Puzzle): BoardState {
   for (const [id, slot] of Object.entries(puzzle.slots)) {
     slots[id] = { ...slot, currentBlockId: null, validationState: 'idle' };
   }
-  return { slots, paletteBlockIds: puzzle.availableBlocks.map(b => b.id) };
+
+  const blockMap = new Map<string, CodeBlock>();
+  for (const block of puzzle.availableBlocks) {
+    blockMap.set(block.id, block);
+  }
+
+  return { slots, paletteBlockIds: puzzle.availableBlocks.map(b => b.id), blockMap };
 }

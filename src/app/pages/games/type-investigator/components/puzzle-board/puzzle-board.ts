@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { CodeBlock, Puzzle } from '../../models/puzzle.model';
+import { Puzzle } from '../../models/puzzle.model';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { BoardState } from '../../models/board.state.model';
 import { buildInitialState } from './helpers/build-initial-state.utils';
-import { getBlock } from './helpers/get-block.utils';
 import { applySlotDrop } from './helpers/apply-slot-drop.utils';
 import { applyPaletteDrop } from './helpers/apply-palette-drop.utils';
 import { validateSolution } from './helpers/validate-solution.utils';
@@ -21,7 +20,7 @@ export class TndmPuzzleBoard {
   readonly solved = output<void>();
   readonly back = output<void>();
 
-  readonly state = signal<BoardState>({ slots: {}, paletteBlockIds: [] });
+  readonly state = signal<BoardState>({ slots: {}, paletteBlockIds: [], blockMap: new Map() });
   readonly showHint = signal(false);
   readonly isSolved = signal(false);
 
@@ -43,10 +42,6 @@ export class TndmPuzzleBoard {
   resetPuzzle(): void {
     this.state.set(buildInitialState(this.puzzle()));
     this.isSolved.set(false);
-  }
-
-  findBlock(id: string | null): CodeBlock | undefined {
-    return getBlock(this.puzzle(), id);
   }
 
   onDrop(event: CdkDragDrop<string>, targetSlotId: string): void {

@@ -14,7 +14,7 @@
     <div class="puzzle-board_line" [style.padding-left.rem]="line.indent * 1.5">
       @for (seg of line.segments; track $index) { @if (seg.kind === 'locked') {
       <span class="puzzle-board_token puzzle-board_token--{{ seg.tokenType }}">{{ seg.text }}</span>
-      } @else { @let slot = state().slots[seg.slotId]; @let placedBlock = findBlock(slot.currentBlockId);
+      } @else { @let slot = state().slots[seg.slotId]; @let placedBlock = state().blockMap.get(slot.currentBlockId!);
 
       <div
         cdkDropList
@@ -28,10 +28,14 @@
         @if (placedBlock) {
         <div
           cdkDrag
-          class="puzzle-board_block puzzle-board_block--{{ placedBlock.type }}"
+          class="puzzle-board_block"
           tabindex="0"
           [cdkDragData]="{ blockId: placedBlock.id, fromSlot: seg.slotId }"
+          [class.puzzle-board_block--bracket]="placedBlock.type === 'bracket'"
           [class.puzzle-board_block--correct]="slot.validationState === 'correct'"
+          [class.puzzle-board_block--identifier]="placedBlock.type === 'identifier'"
+          [class.puzzle-board_block--keyword]="placedBlock.type === 'keyword'"
+          [class.puzzle-board_block--operator]="placedBlock.type === 'operator'"
           [class.puzzle-board_block--wrong]="slot.validationState === 'wrong'">
           {{ placedBlock.label }}
           <div cdkDragPlaceholder class="puzzle-board_placeholder"></div>
@@ -51,12 +55,17 @@
       id="palette"
       [cdkDropListData]="'palette'"
       (cdkDropListDropped)="onDropToPalette($event)">
-      @for (blockId of state().paletteBlockIds; track blockId) { @let block = findBlock(blockId); @if (block) {
+      @for (blockId of state().paletteBlockIds; track blockId) { @let block = state().blockMap.get(blockId); @if (block)
+      {
       <div
         cdkDrag
-        class="puzzle-board_block puzzle-board_block--{{ block.type }}"
+        class="puzzle-board_block"
         tabindex="0"
-        [cdkDragData]="{ blockId: block.id, fromSlot: null }">
+        [cdkDragData]="{ blockId: block.id, fromSlot: null }"
+        [class.puzzle-board_block--bracket]="block.type === 'bracket'"
+        [class.puzzle-board_block--identifier]="block.type === 'identifier'"
+        [class.puzzle-board_block--keyword]="block.type === 'keyword'"
+        [class.puzzle-board_block--operator]="block.type === 'operator'">
         {{ block.label }}
         <div cdkDragPlaceholder class="puzzle-board_placeholder"></div>
       </div>
