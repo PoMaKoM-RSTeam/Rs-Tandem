@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, OnDestroy, signal } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 
 @Component({
@@ -8,7 +8,7 @@ import { interval, Subscription } from 'rxjs';
   styleUrl: './timer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmTimer {
+export class TndmTimer implements OnDestroy {
   readonly seconds = signal(0);
   private timerSubscription: Subscription | undefined;
   readonly formatedTime = computed(() => {
@@ -37,7 +37,7 @@ export class TndmTimer {
     this.timerSubscription = undefined;
   }
 
-  OnDestroy(): void {
+  ngOnDestroy(): void {
     this.stop();
   }
 }
