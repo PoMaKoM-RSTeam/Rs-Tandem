@@ -4,142 +4,142 @@
   display: contents;
 }
 
-.viewer {
-  border: 1px solid $color-gray;
-  border-radius: $radius-md;
-  overflow: hidden;
-  width: 100%;
-}
+.code-viewer {
+  .viewer {
+    border: 1px solid $color-gray;
+    border-radius: $radius-md;
+    overflow: hidden;
+    width: 100%;
+  }
 
-.viewer_header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: $space-sm $space-md;
-  background: $color-black;
-  border-bottom: 1px solid $color-black;
-}
+  .viewer_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-sm $space-md;
+    background: $color-gray;
+    border-bottom: 1px solid $color-black;
+  }
 
-.viewer_filename {
-  font-size: $font-size-sm;
-  font-weight: $font-weight-bold;
-  color: $color-white;
-}
+  .viewer_filename {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+  }
 
-.viewer_category {
-  font-size: 0.68rem;
-  color: $color-dark-grey;
-  background: $color-black;
-  padding: 2px $space-sm;
-  border-radius: $radius-lg;
-}
+  .viewer_category {
+    font-size: 0.68rem;
+    color: $color-dark-grey;
+    background: $color-gray;
+    padding: 2px $space-sm;
+    border-radius: $radius-lg;
+  }
 
-.viewer_editor {
-  display: flex;
-  background: $color-black;
-  overflow-x: auto;
-  font-size: $font-size-sm;
-  line-height: 24px;
-  margin: 0;
-}
+  .viewer_editor {
+    display: flex;
+    background: $color-gray;
+    overflow-x: auto;
+    font-size: $font-size-sm;
+    line-height: 24px;
+    margin: 0;
+  }
 
-.viewer_gutter {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-  min-width: 40px;
-  text-align: right;
-  user-select: none;
-  border-right: 1px solid $color-black;
-  flex-shrink: 0;
-}
+  .viewer_gutter {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    min-width: 40px;
+    text-align: right;
+    user-select: none;
+    border-right: 1px solid $color-black;
+    flex-shrink: 0;
+  }
 
-.viewer_line-num {
-  padding: 0 $space-sm;
-  color: $color-dark-grey;
-  font-size: 0.75rem;
-  height: 24px;
-  line-height: 24px;
-}
+  .viewer_line-num {
+    padding: 0 $space-sm;
+    color: $color-dark-grey;
+    font-size: 0.75rem;
+    height: 24px;
+    line-height: 24px;
+  }
 
-.viewer_code {
-  flex: 1;
-  padding: 10px 0;
-  min-width: 0;
-}
+  .viewer_code {
+    flex: 1;
+    padding: 10px 0;
+    min-width: 0;
+  }
 
-.viewer_line {
-  padding: 0 $space-md - $space-xs;
-  height: 24px;
-}
+  .viewer_line {
+    padding: 0 $space-md - $space-xs;
+    height: 24px;
+  }
 
-.viewer_text {
-  margin: 0;
-  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
-  font-size: inherit;
-  line-height: inherit;
-  color: $color-white;
-  white-space: pre;
-}
+  .viewer_text {
+    margin: 0;
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+    font-size: inherit;
+    line-height: inherit;
+    color: $color-white;
+    white-space: pre;
+  }
 
-:host ::ng-deep .viewer_text {
-  .hljs-keyword,
-  .hljs-selector-tag {
+  .viewer_text .hljs-keyword,
+  .viewer_text .hljs-selector-tag {
     color: #ff7b72;
   }
 
-  .hljs-string,
-  .hljs-doctag,
-  .hljs-template-variable,
-  .hljs-template-tag {
+  .viewer_text .hljs-string,
+  .viewer_text .hljs-doctag,
+  .viewer_text .hljs-template-variable,
+  .viewer_text .hljs-template-tag {
     color: #a5d6ff;
   }
 
-  .hljs-comment {
+  .viewer_text .hljs-comment {
     color: $color-dark-grey;
     font-style: italic;
   }
 
-  .hljs-number,
-  .hljs-literal {
+  .viewer_text .hljs-number,
+  .viewer_text .hljs-literal {
     color: #79c0ff;
   }
 
-  .hljs-meta,
-  .hljs-meta .hljs-keyword {
+  .viewer_text .hljs-meta,
+  .viewer_text .hljs-meta .viewer_text .hljs-keyword {
     color: #d2a8ff;
   }
 
-  .hljs-type,
-  .hljs-built_in,
-  .hljs-title.class_,
-  .hljs-title.class_.inherited__ {
+  .viewer_text .hljs-type,
+  .viewer_text .hljs-built_in,
+  .viewer_text .hljs-title.class_,
+  .viewer_text .hljs-title.class_.inherited__ {
     color: #ffa657;
   }
 
-  .hljs-title.function_ {
+  .viewer_text .hljs-title.function_ {
     color: #d2a8ff;
   }
 
-  .hljs-attr,
-  .hljs-attribute {
+  .viewer_text .hljs-attr,
+  .viewer_text .hljs-attribute {
     color: #79c0ff;
   }
 
-  .hljs-variable,
+  .viewer_text .hljs-variable,
   .hljs-property {
     color: $color-white;
   }
 
-  .hljs-params {
+  .viewer_text .hljs-params {
     color: $color-white;
   }
 
-  .hljs-regexp {
+  .viewer_text .hljs-regexp {
     color: #7ee787;
   }
 
-  .hljs-symbol {
+  .viewer_text .hljs-symbol {
     color: #79c0ff;
   }
 }

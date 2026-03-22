@@ -50,32 +50,33 @@
   font-size: $font-size-sm;
   color: #adbac7;
   transition: background $transition-fast;
+  width: 100%;
 }
 
 .sidebar_item:hover {
-  background: #21262d;
+  background: $color-black;
 }
 
 .sidebar_item:focus-visible {
-  outline: 2px solid #58a6ff;
+  outline: 2px solid $color-grey;
   outline-offset: 1px;
 }
 
 .sidebar_item--active {
   background: $color-black;
-  border-color: #58a6ff;
-  color: #e6edf3;
+  border-color: $color-orange;
+  color: $color-white;
 }
 
 .sidebar_index {
-  font-size: 0.68rem;
-  color: #484f58;
+  font-size: 0.6rem;
+  color: $color-dark-grey;
   min-width: $space-md;
   text-align: center;
 }
 
 .sidebar_item--active .sidebar_index {
-  color: #58a6ff;
+  color: $color-orange;
 }
 
 .sidebar_name {
@@ -87,7 +88,7 @@
 }
 
 .sidebar_difficulty {
-  font-size: 0.58rem;
+  font-size: $font-size-sm;
   font-weight: $font-weight-bold;
   text-transform: uppercase;
   padding: 1px 5px;
@@ -95,17 +96,19 @@
   flex-shrink: 0;
 }
 
+.sidebar_difficulty[data-diff='Junior'],
+.sidebar_difficulty[data-diff='Middle'],
+.sidebar_difficulty[data-diff='Senior'] {
+  background: $color-gray;
+}
 .sidebar_difficulty[data-diff='Junior'] {
-  background: #0d4429;
   color: $color-green;
 }
 
 .sidebar_difficulty[data-diff='Middle'] {
-  background: #341a00;
   color: $color-orange;
 }
 
 .sidebar_difficulty[data-diff='Senior'] {
-  background: #3d0c0c;
   color: $color-red;
 }
