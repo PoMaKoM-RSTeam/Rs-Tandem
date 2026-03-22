@@ -9,11 +9,12 @@ import { ToastService } from '../../../../core/toast/toast-service';
 export class CodeGolfFetcherService {
   private readonly supabaseUrl = 'https://bqfoaeuuwilliipmpovu.supabase.co';
   private readonly supabaseKey = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
-  private readonly GET_CHALLENGE = 'get_random_challenge';
-  private readonly GET_USER_CHALLENGE_RESULT = 'get_user_golf_result';
-  private readonly SAVE_CHALLENGE = 'save_golf_result';
-  private readonly GET_RANKS = 'get_golf_ranks';
-
+  private readonly RPC_FUNCTIONS = {
+    GET_RANDOM_CHALLENGE: 'get_random_challenge',
+    GET_USER_CHALLENGE_RESULT: 'get_user_golf_result',
+    SAVE_CHALLENGE: 'save_golf_result',
+    GET_RANKS: 'get_golf_ranks',
+  } as const;
   private readonly toastService = inject(ToastService);
 
   private supabase: SupabaseClient;
@@ -23,7 +24,7 @@ export class CodeGolfFetcherService {
   }
 
   getRandomChallenge(lang: 'ru' | 'en' = 'en'): Observable<Challenge | undefined> {
-    return from(this.supabase.rpc(this.GET_CHALLENGE, { lang_code: lang })).pipe(
+    return from(this.supabase.rpc(this.RPC_FUNCTIONS.GET_RANDOM_CHALLENGE, { lang_code: lang })).pipe(
       map(({ data, error }) => {
         if (error) {
           throw error;
@@ -38,25 +39,27 @@ export class CodeGolfFetcherService {
   }
 
   getUserChallengeResult(challengeKey: string, userId: string): Observable<number | null> {
+    if (!challengeKey || !userId) {
+      return of(null);
+    }
     return from(
-      this.supabase.rpc(this.GET_USER_CHALLENGE_RESULT, {
-        p_challenge_key: challengeKey,
-        p_user_id: userId,
+      this.supabase.rpc(this.RPC_FUNCTIONS.GET_USER_CHALLENGE_RESULT, {
+        challengekey: challengeKey,
+        userid: userId,
       })
     ).pipe(
       map(({ data, error }) => {
         if (error) {
           throw error;
         }
-        console.log(data);
-        return data !== undefined ? data : null;
+        return data ? data : null;
       }),
       catchError(() => of(null))
     );
   }
 
   getGolfRanks(): Observable<GolfRank[]> {
-    return from(this.supabase.rpc(this.GET_RANKS)).pipe(
+    return from(this.supabase.rpc(this.RPC_FUNCTIONS.GET_RANKS)).pipe(
       map(({ data, error }) => {
         if (error) {
           throw error;
@@ -70,19 +73,19 @@ export class CodeGolfFetcherService {
     );
   }
 
-  saveResult(challengeKey: string, userId: string, bytes: number): Observable<void> {
+  saveResult(challengeKey: string, userId: string, bytes: number): Observable<number> {
     return from(
-      this.supabase.rpc(this.SAVE_CHALLENGE, {
+      this.supabase.rpc(this.RPC_FUNCTIONS.SAVE_CHALLENGE, {
         p_challenge_key: challengeKey,
         p_user_id: userId,
         p_byte_count: bytes,
       })
     ).pipe(
-      map(({ error }) => {
+      map(({ data, error }) => {
         if (error) {
           throw error;
         }
-        return;
+        return data;
       }),
       catchError(error => {
         this.toastService.danger('Error saving result', error.message);

@@ -5,6 +5,7 @@ import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
 import { of, switchMap } from 'rxjs';
+import { ToastService } from '../../../../core/toast/toast-service';
 
 export type TestResult = {
   input: unknown;
@@ -23,6 +24,8 @@ export type WorkerResponse = {
 export class CodeGolfService implements OnDestroy {
   private readonly fetcher = inject(CodeGolfFetcherService);
   private readonly authStore = inject(TndmAuthStateStoreService);
+  private readonly toastService = inject(ToastService);
+
   private worker: Worker | undefined;
 
   readonly rawCode = signal('');
@@ -95,7 +98,23 @@ export class CodeGolfService implements OnDestroy {
   }
 
   saveResult(challengeKey: string, userId: string, bytes: number): void {
-    this.fetcher.saveResult(challengeKey, userId, bytes);
+    const previousBest = this.previousBest();
+    const isNewRecord = previousBest === null || bytes < previousBest;
+
+    if (!isNewRecord) {
+      this.toastService.info('Keep trying!', `Your current best is ${previousBest} bytes.`);
+      return;
+    }
+
+    this.fetcher.saveResult(challengeKey, userId, bytes).subscribe({
+      next: (savedBytes: number) => {
+        this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved successfully.`);
+      },
+      error: err => {
+        const errorMessage = err?.message || 'Unknown database error';
+        this.toastService.danger('Save failed', errorMessage);
+      },
+    });
   }
 
   private initWorker(): void {
