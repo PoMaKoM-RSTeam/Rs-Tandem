@@ -8,11 +8,12 @@
 tndm-button {
   display: inline-block;
   align-self: flex-start;
-  &.await-loading ::ng-deep .button {
-    cursor: wait;
-    &:active {
-      transform: none;
-    }
+}
+
+.await-loading {
+  cursor: wait;
+  &:active {
+    transform: none;
   }
 }
 
