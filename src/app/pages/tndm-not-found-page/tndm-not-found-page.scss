@@ -1,0 +1,52 @@
+@use './styles/typography' as typ;
+@use './styles/variables' as vars;
+
+.not-found {
+  &__wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background-color: vars.$bg-main;
+  }
+
+  &__logo-cnt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__logo-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
+
+  &__content-cnt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__content-wrapper {
+    max-width: 440px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$space-xl;
+  }
+
+  &__title {
+    @include typ.saibex-heading-xl();
+  }
+
+  &__subtitle {
+    @include typ.saibex-heading-xl(vars.$text-accent-color);
+  }
+
+  &__body {
+    @include typ.text-body();
+  }
+}
