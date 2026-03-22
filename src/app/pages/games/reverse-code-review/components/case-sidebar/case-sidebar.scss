@@ -1,51 +1,55 @@
+@use '/styles/variables' as *;
+
 :host {
   display: contents;
 }
 
 .sidebar {
-  background: #1c2128;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 0.75rem;
-  width: 240px;
+  background: $color-gray;
+  border: 1px solid $color-black;
+  border-radius: $radius-md;
+  padding: $space-xs;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: $space-xs;
   max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
 .sidebar_title {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: $font-size-sm;
   color: #e6edf3;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid #21262d;
+  padding-bottom: $space-xs;
+  border-bottom: 1px solid $color-black;
 }
 
 .sidebar_list {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .sidebar_item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0.4rem 0.5rem;
+  gap: $space-sm;
+  padding: $space-xs $space-sm - $space-xs;
   background: none;
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: $radius-sm;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
-  font-size: 0.78rem;
+  font-size: $font-size-sm;
   color: #adbac7;
-  transition: background 0.15s;
+  transition: background $transition-fast;
 }
 
 .sidebar_item:hover {
@@ -58,7 +62,7 @@
 }
 
 .sidebar_item--active {
-  background: #21262d;
+  background: $color-black;
   border-color: #58a6ff;
   color: #e6edf3;
 }
@@ -66,7 +70,7 @@
 .sidebar_index {
   font-size: 0.68rem;
   color: #484f58;
-  min-width: 16px;
+  min-width: $space-md;
   text-align: center;
 }
 
@@ -84,24 +88,24 @@
 
 .sidebar_difficulty {
   font-size: 0.58rem;
-  font-weight: 600;
+  font-weight: $font-weight-bold;
   text-transform: uppercase;
   padding: 1px 5px;
-  border-radius: 8px;
+  border-radius: $radius-md;
   flex-shrink: 0;
 }
 
 .sidebar_difficulty[data-diff='Junior'] {
   background: #0d4429;
-  color: #3fb950;
+  color: $color-green;
 }
 
 .sidebar_difficulty[data-diff='Middle'] {
   background: #341a00;
-  color: #d29922;
+  color: $color-orange;
 }
 
 .sidebar_difficulty[data-diff='Senior'] {
   background: #3d0c0c;
-  color: #f85149;
+  color: $color-red;
 }

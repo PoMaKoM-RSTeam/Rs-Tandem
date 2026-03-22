@@ -1,11 +1,13 @@
+@use '/styles/variables' as *;
+
 .page {
   min-height: 100vh;
-  padding: 2rem 1rem;
-  background-color: #a29d9a;
-  font-family: 'JetBrains Mono', monospace;
+  padding: $space-xl $space-md;
+  background-color: $color-light-grey;
+  font-family: $font-family-ui;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: $space-lg;
   align-items: center;
 }
 
@@ -15,19 +17,13 @@
 
 .page_title {
   margin: 0;
-  font-size: 1.6rem;
-  color: #292828;
-}
-
-.page_subtitle {
-  margin: 0.3rem 0 0;
-  font-size: 0.85rem;
-  color: #fff;
+  font-size: $font-size-lg;
+  color: $text-primary-color;
 }
 
 .page_layout {
   display: flex;
-  gap: 1.2rem;
+  gap: $space-md;
   width: 100%;
   max-width: 1060px;
   align-items: flex-start;
@@ -43,9 +39,9 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  background: #dad9d9;
-  border: 1px dashed #30363d;
-  border-radius: 8px;
-  color: #484f58;
-  font-size: 0.85rem;
+  background: $color-light-grey;
+  border: 1px dashed $border-main-color;
+  border-radius: $radius-md;
+  color: $text-primary-color;
+  font-size: $font-size-sm;
 }
