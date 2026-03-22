@@ -1,7 +1,6 @@
 <div class="page">
   <header class="page_header">
     <h1 class="page_title">Reverse Code Review</h1>
-    <p class="page_subtitle"></p>
   </header>
 
   <div class="page_layout">
@@ -11,8 +10,8 @@
       (caseSelected)="activeCase.set($event)" />
 
     <main class="page_main">
-      @if (activeCase()) {
-      <tndm-code-viewer [reviewCase]="activeCase()!" />
+      @if (activeCase(); as selectedCase) {
+      <tndm-code-viewer [reviewCase]="selectedCase" />
       } @else {
       <div class="page_placeholder">
         <p>Select a case from the sidebar.</p>

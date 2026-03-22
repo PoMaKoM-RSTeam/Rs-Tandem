@@ -5,7 +5,7 @@
   </header>
 
   <div class="viewer_editor">
-    <div aria-hidden="true" class="viewer_gutter">
+    <div class="viewer_gutter">
       @for (lineHtml of highlightedLines(); track $index) {
       <span class="viewer_line-num">{{ $index + 1 }}</span>
       }
