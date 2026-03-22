@@ -8,16 +8,25 @@
 
 <div class="button-wrapper">
   <tndm-button
-    [btnConfig]="{ label: 'Generate question' }"
+    [btnConfig]="{ label: 'Generate question', isDisabled: isGenerateQuestionDisabled()}"
     [class.await-loading]="isLoading()"
     (clicked)="generateQuestion()" />
-  <tndm-button [btnConfig]="{ label: 'Skip question' }" [class.await-loading]="isLoading()" />
+  <tndm-button [btnConfig]="{ label: 'Skip question'}" [class.await-loading]="isLoading()" />
 </div>
 
 <pre class="ai-question">{{currentQuestion()}}</pre>
 
-<form action="">
+<form (submit)="answerQuestion($event)">
   <label for="user-answer">Write your answer to the question:</label>
-  <textarea cols="10" id="answer" name="answer" placeholder="Your answer" rows="4"></textarea>
-  <tndm-button [btnConfig]="{label: 'Send review'}" [class.await-loading]="isLoading()" />
+  <textarea
+    cols="10"
+    id="user-answer"
+    name="user-answer"
+    placeholder="Your answer"
+    rows="4"
+    [class.await-loading]="isLoading()"
+    [disabled]="isLoading()"></textarea>
+  <tndm-button
+    [btnConfig]="{label: 'Answer the question', type: 'submit', isDisabled: isAnswerQuestionDisabled()}"
+    [class.await-loading]="isLoading()" />
 </form>
