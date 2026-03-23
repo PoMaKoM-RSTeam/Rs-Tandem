@@ -8,7 +8,8 @@ export class AiExamOllamaService {
 
   async ask(newQuestion: string, chatHistory: Message[]): Promise<string> {
     const response = await this.ollama.chat({
-      model: 'deepseek-r1:8b',
+      // model: 'deepseek-r1:8b',
+      model: 'llama3.1',
       messages: [...chatHistory, { role: ROLES.user, content: newQuestion }],
     });
     return response.message.content;
