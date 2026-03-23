@@ -8,6 +8,22 @@
   line-height: 91px;
 }
 
+@mixin saibex-heading-xl($color: v.$text-primary-color) {
+  color: $color;
+  font-family: v.$font-family-second-heading;
+  font-weight: v.$font-weight-bold;
+  font-size: 54px;
+  line-height: 57px;
+}
+
+@mixin saibex-heading-md($color: v.$text-primary-color) {
+  color: $color;
+  font-family: v.$font-family-second-heading;
+  font-weight: v.$font-weight-bold;
+  font-size: 24px;
+  line-height: 24px;
+}
+
 @mixin text-title($color: v.$text-primary-color) {
   color: $color;
   font-family: v.$font-family-base;
