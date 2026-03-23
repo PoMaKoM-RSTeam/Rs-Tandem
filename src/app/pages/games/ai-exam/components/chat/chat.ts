@@ -26,9 +26,8 @@ export class TndmChat {
   private scrollChatToBottom(): void {
     requestAnimationFrame(() => {
       const container = this.chatContainer()?.nativeElement;
-      if (!container) {
-        return;
-      }
+      if (!container) return;
+
       container.scrollTop = container.scrollHeight;
     });
   }
