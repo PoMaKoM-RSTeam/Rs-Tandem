@@ -31,22 +31,6 @@ textarea {
   padding: 5px;
 }
 
-.ai-question-container {
-  @include typography.text-body();
-  max-width: 500px;
-  min-height: 100px;
-  border: 1px solid gray;
-  padding: 15px;
-  white-space: pre-wrap;
-}
-
-:host ::ng-deep .ai-question-container code {
-  background: #e9ecef;
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  font-family: 'Fira Code', monospace;
-}
-
 form {
   display: flex;
   flex-direction: column;

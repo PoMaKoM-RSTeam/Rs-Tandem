@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { MarkdownComponent } from 'ngx-markdown';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AiExamOllamaService } from './ollama.service';
 import { Message, ROLES } from './shared/types';
 import { SYSTEM_INSTRUCTION } from './shared/prompts';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
+import { TndmChat } from './components/chat/chat';
 
-type TryCatchRequestParams =
+type TryCatchRequestConfig =
   | { isInitialQuestion: boolean; userAnswer?: string; textInputElement?: HTMLTextAreaElement }
   | { isInitialQuestion?: boolean; userAnswer: string; textInputElement: HTMLTextAreaElement };
 
@@ -15,15 +15,17 @@ type TryCatchRequestParams =
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
-  imports: [TndmButton, TndmToaster, MarkdownComponent],
+  imports: [TndmButton, TndmToaster, TndmChat],
   providers: [AiExamOllamaService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam {
   private readonly ollama = inject(AiExamOllamaService);
   private readonly toaster = inject(ToastService);
+  private readonly chat = viewChild(TndmChat);
 
-  readonly currentQuestion = signal('');
+  // readonly currentQuestion = signal('');
+
   readonly isLoading = signal(false);
   readonly isGenerateQuestionDisabled = signal(false);
   readonly isAnswerQuestionDisabled = signal(true);
@@ -70,15 +72,21 @@ export class TndmAiExam {
     isInitialQuestion,
     userAnswer,
     textInputElement,
-  }: TryCatchRequestParams): Promise<void> {
+  }: TryCatchRequestConfig): Promise<void> {
+    const chat = this.chat();
+    if (!chat) {
+      throw new Error('Chat element not found');
+    }
+
     this.isLoading.set(true);
 
     let answerFromAi = null;
 
     try {
       if (isInitialQuestion) {
-        answerFromAi = await this.ollama.ask(this.initialQuestion, this.chatHistory);
-        this.updateChatHistory(this.initialQuestion, answerFromAi);
+        chat.updateChatHistory({ role: ROLES.user, content: this.initialQuestion });
+        answerFromAi = await this.ollama.ask(this.initialQuestion, chat.allMessages());
+        chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
 
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
@@ -87,11 +95,10 @@ export class TndmAiExam {
         if (!userAnswer) {
           throw new Error('Message content is NOT provided');
         }
-        answerFromAi = await this.ollama.ask(userAnswer, this.chatHistory);
-        this.updateChatHistory(userAnswer, answerFromAi);
+        chat.updateChatHistory({ role: ROLES.user, content: userAnswer });
+        answerFromAi = await this.ollama.ask(userAnswer, chat.allMessages());
+        chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
       }
-
-      this.currentQuestion.set(answerFromAi);
 
       if (textInputElement) {
         textInputElement.value = '';
@@ -101,18 +108,7 @@ export class TndmAiExam {
       console.error(error);
     } finally {
       this.isLoading.set(false);
-      console.log(this.chatHistory);
+      console.log(chat.allMessages());
     }
-  }
-
-  private updateChatHistory(questionToAi: string, answerFromAi: string): void {
-    this.chatHistory.push({
-      role: ROLES.user,
-      content: questionToAi,
-    });
-    this.chatHistory.push({
-      role: ROLES.assistant,
-      content: answerFromAi,
-    });
   }
 }
