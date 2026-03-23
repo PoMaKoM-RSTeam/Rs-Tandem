@@ -12,7 +12,7 @@ type Tab = 'HTML' | 'CSS' | 'JS';
   standalone: true,
   imports: [FormsModule, MatTabsModule, MonacoEditorModule],
   templateUrl: './sandbox.html',
-  styleUrls: ['./sandbox.css'],
+  styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
   private sanitizer = inject(DomSanitizer);

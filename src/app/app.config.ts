@@ -12,10 +12,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([tndmAuthInterceptor])),
     provideAngularSvgIcon(),
-     importProvidersFrom(
+    importProvidersFrom(
       MonacoEditorModule.forRoot({
-        baseUrl: 'assets/monaco/vs'
+        baseUrl: 'assets/monaco/vs',
       })
-    )
+    ),
   ],
 };
