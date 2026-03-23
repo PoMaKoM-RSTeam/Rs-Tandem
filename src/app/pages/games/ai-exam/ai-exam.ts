@@ -3,6 +3,8 @@ import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AiExamOllamaService } from './ollama.service';
 import { Message, ROLES } from './shared/types';
 import { SYSTEM_INSTRUCTION } from './shared/prompts';
+import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
+import { ToastService } from '../../../core/toast/toast-service';
 
 type TryCatchRequestParams =
   | { isInitialQuestion: boolean; userAnswer?: string }
@@ -12,12 +14,14 @@ type TryCatchRequestParams =
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
-  imports: [TndmButton],
+  imports: [TndmButton, TndmToaster],
   providers: [AiExamOllamaService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam {
   private readonly ollama = inject(AiExamOllamaService);
+  private readonly toaster = inject(ToastService);
+
   readonly currentQuestion = signal('');
   readonly isLoading = signal(false);
   readonly isGenerateQuestionDisabled = signal(false);
@@ -43,7 +47,12 @@ export class TndmAiExam {
       throw new Error('HTMLFormElement expected');
     }
 
-    const userAnswer = String(new FormData(form).get('user-answer'));
+    const userAnswer = new FormData(form).get('user-answer')?.toString();
+    if (userAnswer === undefined || userAnswer === '') {
+      this.toaster.info(`Message required`, `Provide a message to AI`);
+      return;
+    }
+
     this.tryCatchRequest({ userAnswer });
   }
 
@@ -67,11 +76,11 @@ export class TndmAiExam {
 
       this.currentQuestion.set(answerFromAi);
     } catch (error) {
-      console.error(`Failed to connect to the AI tutor.`, error);
-      this.currentQuestion.set('FAILED to connect to the AI tutor.');
+      this.toaster.warning(`API error`, `Failed to send request`);
+      console.error(error);
     } finally {
       this.isLoading.set(false);
-      // console.log(this.chatHistory);
+      console.log(this.chatHistory);
     }
   }
 
