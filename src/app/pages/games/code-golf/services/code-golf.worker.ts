@@ -1,11 +1,6 @@
 /// <reference lib="webworker" />
 
-type TestResult = {
-  input: unknown;
-  output: unknown;
-  expected: unknown;
-  passed: boolean;
-};
+import { TestResult } from '../types/worker.types';
 
 addEventListener('message', ({ data }) => {
   const { code, testCases } = data;

@@ -4,21 +4,10 @@ import { TndmAuthStateStoreService } from '@auth';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
-import { of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
-
-export type TestResult = {
-  input: unknown;
-  output: unknown;
-  expected: unknown;
-  passed: boolean;
-};
-
-export type WorkerResponse = {
-  allPassed: boolean;
-  results?: TestResult[];
-  error?: string;
-};
+import { WorkerResponse } from '../types/worker.types';
+import { Challenge } from '../types/challenge';
 
 @Injectable({ providedIn: 'root' })
 export class CodeGolfService implements OnDestroy {
@@ -27,6 +16,7 @@ export class CodeGolfService implements OnDestroy {
   private readonly toastService = inject(ToastService);
 
   private worker: Worker | undefined;
+  private readonly workerTimeout = 5000;
 
   readonly rawCode = signal('');
   readonly showResults = signal(false);
@@ -40,6 +30,29 @@ export class CodeGolfService implements OnDestroy {
     stream: () => this.fetcher.getRandomChallenge(),
   });
 
+  readonly currentChallenge = computed(() => this.challengeResource.value());
+  readonly userId = computed(() => this.authStore.user()?.id);
+
+  readonly byteCount = computed(() => {
+    const code = this.rawCode();
+    if (!code) {
+      return 0;
+    }
+
+    return this.calculateByteCount(code);
+  });
+
+  readonly currentRank = computed((): GolfRank | undefined => {
+    const bytes = this.byteCount();
+    const allRanks = this.ranksResource.value();
+
+    if (!allRanks?.length) {
+      return undefined;
+    }
+
+    return this.findRankForBytes(bytes, allRanks);
+  });
+
   private readonly userResult = toObservable(
     computed(() => ({
       key: this.currentChallenge()?.challenge_key,
@@ -50,31 +63,17 @@ export class CodeGolfService implements OnDestroy {
       if (!key || !uid) {
         return of(null);
       }
-      return this.fetcher.getUserChallengeResult(key, uid);
+
+      return this.fetcher.getUserChallengeResult(key, uid).pipe(
+        catchError(error => {
+          this.toastService.danger('Save failed', error);
+          return of(null);
+        })
+      );
     })
   );
 
   readonly previousBest = toSignal(this.userResult, { initialValue: null });
-
-  readonly currentChallenge = computed(() => this.challengeResource.value());
-  readonly userId = computed(() => this.authStore.user()?.id);
-
-  readonly byteCount = computed(() => {
-    const code = this.rawCode();
-    if (!code) {
-      return 0;
-    }
-    return code
-      .replace(REGEX_RULES.MultiComment, '')
-      .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '').length;
-  });
-
-  readonly currentRank = computed((): GolfRank => {
-    const bytes = this.byteCount();
-    const allRanks = this.ranksResource.value() ?? [];
-    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
-  });
 
   constructor() {
     this.initWorker();
@@ -83,6 +82,10 @@ export class CodeGolfService implements OnDestroy {
   checkSolution(): void {
     const code = this.rawCode();
     const challenge = this.currentChallenge();
+
+    if (!this.validateSolutionInput(code, challenge)) {
+      return;
+    }
 
     if (code && challenge && this.worker) {
       this.worker.postMessage({ code, testCases: challenge.test_cases });
@@ -139,5 +142,35 @@ export class CodeGolfService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.worker?.terminate();
+  }
+
+  private calculateByteCount(code: string): number {
+    return code
+      .replace(REGEX_RULES.MultiComment, '')
+      .replace(REGEX_RULES.SingleComment, '')
+      .replace(REGEX_RULES.AllWhitespace, '').length;
+  }
+
+  private findRankForBytes(bytes: number, ranks: GolfRank[]): GolfRank {
+    return ranks.find(rank => bytes <= rank.maxBytes) ?? ranks[ranks.length - 1];
+  }
+
+  private validateSolutionInput(code: string, challenge: Challenge | undefined): boolean {
+    if (!code?.trim()) {
+      this.toastService.warning('Empty Code', 'Please write some code first!');
+      return false;
+    }
+
+    if (!challenge) {
+      this.toastService.danger('No Challenge', 'Please wait for the challenge to load.');
+      return false;
+    }
+
+    if (!this.worker) {
+      this.toastService.danger('System Error', 'Code execution environment is not available.');
+      return false;
+    }
+
+    return true;
   }
 }

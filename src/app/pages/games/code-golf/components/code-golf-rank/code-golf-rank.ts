@@ -9,7 +9,7 @@ import { GolfRank } from '../../types/golf-rank';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolfRank {
-  readonly rank = input.required<GolfRank>();
+  readonly rank = input.required<GolfRank | undefined>();
   readonly previousBest = input.required<number | null>();
   readonly byteCount = input.required<number>();
 
