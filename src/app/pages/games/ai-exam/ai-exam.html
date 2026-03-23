@@ -12,7 +12,9 @@
     [btnConfig]="{ label: 'Generate question', isDisabled: isGenerateQuestionDisabled()}"
     [class.await-loading]="isLoading()"
     (clicked)="generateQuestion()" />
-  <tndm-button [btnConfig]="{ label: 'Skip question'}" [class.await-loading]="isLoading()" />
+  <tndm-button
+    [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
+    [class.await-loading]="isLoading()" />
 </div>
 
 <pre class="ai-question">{{currentQuestion()}}</pre>
@@ -26,7 +28,7 @@
     placeholder="Your answer"
     rows="4"
     [class.await-loading]="isLoading()"
-    [disabled]="isLoading()"></textarea>
+    [disabled]="isTextInputDisabled() || isLoading()"></textarea>
   <tndm-button
     [btnConfig]="{label: 'Answer the question', type: 'submit', isDisabled: isAnswerQuestionDisabled()}"
     [class.await-loading]="isLoading()" />
