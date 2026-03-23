@@ -34,9 +34,7 @@ export class TndmAiExam {
   private readonly initialQuestion = `Ask me a question on JavaScript`;
 
   async generateQuestion(): Promise<void> {
-    if (this.isLoading()) {
-      return;
-    }
+    if (this.isLoading()) return;
 
     this.tryCatchRequest({ isInitialQuestion: true });
     this.isGenerateQuestionDisabled.set(true);
@@ -46,20 +44,14 @@ export class TndmAiExam {
     event.preventDefault();
 
     const form = event.target;
-    if (!(form instanceof HTMLFormElement)) {
-      throw new Error('HTMLFormElement expected');
-    }
+    if (!(form instanceof HTMLFormElement)) throw new Error('HTMLFormElement expected');
 
     const textInputElement = form.querySelector('#user-answer');
-    if (!(textInputElement instanceof HTMLTextAreaElement)) {
-      throw new Error('HTMLTextAreaElement expected');
-    }
+    if (!(textInputElement instanceof HTMLTextAreaElement)) throw new Error('HTMLTextAreaElement expected');
 
     const userAnswer = new FormData(form).get('user-answer')?.toString();
     if (userAnswer === undefined || userAnswer === '') {
-      if (!this.isLoading()) {
-        this.toaster.info(`Message required`, `Provide a message to AI`);
-      }
+      if (!this.isLoading()) this.toaster.info(`Message required`, `Provide a message to AI`);
       return;
     }
 
@@ -67,14 +59,11 @@ export class TndmAiExam {
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
-    if (event.key !== 'Enter' || event.shiftKey) {
-      return;
-    }
+    if (event.key !== 'Enter' || event.shiftKey) return;
 
     event.preventDefault();
-    if (this.isLoading() || this.isTextInputDisabled()) {
-      return;
-    }
+    if (this.isLoading() || this.isTextInputDisabled()) return;
+
     form.requestSubmit();
   }
 
@@ -84,16 +73,12 @@ export class TndmAiExam {
     textInputElement,
   }: TryCatchRequestConfig): Promise<void> {
     const chat = this.chat();
-    if (!chat) {
-      throw new Error('Chat element not found');
-    }
+    if (!chat) throw new Error('Chat element not found');
 
     this.isLoading.set(true);
 
     let answerFromAi = null;
-    if (textInputElement) {
-      textInputElement.value = '';
-    }
+    if (textInputElement) textInputElement.value = '';
 
     try {
       if (isInitialQuestion) {
@@ -105,9 +90,8 @@ export class TndmAiExam {
         this.isSkipQuestionDisabled.set(false);
         this.isTextInputDisabled.set(false);
       } else {
-        if (!userAnswer) {
-          throw new Error('Message content is NOT provided');
-        }
+        if (!userAnswer) throw new Error('Message content is NOT provided');
+
         chat.updateChatHistory({ role: ROLES.user, content: userAnswer });
         answerFromAi = await this.ollama.ask(userAnswer, chat.allMessages());
         chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
