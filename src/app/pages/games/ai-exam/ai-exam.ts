@@ -6,10 +6,6 @@ import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
 
-type TryCatchRequestConfig =
-  | { isInitialQuestion: boolean; userAnswer?: string; textInputElement?: HTMLTextAreaElement }
-  | { isInitialQuestion?: boolean; userAnswer: string; textInputElement: HTMLTextAreaElement };
-
 @Component({
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
@@ -22,7 +18,7 @@ export class TndmAiExam {
   private readonly ollama = inject(AiExamOllamaService);
   private readonly toaster = inject(ToastService);
   private readonly chat = viewChild(TndmChat);
-  private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('answerTextarea');
+  private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
 
   readonly isLoading = signal(false);
   readonly isGenerateQuestionDisabled = signal(false);
@@ -35,7 +31,7 @@ export class TndmAiExam {
   async generateQuestion(): Promise<void> {
     if (this.isLoading()) return;
 
-    this.tryCatchRequest({ isInitialQuestion: true });
+    this.askAi(this.initialQuestion, 'is-initial-question');
     this.isGenerateQuestionDisabled.set(true);
   }
 
@@ -54,56 +50,45 @@ export class TndmAiExam {
       return;
     }
 
-    this.tryCatchRequest({ userAnswer, textInputElement });
+    this.askAi(userAnswer);
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
-    event.preventDefault();
-
     if (event.key !== 'Enter' || event.shiftKey) return;
     if (this.isLoading() || this.isTextInputDisabled()) return;
 
+    event.preventDefault();
     form.requestSubmit();
   }
 
-  private async tryCatchRequest({
-    isInitialQuestion,
-    userAnswer,
-    textInputElement,
-  }: TryCatchRequestConfig): Promise<void> {
+  private async askAi(content: string, isInitialQuestion?: 'is-initial-question'): Promise<void> {
     const chat = this.chat();
+    const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
+    if (!textInput) throw new Error('textInput element not found');
 
     this.isLoading.set(true);
+    textInput.value = '';
 
-    let isResponseRecieved = false;
-    let answerFromAi = null;
-    if (textInputElement) textInputElement.value = '';
+    const isFirstMessage = isInitialQuestion === 'is-initial-question';
+    const messageContent = isFirstMessage ? this.initialQuestion : content;
 
     try {
-      if (isInitialQuestion) {
-        chat.updateChatHistory({ role: ROLES.user, content: this.initialQuestion });
-        answerFromAi = await this.ollama.ask(this.initialQuestion, chat.allMessages());
-        chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
+      chat.updateChatHistory({ role: ROLES.user, content: messageContent });
+      const answerFromAi = await this.ollama.ask(messageContent, chat.allMessages());
+      chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
 
+      if (isFirstMessage) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
         this.isTextInputDisabled.set(false);
-      } else {
-        if (!userAnswer) throw new Error('Message content is NOT provided');
-
-        chat.updateChatHistory({ role: ROLES.user, content: userAnswer });
-        answerFromAi = await this.ollama.ask(userAnswer, chat.allMessages());
-        chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
       }
-
-      isResponseRecieved = true;
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       console.error(error);
     } finally {
       this.isLoading.set(false);
-      if (isResponseRecieved) this.focusAnswerTextarea();
+      this.focusAnswerTextarea();
     }
   }
 
