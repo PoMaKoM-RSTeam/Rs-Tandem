@@ -17,7 +17,7 @@
     [class.await-loading]="isLoading()" />
 </div>
 
-<tndm-chat />
+<tndm-chat [isLoading]="isLoading()" />
 
 <form #answerForm (submit)="answerQuestion($event)">
   <label for="user-answer">Write your answer to the question:</label>

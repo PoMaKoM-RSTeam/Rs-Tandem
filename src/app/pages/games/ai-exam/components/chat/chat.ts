@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChild } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
 import { Message, ROLES } from '../../shared/types';
 import { SYSTEM_INSTRUCTION } from '../../shared/prompts';
@@ -12,10 +12,10 @@ import { SYSTEM_INSTRUCTION } from '../../shared/prompts';
 })
 export class TndmChat {
   readonly chatContainer = viewChild<ElementRef<HTMLDivElement>>('chatContainer');
+  readonly isLoading = input.required<boolean>();
   readonly ROLES = ROLES;
 
   readonly allMessages = signal<Message[]>([{ role: ROLES.system, content: SYSTEM_INSTRUCTION }]);
-  private readonly initialQuestion = `Ask me a question on JavaScript`;
 
   updateChatHistory({ role, content }: Message): void {
     const newMessage = { role, content };

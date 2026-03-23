@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AiExamOllamaService } from './ollama.service';
-import { Message, ROLES } from './shared/types';
-import { SYSTEM_INSTRUCTION } from './shared/prompts';
+import { ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
@@ -30,8 +29,7 @@ export class TndmAiExam {
   readonly isSkipQuestionDisabled = signal(true);
   readonly isTextInputDisabled = signal(true);
 
-  private readonly chatHistory: Message[] = [{ role: ROLES.system, content: SYSTEM_INSTRUCTION }];
-  private readonly initialQuestion = `Ask me a question on JavaScript`;
+  private readonly initialQuestion = `Ask a question on JavaScript`;
 
   async generateQuestion(): Promise<void> {
     if (this.isLoading()) return;
