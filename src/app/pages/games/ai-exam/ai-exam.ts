@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AiExamOllamaService } from './ollama.service';
 import { Message, ROLES } from './shared/types';
@@ -14,7 +15,7 @@ type TryCatchRequestParams =
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
-  imports: [TndmButton, TndmToaster],
+  imports: [TndmButton, TndmToaster, MarkdownComponent],
   providers: [AiExamOllamaService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
