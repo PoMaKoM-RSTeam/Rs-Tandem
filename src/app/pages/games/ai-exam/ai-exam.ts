@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { AiExamOllamaService } from './ollama.service';
 import { ROLES } from './shared/types';
@@ -22,6 +22,7 @@ export class TndmAiExam {
   private readonly ollama = inject(AiExamOllamaService);
   private readonly toaster = inject(ToastService);
   private readonly chat = viewChild(TndmChat);
+  private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('answerTextarea');
 
   readonly isLoading = signal(false);
   readonly isGenerateQuestionDisabled = signal(false);
@@ -57,9 +58,9 @@ export class TndmAiExam {
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
-    if (event.key !== 'Enter' || event.shiftKey) return;
-
     event.preventDefault();
+
+    if (event.key !== 'Enter' || event.shiftKey) return;
     if (this.isLoading() || this.isTextInputDisabled()) return;
 
     form.requestSubmit();
@@ -75,6 +76,7 @@ export class TndmAiExam {
 
     this.isLoading.set(true);
 
+    let isResponseRecieved = false;
     let answerFromAi = null;
     if (textInputElement) textInputElement.value = '';
 
@@ -94,12 +96,22 @@ export class TndmAiExam {
         answerFromAi = await this.ollama.ask(userAnswer, chat.allMessages());
         chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
       }
+
+      isResponseRecieved = true;
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       console.error(error);
     } finally {
       this.isLoading.set(false);
-      console.log(chat.allMessages());
+      if (isResponseRecieved) this.focusAnswerTextarea();
     }
+  }
+
+  private focusAnswerTextarea(): void {
+    requestAnimationFrame(() => {
+      const textInput = this.textInput()?.nativeElement;
+      if (!textInput) return;
+      textInput.focus();
+    });
   }
 }
