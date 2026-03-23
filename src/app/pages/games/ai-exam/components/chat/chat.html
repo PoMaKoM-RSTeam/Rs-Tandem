@@ -1,0 +1,13 @@
+<div #chatContainer class="chat-container">
+  <div class="chat-content">
+    @for (message of allMessages(); track $index) {
+    <div class="chat-message-AI" [class.chat-message-user]="message.role === 'user'">
+      @if (message.role === ROLES.assistant) {
+      <markdown class="ai-question" [data]="message.content" />
+      } @else if (message.role === ROLES.user){
+      <div class="user-message-bubble">{{ message.content }}</div>
+      }
+    </div>
+    }
+  </div>
+</div>

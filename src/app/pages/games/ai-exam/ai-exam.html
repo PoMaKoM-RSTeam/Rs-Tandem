@@ -17,9 +17,7 @@
     [class.await-loading]="isLoading()" />
 </div>
 
-<div class="ai-question-container">
-  <markdown class="ai-question" [data]="currentQuestion()" />
-</div>
+<tndm-chat />
 
 <form (submit)="answerQuestion($event)">
   <label for="user-answer">Write your answer to the question:</label>
