@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
+import { DEFAULT_SANDBOX_CODE } from './sandbox.constants';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
@@ -19,12 +20,12 @@ export class TndmSandbox {
   tabs: Tab[] = ['HTML', 'CSS', 'JS'];
   readonly selectedTab = signal<number>(0);
 
-  readonly htmlCode = signal('<h1>Hello Angular Sandbox!</h1>');
-  readonly cssCode = signal('h1 { color: #1976d2; font-family: sans-serif; }');
-  readonly jsCode = signal('console.log("Hello from JS!");');
+  readonly htmlCode = signal(DEFAULT_SANDBOX_CODE.html);
+  readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
+  readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
 
   editorOptions = {
-    theme: 'vs-dark',
+    theme: 'vs',
     automaticLayout: true,
     scrollBeyondLastLine: false,
     minimap: { enabled: false },
