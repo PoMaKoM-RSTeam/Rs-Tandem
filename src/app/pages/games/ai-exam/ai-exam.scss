@@ -12,9 +12,11 @@ tndm-button {
 
 .await-loading {
   cursor: wait;
-  &:active {
-    transform: none;
-  }
+}
+
+:host ::ng-deep tndm-button.await-loading .button {
+  cursor: wait;
+  transform: none;
 }
 
 .button-wrapper {
