@@ -4,6 +4,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { tndmAuthInterceptor } from '@auth';
+import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,5 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([tndmAuthInterceptor])),
     provideAngularSvgIcon(),
+    provideMarkdown(),
   ],
 };
