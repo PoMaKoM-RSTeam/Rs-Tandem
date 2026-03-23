@@ -134,14 +134,18 @@ export class CodeGolfService implements OnDestroy {
         }
       };
 
-      this.worker.onerror = (): void => {
-        this.result.set({ allPassed: false, error: 'Critical Worker Error' });
+      this.worker.onerror = (event: ErrorEvent): void => {
+        event.preventDefault();
+        this.result.set({ allPassed: false, error: `${event.message}` });
       };
     }
   }
 
   ngOnDestroy(): void {
-    this.worker?.terminate();
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = undefined;
+    }
   }
 
   private calculateByteCount(code: string): number {
