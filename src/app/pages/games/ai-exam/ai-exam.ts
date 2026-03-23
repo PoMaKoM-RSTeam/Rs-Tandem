@@ -24,8 +24,6 @@ export class TndmAiExam {
   private readonly toaster = inject(ToastService);
   private readonly chat = viewChild(TndmChat);
 
-  // readonly currentQuestion = signal('');
-
   readonly isLoading = signal(false);
   readonly isGenerateQuestionDisabled = signal(false);
   readonly isAnswerQuestionDisabled = signal(true);
@@ -68,6 +66,18 @@ export class TndmAiExam {
     this.tryCatchRequest({ userAnswer, textInputElement });
   }
 
+  onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return;
+    }
+
+    event.preventDefault();
+    if (this.isLoading() || this.isTextInputDisabled()) {
+      return;
+    }
+    form.requestSubmit();
+  }
+
   private async tryCatchRequest({
     isInitialQuestion,
     userAnswer,
@@ -81,6 +91,9 @@ export class TndmAiExam {
     this.isLoading.set(true);
 
     let answerFromAi = null;
+    if (textInputElement) {
+      textInputElement.value = '';
+    }
 
     try {
       if (isInitialQuestion) {
@@ -98,10 +111,6 @@ export class TndmAiExam {
         chat.updateChatHistory({ role: ROLES.user, content: userAnswer });
         answerFromAi = await this.ollama.ask(userAnswer, chat.allMessages());
         chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
-      }
-
-      if (textInputElement) {
-        textInputElement.value = '';
       }
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
