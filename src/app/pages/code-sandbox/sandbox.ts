@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 
@@ -11,7 +10,7 @@ type Tab = 'HTML' | 'CSS' | 'JS';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  imports: [FormsModule, MatTabsModule, MatGridListModule, MonacoEditorModule],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.css'],
 })
@@ -27,6 +26,8 @@ export class TndmSandbox {
   editorOptions = {
     theme: 'vs-dark',
     automaticLayout: true,
+    scrollBeyondLastLine: false,
+    minimap: { enabled: false },
   };
 
   readonly previewContent = computed<SafeHtml>(() => {
