@@ -14,10 +14,22 @@ export const routes: Routes = [
   },
   {
     path: 'type-investigator',
-    loadComponent: () =>
-      import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
-        m => m.TndmTypeInvestigator
-      ),
     title: 'Type Investigator',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+            m => m.TndmTypeInvestigator
+          ),
+      },
+      {
+        path: ':puzzleId',
+        loadComponent: () =>
+          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+            m => m.TndmTypeInvestigator
+          ),
+      },
+    ],
   },
 ];
