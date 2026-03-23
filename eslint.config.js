@@ -70,7 +70,7 @@ module.exports = tseslint.config(
       // JavaScript best practices
       eqeqeq: 'error',
       complexity: ['error', 20],
-      curly: 'error',
+      curly: ['error', 'multi-line'],
       'guard-for-in': 'error',
       'max-classes-per-file': ['error', 1],
       'max-len': [
