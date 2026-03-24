@@ -142,10 +142,7 @@ export class CodeGolfService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.worker) {
-      this.worker.terminate();
-      this.worker = undefined;
-    }
+    this.worker?.terminate();
   }
 
   private calculateByteCount(code: string): number {
@@ -169,12 +166,6 @@ export class CodeGolfService implements OnDestroy {
       this.toastService.danger('No Challenge', 'Please wait for the challenge to load.');
       return false;
     }
-
-    if (!this.worker) {
-      this.toastService.danger('System Error', 'Code execution environment is not available.');
-      return false;
-    }
-
     return true;
   }
 }
