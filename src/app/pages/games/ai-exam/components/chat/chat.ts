@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChild } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { Message, ROLES } from '../../shared/types';
-import { SYSTEM_INSTRUCTION } from '../../shared/prompts';
+import { Message, Role, ROLES } from '../../shared/types';
+
+type UpdataChatHistoryParams = {
+  role: Role;
+  content: string;
+};
 
 @Component({
   selector: 'tndm-chat',
@@ -15,10 +19,17 @@ export class TndmChat {
   readonly isLoading = input.required<boolean>();
   readonly ROLES = ROLES;
 
-  readonly allMessages = signal<Message[]>([{ role: ROLES.system, content: SYSTEM_INSTRUCTION }]);
+  readonly allMessages = signal<Message[]>([]);
 
-  updateChatHistory({ role, content }: Message): void {
-    const newMessage = { role, content };
+  updateChatHistory({ role, content }: UpdataChatHistoryParams): void {
+    const newMessage: Message = {
+      role,
+      parts: [
+        {
+          text: content,
+        },
+      ],
+    };
     this.allMessages.update(messages => [...messages, newMessage]);
     this.scrollChatToBottom();
   }
@@ -30,5 +41,13 @@ export class TndmChat {
 
       container.scrollTop = container.scrollHeight;
     });
+  }
+
+  getMessageText(message: Message): string {
+    const { parts } = message;
+    const textPart = parts.find(part => 'text' in part);
+    if (!textPart) throw new Error('Text part not found');
+
+    return textPart.text;
   }
 }

@@ -5,12 +5,12 @@
       class="message-wrapper"
       [class.chat-message-user]="message.role === 'user'"
       [class.row-with-spinner]="$last && isLoading()">
-      @if (message.role === ROLES.assistant) {
-      <markdown class="ai-question" [data]="message.content" />
+      @if (message.role === ROLES.model) {
+      <markdown class="ai-question" [data]="getMessageText(message)" />
       } @else if (message.role === ROLES.user){ @if ($last && isLoading()) {
       <div class="spinner"></div>
       }
-      <div class="user-message-bubble">{{ message.content }}</div>
+      <div class="user-message-bubble">{{ getMessageText(message)}}</div>
       }
     </div>
     }

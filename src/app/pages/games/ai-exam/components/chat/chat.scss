@@ -47,7 +47,9 @@
 }
 
 .spinner {
+  align-self: center;
   width: 37px;
+  max-height: 37px;
   aspect-ratio: 1 / 1;
   border: 2px solid variables.$color-dark-grey;
   border-top: 2px solid variables.$color-accent;

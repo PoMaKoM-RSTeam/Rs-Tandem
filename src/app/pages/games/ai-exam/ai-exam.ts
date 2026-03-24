@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { AiExamOllamaService } from './ollama.service';
+import { GeminiService } from './gemini.service';
 import { ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
@@ -11,11 +11,11 @@ import { TndmChat } from './components/chat/chat';
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
   imports: [TndmButton, TndmToaster, TndmChat],
-  providers: [AiExamOllamaService],
+  providers: [GeminiService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam {
-  private readonly ollama = inject(AiExamOllamaService);
+  private readonly gemini = inject(GeminiService);
   private readonly toaster = inject(ToastService);
   private readonly chat = viewChild(TndmChat);
   private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
@@ -75,8 +75,8 @@ export class TndmAiExam {
 
     try {
       chat.updateChatHistory({ role: ROLES.user, content: messageContent });
-      const answerFromAi = await this.ollama.ask(messageContent, chat.allMessages());
-      chat.updateChatHistory({ role: ROLES.assistant, content: answerFromAi });
+      const answerFromAi = await this.gemini.ask(chat.allMessages());
+      chat.updateChatHistory({ role: ROLES.model, content: answerFromAi });
 
       if (isFirstMessage) {
         this.isAnswerQuestionDisabled.set(false);
