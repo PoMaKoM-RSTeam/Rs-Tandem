@@ -1,23 +1,39 @@
-@use './styles/typography' as txt;
+@use 'sass:color';
 @use './styles/variables' as v;
+@use './styles/typography' as txt;
 @use './styles/mixins' as mx;
 
-$tab-header-height: 48px;
+$tab-header-height: 54px;
 $editor-z-index: 1000;
+$color-shadow: rgba(v.$color-black, 0.15);
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  margin: 0 auto;
   padding: v.$space-md;
+  box-sizing: border-box;
   background-color: v.$bg-main;
+  @include txt.text-body;
+}
+
+.page-header {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  @include txt.text-heading(v.$text-accent-color);
+  font-size: 48px;
+  line-height: 52px;
 }
 
 .sandbox-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: v.$space-md;
-  height: 100%;
-  transition: all 0.3s ease;
+  gap: v.$space-lg;
+  flex: 1;
+  min-height: 0;
+  transition: all v.$transition-base;
 
   &.is-fullscreen {
     grid-template-columns: 1fr 0;
@@ -25,10 +41,9 @@ $editor-z-index: 1000;
 
     .editor-section {
       position: fixed;
-      inset: 0;
+      inset: v.$space-md;
       z-index: $editor-z-index;
-      border: none;
-      @include mx.corner-borders(0, 0, transparent, 0);
+      box-shadow: 0 20px 50px rgba(v.$color-black, 0.4);
     }
 
     .preview-section {
@@ -37,21 +52,28 @@ $editor-z-index: 1000;
   }
 }
 
-.editor-section {
+%sandbox-card {
+  background-color: v.$bg-surface;
+  border: 1px solid v.$border-second-color;
+  border-radius: v.$radius-md;
+  box-shadow: 4px 4px 0px v.$border-main-color;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: v.$bg-surface;
-  border: 1px solid v.$border-main-color;
-  overflow: hidden;
-  @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
+}
+
+.editor-section {
+  @extend %sandbox-card;
+  @include mx.corner-borders(16px, 3px, v.$color-accent, -1px);
 }
 
 .tabs-header-area {
   display: flex;
   align-items: center;
   background-color: v.$bg-surface;
-  border-bottom: 1px solid v.$border-main-color;
+  border-bottom: 1px solid v.$border-second-color;
   height: $tab-header-height;
+  padding-right: v.$space-sm;
 
   .flex-tabs {
     flex: 1;
@@ -63,8 +85,6 @@ $editor-z-index: 1000;
   display: flex;
   align-items: center;
   gap: v.$space-xs;
-  padding: 0 v.$space-sm;
-  height: 100%;
 }
 
 .editor-container {
@@ -81,11 +101,7 @@ $editor-z-index: 1000;
 }
 
 .preview-section {
-  display: flex;
-  flex-direction: column;
-  background-color: v.$bg-surface;
-  border: 1px solid v.$border-main-color;
-  @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
+  @extend %sandbox-card;
 
   .preview-header {
     height: $tab-header-height;
@@ -93,40 +109,37 @@ $editor-z-index: 1000;
     align-items: center;
     padding: 0 v.$space-md;
     background-color: v.$bg-surface;
-    border-bottom: 1px solid v.$border-main-color;
-    @include txt.text-ui(v.$color-black, 12px);
-    font-weight: 600;
+    border-bottom: 1px solid v.$border-second-color;
+    @include txt.text-ui(v.$color-black, 0.8rem, v.$font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   iframe {
     flex: 1;
-    background-color: #fff;
+    background-color: v.$color-white;
+    border: none;
   }
 }
 
 :host ::v-deep {
   .mat-mdc-tab-header {
     border-bottom: none !important;
-    background-color: transparent !important;
-  }
-
-  .mat-mdc-tab-labels {
-    background-color: transparent !important;
   }
 
   .mdc-tab__text-label {
-    @include txt.text-ui(v.$color-black, v.$font-size-sm, 500);
-    opacity: 0.6;
+    @include txt.text-ui(v.$color-grey-accent, v.$font-size-sm, 500);
     text-transform: uppercase;
+    transition: color v.$transition-fast;
   }
 
   .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color: v.$color-orange !important;
-    opacity: 1;
   }
 
   .mat-mdc-tab-group-indicator {
     background-color: v.$color-orange !important;
+    height: 3px !important;
   }
 
   .mat-mdc-tab-body-wrapper {

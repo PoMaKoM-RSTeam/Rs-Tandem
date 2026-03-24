@@ -1,3 +1,5 @@
+<h2 class="page-header">Sandbox</h2>
+
 <div class="sandbox-wrapper" [class.is-fullscreen]="isFullscreen()">
   <div class="editor-section">
     <div class="tabs-header-area">
@@ -5,10 +7,9 @@
         class="flex-tabs"
         dynamicHeight
         [selectedIndex]="selectedTab()"
-        (selectedIndexChange)="selectedTab.set($event)"
-      >
+        (selectedIndexChange)="selectedTab.set($event)">
         @for (tab of tabs; track tab) {
-          <mat-tab [label]="tab" />
+        <mat-tab [label]="tab" />
         }
       </mat-tab-group>
 
