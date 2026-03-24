@@ -22,6 +22,12 @@ export const routes: Routes = [
     canActivate: [tndmAuthGuard],
   },
   {
+    path: 'sandbox',
+    loadComponent: () => import('./pages/code-sandbox/sandbox').then(m => m.TndmSandbox),
+    title: 'Sandbox',
+    canActivate: [tndmAuthGuard],
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/tndm-not-found-page/tndm-not-found-page').then(m => m.TndmNotFoundPage),
     title: 'Not Found',
