@@ -17,12 +17,19 @@ type Tab = 'HTML' | 'CSS' | 'JS';
 })
 export class TndmSandbox {
   private sanitizer = inject(DomSanitizer);
-  tabs: Tab[] = ['HTML', 'CSS', 'JS'];
+
+  readonly tabs: Tab[] = ['HTML', 'CSS', 'JS'];
   readonly selectedTab = signal<number>(0);
 
   readonly htmlCode = signal(DEFAULT_SANDBOX_CODE.html);
   readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
   readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
+
+  readonly tabConfig = {
+    HTML: { code: this.htmlCode, lang: 'html' },
+    CSS: { code: this.cssCode, lang: 'css' },
+    JS: { code: this.jsCode, lang: 'javascript' },
+  } as const;
 
   readonly editorOptions = {
     theme: 'vs',
@@ -32,9 +39,9 @@ export class TndmSandbox {
   };
 
   readonly editorConfigs = computed(() => ({
-    HTML: { ...this.editorOptions, language: 'html' },
-    CSS: { ...this.editorOptions, language: 'css' },
-    JS: { ...this.editorOptions, language: 'javascript' },
+    HTML: { ...this.editorOptions, language: this.tabConfig.HTML.lang },
+    CSS: { ...this.editorOptions, language: this.tabConfig.CSS.lang },
+    JS: { ...this.editorOptions, language: this.tabConfig.JS.lang },
   }));
 
   readonly previewContent = computed<SafeHtml>(() => {
@@ -57,39 +64,4 @@ export class TndmSandbox {
     `;
     return this.sanitizer.bypassSecurityTrustHtml(rawHtml);
   });
-
-  getCode(tab: Tab): string {
-    const codeMap = {
-      HTML: this.htmlCode(),
-      CSS: this.cssCode(),
-      JS: this.jsCode(),
-    };
-    return codeMap[tab];
-  }
-
-  setCode(tab: Tab, value: string): void {
-    if (tab === 'HTML') {
-      this.htmlCode.set(value);
-    } else if (tab === 'CSS') {
-      this.cssCode.set(value);
-    } else {
-      this.jsCode.set(value);
-    }
-  }
-
-  getLanguage(tab: Tab): string {
-    if (tab === 'HTML') {
-      return 'html';
-    }
-    if (tab === 'CSS') {
-      return 'css';
-    }
-    return 'javascript';
-  }
-
-  onCodeChange(tab: Tab, value: string | unknown): void {
-    if (typeof value === 'string') {
-      this.setCode(tab, value);
-    }
-  }
 }

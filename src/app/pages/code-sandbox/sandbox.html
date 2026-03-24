@@ -5,9 +5,9 @@
       <mat-tab [label]="tab">
         <div class="editor-container">
           <ngx-monaco-editor
-            [ngModel]="getCode(tab)"
+            [ngModel]="tabConfig[tab].code()"
             [options]="editorConfigs()[tab]"
-            (ngModelChange)="onCodeChange(tab, $event)" />
+            (ngModelChange)="tabConfig[tab].code.set($event)" />
         </div>
       </mat-tab>
       }
@@ -16,7 +16,6 @@
 
   <div class="preview-section">
     <div class="preview-header">Live Preview</div>
-
-    <iframe frameborder="0" [srcdoc]="previewContent()"> </iframe>
+    <iframe frameborder="0" [srcdoc]="previewContent()"></iframe>
   </div>
 </div>
