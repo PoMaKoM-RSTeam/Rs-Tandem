@@ -28,4 +28,8 @@ export const routes: Routes = [
     canActivate: [tndmAuthGuard],
   },
   { path: '**', redirectTo: 'code-golf' },
+    path: '**',
+    loadComponent: () => import('./pages/tndm-not-found-page/tndm-not-found-page').then(m => m.TndmNotFoundPage),
+    title: 'Not Found',
+  },
 ];

@@ -54,6 +54,9 @@ The application features a set of interactive games designed to focus on specifi
 - [feat: animate moving blocks to final call stack](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/37)
 - ...
 
+## Week 5 Checkpoint
+[video link](https://youtu.be/nxAmDsMHFuk)
+
 ## Demo
 
 ...

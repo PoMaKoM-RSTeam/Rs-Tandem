@@ -1,0 +1,23 @@
+<div class="not-found__wrapper">
+  <div class="not-found__logo-cnt">
+    <div class="not-found__logo-wrapper">
+      <tndm-dot-grid />
+    </div>
+  </div>
+  <div class="not-found__content-cnt">
+    <div class="not-found__content-wrapper">
+      <div class="not-found__header">
+        <div class="not-found__title">Page not found</div>
+        <div class="not-found__subtitle">404</div>
+      </div>
+      <div class="not-found__body">
+        <div class="not-found__content">
+          The page you requested does not exist. You may have entered an invalid address or the page has been removed.
+        </div>
+      </div>
+      <div class="not-found__footer">
+        <tndm-button [btnConfig]="toMainBtnConfig()" (click)="toMainPage()" />
+      </div>
+    </div>
+  </div>
+</div>
