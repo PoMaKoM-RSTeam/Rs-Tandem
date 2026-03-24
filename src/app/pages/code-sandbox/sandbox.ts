@@ -24,12 +24,18 @@ export class TndmSandbox {
   readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
   readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
 
-  editorOptions = {
+  readonly editorOptions = {
     theme: 'vs',
     automaticLayout: true,
     scrollBeyondLastLine: false,
     minimap: { enabled: false },
   };
+
+  readonly editorConfigs = computed(() => ({
+    HTML: { ...this.editorOptions, language: 'html' },
+    CSS: { ...this.editorOptions, language: 'css' },
+    JS: { ...this.editorOptions, language: 'javascript' },
+  }));
 
   readonly previewContent = computed<SafeHtml>(() => {
     const rawHtml = `
@@ -53,13 +59,12 @@ export class TndmSandbox {
   });
 
   getCode(tab: Tab): string {
-    if (tab === 'HTML') {
-      return this.htmlCode();
-    }
-    if (tab === 'CSS') {
-      return this.cssCode();
-    }
-    return this.jsCode();
+    const codeMap = {
+      HTML: this.htmlCode(),
+      CSS: this.cssCode(),
+      JS: this.jsCode(),
+    };
+    return codeMap[tab];
   }
 
   setCode(tab: Tab, value: string): void {
