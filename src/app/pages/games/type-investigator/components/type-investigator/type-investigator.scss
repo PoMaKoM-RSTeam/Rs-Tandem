@@ -1,8 +1,10 @@
+@use 'styles/variables' as *;
+
 .ti-page {
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: #a29d9a;
-  color: #292828;
+  background-color: $color-light-grey;
+  color: $color-black;
   font-family: 'JetBrains Mono', monospace;
   display: flex;
   flex-direction: column;
@@ -15,11 +17,11 @@
 }
 
 .ti-title__accent {
-  color: #1c78e0;
+  color: $color-green;
 }
 
 .ti-subtitle {
-  color: #ffffff;
+  color: $color-gray;
   margin: 0.4rem 0 0;
   font-size: 0.9rem;
 }
@@ -34,19 +36,19 @@
 
 .ti-progress__label {
   font-size: 0.8rem;
-  color: #ffffff;
+  color: $color-light-grey;
 }
 
 .ti-progress__bar {
   height: 6px;
-  background: #21262d;
+  background: $color-black;
   border-radius: 3px;
   overflow: hidden;
 }
 
 .ti-progress__fill {
   height: 100%;
-  background: linear-gradient(-90deg, #fd731b, #ffffff);
+  background: linear-gradient(-90deg, $color-orange, $color-black);
   border-radius: 3px;
   transition: width 0.4s ease-in-out;
 }
