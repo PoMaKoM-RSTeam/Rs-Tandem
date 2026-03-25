@@ -52,7 +52,8 @@ The application features a set of interactive games designed to focus on specifi
 ### Code Review
 
 - [feat: animate moving blocks to final call stack](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/37)
-- ...
+- [feat: code golf add check solution](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/58)
+- [feat: code sandbox](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/57)
 
 ## Week 5 Checkpoint
 [video link](https://youtu.be/nxAmDsMHFuk)
