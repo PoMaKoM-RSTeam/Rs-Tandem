@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChild } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { Message, Role, ROLES } from '../../shared/types';
+import { Message, ROLES } from '../../shared/types';
 
-type UpdataChatHistoryParams = {
-  role: Role;
-  content: string;
-};
+type UpdataChatHistoryParams =
+  | {
+      role: typeof ROLES.model;
+      content: string;
+    }
+  | {
+      role: typeof ROLES.user;
+      content: string;
+      remainingAttempts: number;
+    };
 
 @Component({
   selector: 'tndm-chat',
@@ -21,15 +27,18 @@ export class TndmChat {
 
   readonly allMessages = signal<Message[]>([]);
 
-  updateChatHistory({ role, content }: UpdataChatHistoryParams): void {
+  updateChatHistory(params: UpdataChatHistoryParams): void {
+    const parts = [{ text: params.content }];
+
+    if (params.role === ROLES.user) {
+      parts.push({ text: `[System note: Remaining attempts: ${params.remainingAttempts}]` });
+    }
+
     const newMessage: Message = {
-      role,
-      parts: [
-        {
-          text: content,
-        },
-      ],
+      role: params.role,
+      parts,
     };
+
     this.allMessages.update(messages => [...messages, newMessage]);
     this.scrollChatToBottom();
   }

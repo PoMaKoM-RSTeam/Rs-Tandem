@@ -1,6 +1,7 @@
 @use '/styles/typography' as typography;
 
 :host {
+  @include typography.text-body();
   padding: 20px;
   display: flex;
   flex-direction: column;

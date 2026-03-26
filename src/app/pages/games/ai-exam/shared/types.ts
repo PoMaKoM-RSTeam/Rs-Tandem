@@ -7,5 +7,5 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export type Message = {
   role: Role;
-  parts: [{ text: string }];
+  parts: { text: string }[];
 };

@@ -5,6 +5,7 @@ import { ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
+import { ANSWER_ATTEMPTS } from './shared/prompt';
 
 @Component({
   selector: 'tndm-ai-exam',
@@ -24,7 +25,9 @@ export class TndmAiExam {
   readonly isGenerateQuestionDisabled = signal(false);
   readonly isAnswerQuestionDisabled = signal(true);
   readonly isSkipQuestionDisabled = signal(true);
-  readonly isTextInputDisabled = signal(true);
+
+  readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
+  readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
 
   private readonly initialQuestion = `Ask a question on JavaScript`;
 
@@ -50,12 +53,18 @@ export class TndmAiExam {
       return;
     }
 
+    this.currentAttempt.update(attempt => (attempt -= 1));
     this.askAi(userAnswer);
+
+    if (this.currentAttempt() === 0) {
+      this.isAnswerQuestionDisabled.set(true);
+      this.toaster.info(`You've used all attempts`, `Generate a new question`);
+    }
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
     if (event.key !== 'Enter' || event.shiftKey) return;
-    if (this.isLoading() || this.isTextInputDisabled()) return;
+    if (this.isLoading() || this.isAnswerQuestionDisabled()) return;
 
     event.preventDefault();
     form.requestSubmit();
@@ -74,21 +83,20 @@ export class TndmAiExam {
     const messageContent = isFirstMessage ? this.initialQuestion : content;
 
     try {
-      chat.updateChatHistory({ role: ROLES.user, content: messageContent });
+      chat.updateChatHistory({ role: ROLES.user, content: messageContent, remainingAttempts: this.currentAttempt() });
       const answerFromAi = await this.gemini.ask(chat.allMessages());
       chat.updateChatHistory({ role: ROLES.model, content: answerFromAi });
 
       if (isFirstMessage) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
-        this.isTextInputDisabled.set(false);
       }
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       console.error(error);
     } finally {
       this.isLoading.set(false);
-      this.focusAnswerTextarea();
+      if (!this.isAnswerQuestionDisabled()) this.focusAnswerTextarea();
     }
   }
 
