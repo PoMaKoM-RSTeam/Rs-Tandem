@@ -55,11 +55,6 @@ export class TndmAiExam {
 
     this.currentAttempt.update(attempt => (attempt -= 1));
     this.askAi(userAnswer);
-
-    if (this.currentAttempt() === 0) {
-      this.isAnswerQuestionDisabled.set(true);
-      this.toaster.info(`You've used all attempts`, `Generate a new question`);
-    }
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
@@ -84,12 +79,20 @@ export class TndmAiExam {
 
     try {
       chat.updateChatHistory({ role: ROLES.user, content: messageContent, remainingAttempts: this.currentAttempt() });
-      const answerFromAi = await this.gemini.ask(chat.allMessages());
-      chat.updateChatHistory({ role: ROLES.model, content: answerFromAi });
+      const response = await this.gemini.ask(chat.allMessages());
+      chat.updateChatHistory({ role: ROLES.model, content: response.message });
 
       if (isFirstMessage) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
+      }
+
+      if (response.isExamFinished) {
+        this.isAnswerQuestionDisabled.set(true);
+        this.isSkipQuestionDisabled.set(true);
+        this.isGenerateQuestionDisabled.set(false);
+        this.currentAttempt.set(this.MAX_ATTEMPT_NUMBER);
+        this.toaster.info(`Exam finished!`, `Check your final score.`);
       }
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);

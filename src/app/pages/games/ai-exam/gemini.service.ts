@@ -3,11 +3,16 @@ import { Message } from './shared/types';
 import { SupabaseService } from '../../../core/supabase/supabase-service';
 import { PASSING_SCORE, SYSTEM_INSTRUCTION } from './shared/prompt';
 
+export type GeminiResponse = {
+  isExamFinished: boolean;
+  message: string;
+};
+
 @Injectable()
 export class GeminiService {
   private readonly supabase = inject(SupabaseService).client;
 
-  async ask(history: Message[]): Promise<string> {
+  async ask(history: Message[]): Promise<GeminiResponse> {
     const maxPassingScore = 100;
     if (PASSING_SCORE > 100) {
       throw new Error(`Passing score is set to ${PASSING_SCORE}. It has to be <= ${maxPassingScore}`);
@@ -20,26 +25,61 @@ export class GeminiService {
         systemInstruction: {
           parts: [{ text: SYSTEM_INSTRUCTION }],
         },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'object',
+            properties: {
+              isExamFinished: {
+                type: 'boolean',
+                description: 'Set to true ONLY if the user score is >= PASSING_SCORE or Remaining attempts == 0.',
+              },
+              message: {
+                type: 'string',
+                description: 'The markdown-formatted message to show to the user.',
+              },
+            },
+            required: ['isExamFinished', 'message'],
+          },
+        },
       },
     });
 
     if (error) {
       console.error('API or Supabase Edge Function error:', error);
-      return `Oops! I experienced a brain freeze 🥶.
-Check the console to see the full error message.`;
+      return {
+        isExamFinished: false,
+        message: `Oops! I experienced a brain freeze 🥶.
+        Check the console to see the full error message.`,
+      };
     }
 
     if (!data) {
-      return `Oops! The response I received from the server is empty 😢`;
+      return {
+        isExamFinished: false,
+        message: `Oops! The response I received from the server is empty 😢`,
+      };
     }
 
     if (!data.text) {
       console.warn(data);
-      return `Oops! The response I received from the server is a mess.
-I couldn't find the text I'm supposed to show you.
-Check the console to see what I received from the server.`;
+      return {
+        isExamFinished: false,
+        message: `Oops! The response I received from the server is a mess.
+        I couldn't find the text I'm supposed to show you.
+        Check the console to see what I received from the server.`,
+      };
     }
 
-    return data.text;
+    try {
+      return JSON.parse(data.text);
+    } catch (parsingError) {
+      console.error(`Failed to parse JSON from Gemini. Error: ${parsingError}`);
+      return {
+        isExamFinished: false,
+        message: `Oops! The AI returned an invalid format. Raw response:
+        ${data.text}`,
+      };
+    }
   }
 }

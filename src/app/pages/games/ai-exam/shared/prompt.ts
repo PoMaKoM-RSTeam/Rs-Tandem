@@ -34,46 +34,43 @@ const examples = `
   <example>
     User: "Ask a question on JavaScript."
     model:
-    <response>
-      **Question:**
-      What is the difference between 'let' and 'var' in JavaScript?
-
-      **Remaining attempts:** 2/2
-    </response>
+    {
+      "isExamFinished": false,
+      "message": "**Question:**\\nWhat is the difference between 'let' and 'var'?\\n\\n**Remaining attempts:** 2/2"
+    }
   </example>
   `;
 
 const outputFormat = `
- Choose ONE of the following formats based on the current state of the conversation:
+ You must respond with a JSON object containing two properties:
+ 1. "isExamFinished": a boolean. Set to true ONLY if the user's score is >= ${PASSING_SCORE}%
+ OR the system note says "Remaining attempts: 0". Otherwise, false.
+ 2. "message": a string containing your markdown-formatted response.
+
+ Choose ONE of the following formats for the "message" property based on the current state:
 
  STATE 1: If you are asking the very first question:
-  <response>
     **Question:**
     [Your JavaScript question here]
 
     **Remaining attempts:** ${ANSWER_ATTEMPTS}/${ANSWER_ATTEMPTS}.
-  </response>
 
 STATE 2: If the user has answered, but their score is below ${PASSING_SCORE}%
 and they have attempts left (Remaining attempts > 0):
-  <response>
     **Current score:** [Score]%
 
     [Your comments and guiding questions here]
 
     **Remaining attempts:** [Use the number from the System note] / ${ANSWER_ATTEMPTS}
-  </response>
 
 
  STATE 3: If the user's score is ${PASSING_SCORE}% or higher, OR the system note says "Remaining attempts: 0":
-  <response>
     ## 🏁 EXAM FINISHED 🏁
     **Result:** [PASSED / FAILED]
     **Final score:** [Score]%
     **Attempts used:** [Calculate attempts used] / ${ANSWER_ATTEMPTS}
 
     [Your final feedback here]
-  </response>
   `;
 
 export const SYSTEM_INSTRUCTION = `
