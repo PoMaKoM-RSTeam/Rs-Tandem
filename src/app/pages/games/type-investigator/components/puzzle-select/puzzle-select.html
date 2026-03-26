@@ -1,0 +1,15 @@
+<section class="puzzle-select_grid">
+  @for (puzzle of puzzles(); track puzzle.id) {
+  <button
+    class="puzzle-select_card"
+    type="button"
+    [class.puzzle-select_card--easy]="puzzle.difficulty === 'easy'"
+    [class.puzzle-select_card--hard]="puzzle.difficulty === 'hard'"
+    [class.puzzle-select_card--medium]="puzzle.difficulty === 'medium'"
+    (click)="puzzleSelected.emit(puzzle)">
+    <span class="puzzle-select_card__badge">{{ difficultyLabel(puzzle.difficulty) }}</span>
+    <span class="puzzle-select_card__title">{{ puzzle.title }}</span>
+    <span class="puzzle-select_card__desc">{{ puzzle.description }}</span>
+  </button>
+  }
+</section>

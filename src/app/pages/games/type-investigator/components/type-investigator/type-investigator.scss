@@ -1,0 +1,54 @@
+@use 'styles/variables' as *;
+
+.ti-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: $color-light-grey;
+  color: $color-black;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.ti-header {
+  text-align: center;
+}
+
+.ti-title__accent {
+  color: $color-green;
+}
+
+.ti-subtitle {
+  color: $color-gray;
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+}
+
+.ti-progress {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ti-progress__label {
+  font-size: 0.8rem;
+  color: $color-light-grey;
+}
+
+.ti-progress__bar {
+  height: 6px;
+  background: $color-black;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ti-progress__fill {
+  height: 100%;
+  background: linear-gradient(-90deg, $color-orange, $color-black);
+  border-radius: 3px;
+  transition: width 0.4s ease-in-out;
+}

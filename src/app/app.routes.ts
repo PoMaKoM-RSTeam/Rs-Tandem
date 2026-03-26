@@ -28,6 +28,27 @@ export const routes: Routes = [
     canActivate: [tndmAuthGuard],
   },
   {
+    path: 'type-investigator',
+    title: 'Type Investigator',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+            m => m.TndmTypeInvestigator
+          ),
+      },
+      {
+        path: ':puzzleId',
+        loadComponent: () =>
+          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+            m => m.TndmTypeInvestigator
+          ),
+      },
+    ],
+    canActivate: [tndmAuthGuard],
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/tndm-not-found-page/tndm-not-found-page').then(m => m.TndmNotFoundPage),
     title: 'Not Found',
