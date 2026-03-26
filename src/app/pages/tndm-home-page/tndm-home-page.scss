@@ -1,0 +1,15 @@
+@use 'styles/typography' as t;
+@use 'styles/variables' as v;
+
+.content-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid v.$color-grey;
+}
+
+.content__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4vw;
+  padding: 2vw;
+}
