@@ -11,7 +11,7 @@
 
   <div class="puzzle-board_editor">
     @for (line of puzzle().lines; track $index) {
-    <div class="puzzle-board_line" [style.padding-left.rem]="line.indent * 1.5">
+    <div class="puzzle-board_line" [style.padding-left.rem]="line.indent * INDENT_REM">
       @for (seg of line.segments; track $index) { @if (seg.kind === 'locked') {
       <span class="puzzle-board_token puzzle-board_token--{{ seg.tokenType }}">{{ seg.text }}</span>
       } @else { @let slot = state().slots[seg.slotId]; @let placedBlock = state().blockMap.get(slot.currentBlockId!);

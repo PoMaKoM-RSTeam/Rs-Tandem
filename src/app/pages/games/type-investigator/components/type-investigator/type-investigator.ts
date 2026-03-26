@@ -14,6 +14,8 @@ import { PUZZLES_DATA } from '../../data/puzzles.data';
   templateUrl: './type-investigator.html',
 })
 export class TndmTypeInvestigator {
+  private static readonly REDIRECT_DELAY = 2000;
+
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -54,7 +56,7 @@ export class TndmTypeInvestigator {
       if (this.activePuzzle()?.id === puzzleId) {
         this.router.navigate(['..'], { relativeTo: this.route });
       }
-    }, 2000);
+    }, TndmTypeInvestigator.REDIRECT_DELAY);
   }
 
   onBack(): void {

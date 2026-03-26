@@ -16,6 +16,8 @@ import { validateSolution } from './helpers/validate-solution.utils';
   templateUrl: './puzzle-board.html',
 })
 export class TndmPuzzleBoard {
+  protected readonly INDENT_REM = 1.5;
+
   readonly puzzle = input.required<Puzzle>();
   readonly solved = output<void>();
   readonly back = output<void>();
