@@ -29,7 +29,7 @@ export class TndmAiExam {
   readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
   readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
 
-  private readonly initialQuestion = `Ask a question on JavaScript`;
+  private readonly initialQuestion = `Задай вопрос про JavaScript`;
 
   async generateQuestion(): Promise<void> {
     if (this.isLoading()) return;
@@ -53,7 +53,6 @@ export class TndmAiExam {
       return;
     }
 
-    this.currentAttempt.update(attempt => (attempt -= 1));
     this.askAi(userAnswer);
   }
 
@@ -85,13 +84,14 @@ export class TndmAiExam {
       if (isFirstMessage) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
+      } else {
+        this.currentAttempt.update(attempt => (attempt -= 1));
       }
 
       if (response.isExamFinished) {
         this.isAnswerQuestionDisabled.set(true);
         this.isSkipQuestionDisabled.set(true);
         this.isGenerateQuestionDisabled.set(false);
-        this.currentAttempt.set(this.MAX_ATTEMPT_NUMBER);
         this.toaster.info(`Exam finished!`, `Check your final score.`);
       }
     } catch (error) {
