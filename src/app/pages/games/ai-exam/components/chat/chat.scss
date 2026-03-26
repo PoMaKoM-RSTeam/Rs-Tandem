@@ -6,7 +6,7 @@
   max-width: 1000px;
   min-height: 100px;
   max-height: 400px;
-  border: 1px solid gray;
+  border: 1px solid variables.$color-dark-grey;
   padding: 15px 15px 15px 40px;
   white-space: pre-wrap;
   overflow-y: hidden;
@@ -38,7 +38,7 @@
   padding: 10px 15px;
   border-radius: 15px;
   border-top-right-radius: 0;
-  background: #dbeafe;
+  background: variables.$color-light-grey;
 }
 
 .row-with-spinner {
@@ -70,15 +70,13 @@
 
 :host ::ng-deep .chat-container {
   code {
-    background: #e9ecef;
+    background: variables.$color-light-grey;
     padding: 0.2rem 0.4rem;
   }
   pre {
-    background: #e6e3e3;
-    color: #24292e;
+    background: variables.$color-light-grey;
     padding: 15px;
     border-radius: 10px;
-    border: 2px solid #e1e4e8;
 
     code {
       background: transparent;
