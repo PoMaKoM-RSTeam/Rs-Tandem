@@ -68,9 +68,22 @@
   }
 }
 
-:host ::ng-deep .chat-container code {
-  background: #e9ecef;
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  font-family: 'Fira Code', monospace;
+:host ::ng-deep .chat-container {
+  code {
+    background: #e9ecef;
+    padding: 0.2rem 0.4rem;
+  }
+  pre {
+    background: #e6e3e3;
+    color: #24292e;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #e1e4e8;
+
+    code {
+      background: transparent;
+      padding: 0;
+      font-size: 1.05em;
+    }
+  }
 }
