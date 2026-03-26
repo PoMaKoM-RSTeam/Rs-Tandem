@@ -1,5 +1,16 @@
+@use '../../shared/drag-drop' as dragDrop;
+@use '../../shared/field-heading' as heading;
+
 .final-stack-content {
-  border: 1px solid blueviolet;
-  width: 100px;
-  height: 300px;
+  @include dragDrop.drag-drop-container;
+  min-width: 321px;
+  min-height: 200px;
+}
+
+.is-hidden {
+  visibility: hidden;
+}
+
+.heading {
+  @include heading.field-heading;
 }

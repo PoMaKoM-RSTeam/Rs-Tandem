@@ -1,6 +1,17 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
   padding-inline: 20px;
+  & .heading {
+    margin-top: 20px;
+  }
+}
+
+.stats-wrapper {
+  display: flex;
+  gap: 30px;
 }
 
 ul {
@@ -11,4 +22,6 @@ ul {
 .fields-wrapper {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  gap: 20px;
 }

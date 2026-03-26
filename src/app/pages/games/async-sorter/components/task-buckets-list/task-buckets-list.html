@@ -1,7 +1,31 @@
-<h3>Task Buckets</h3>
+<h3 class="heading">Task Buckets</h3>
 
-<div class="task-buckets-list-content">
-  @for (bucket of buckets; track bucket.id) {
-  <li tndm-task-bucket [heading]="bucket.heading"></li>
-  }
-</div>
+<ul class="task-buckets-list-content">
+  <li
+    tndm-task-bucket
+    [codeBlocks]="syncBucket()"
+    [heading]="'Synchronous (Call Stack)'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
+    [taskType]="TASK_TYPES.sync"
+    (bucketContentUpdated)="syncBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
+  <li
+    tndm-task-bucket
+    [codeBlocks]="microBucket()"
+    [heading]="'Micro Tasks'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
+    [taskType]="TASK_TYPES.micro"
+    (bucketContentUpdated)="microBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
+  <li
+    tndm-task-bucket
+    [codeBlocks]="macroBucket()"
+    [heading]="'Macro Tasks'"
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
+    [taskType]="TASK_TYPES.macro"
+    (bucketContentUpdated)="macroBucketChanged.emit($event)"
+    (codeBlockDropped)="codeBlockDropped.emit($event)"></li>
+</ul>

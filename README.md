@@ -9,92 +9,78 @@ The application features a set of interactive games designed to focus on specifi
 - Type Investigator
 - Code Golf
 - Code Sandbox
+- ...
 
 ## Table of Contents
 
+- [Team](#team)
+- [Deploy](#deploy)
+- [Team Processes](#team-processes)
+- [Demo](#demo)
 - [Technologies](#technologies)
-- [Getting Started](#usage)
-- [Testing](#testing)
-- [Deploy and CI/CD](#deploy-and-cicd)
-- [Contributing](#contributing)
-- [Project Team](#project-team)
+- [Development](#development)
+
+## Team
+
+- [Aleksei Drob](https://github.com/aliakseidrob) — Front-End Engineer and Database Wizard
+- [Mark Pribylnov](https://github.com/mark-pribylnov) — Front-End Engineer and CI/CD Warrior
+- [Alexandr Zhdanko](https://github.com/Zhdko) — Front-End Engineer and UX/UI Magician
+- [Vsevolod Timoshenko](https://github.com/shoblinsky) — Front-End Engineer and Our Secret Weapon
+- [Anatoliy Rubankov](https://github.com/anatolirub) — Front-End Engineer and AI Pioneer
+- [Hanna Surmach](https://github.com/khasekai) — Mentor and Flag Bearer (Teamlead)
+- [Raman Kamarou](https://github.com/PoMaKoM) — Mentor and Engineering Grandmaster
+
+## Deploy
+
+[Deploy link](https://luminous-biscuit-6fec26.netlify.app/)
+
+## Team Processes
+
+### Kanban Board
+
+[Trello board](https://trello.com/b/30vnlooD/rs-tandem)
+
+![Board screenshot](./docs/img/trello-board.png)
+
+### Meeting Notes
+
+- [Weekly Sync #4](https://docs.google.com/document/d/1deMkN9TBNqXL6cWgjV_phSVQiweeYUNDUblqL7qXTsE/edit?tab=t.0)
+- [Weekly Sync #5](https://docs.google.com/document/d/1deMkN9TBNqXL6cWgjV_phSVQiweeYUNDUblqL7qXTsE/edit?tab=t.l8qfflwwjp4f)
+- [Weekly Sync #6](https://docs.google.com/document/d/1deMkN9TBNqXL6cWgjV_phSVQiweeYUNDUblqL7qXTsE/edit?tab=t.gq0dpqwhvhnl)
+- ...
+
+### Code Review
+
+- [feat: animate moving blocks to final call stack](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/37)
+- [feat: code golf add check solution](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/58)
+- [feat: code sandbox](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/57)
+
+## Week 5 Checkpoint
+[video link](https://youtu.be/nxAmDsMHFuk)
+
+## Demo
+
+...
 
 ## Technologies
 
 | Software | Version |
 | -------- | ------- |
 | Angular  | 21.1.4  |
-| NodeJS   | 24.13.1 |
-| npm      | 11.8.0  |
-
-## Usage
-
-**Clone the repository:**
-
-```sh
-git clone <repository-url>
-cd <project-folder>
-```
+| Husky    | 21.1.4  |
+| Prettier | 3.8.1   |
+| Vitest   | 4.0.8   |
 
 ## Development
 
-### Prerequisites
-
-| Software | Version |
-| -------- | ------- |
-| Angular  | 21.1.4  |
-| NodeJS   | 24.13.1 |
-| npm      | 11.8.0  |
-
-### Install dependencies
-
-To install dependencies, run the command:
+To install dependencies:
 
 ```sh
-$ npm i
+npm i
 ```
 
-### Running the Development Server
-
-To start the development server, run the command:
+To run a dev server:
 
 ```sh
 ng serve
 ```
-
-### Creating a Build
-
-To perform a production build, run the command:
-
-```sh
-ng build
-```
-
-## Testing
-
-...
-
-## Deploy and CI/CD
-
-...
-
-## To do
-
-- [x] Add a cool README
-- [ ] Rewrite everything
-- [ ] ...
-
-## Project Team
-
-- [Aleksei Drob](https://github.com/aliakseidrob) — Front-End Engineer
-- [Mark Pribylnov](https://github.com/mark-pribylnov) — Front-End Engineer
-- [Alexandr Zhdanko](https://github.com/Zhdko) — Front-End Engineer
-- [Vsevolod Timoshenko](https://github.com/shoblinsky) — Front-End Engineer
-- [Anatoliy Rubankov](https://github.com/anatolirub) — Front-End Engineer
-- [Hanna](https://github.com/khasekai) — Mentor
-- [Roman](https://github.com/PoMaKoM) — Mentor
-
----
-
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage---%25-brightgreen)

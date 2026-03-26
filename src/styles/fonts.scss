@@ -29,9 +29,17 @@
   font-weight: 700;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'CyberAlert';
   src: url('/fonts/cyber-alert/cyber-alert.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Saibex';
+  src: url('/fonts/saibex/saibex.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
 }

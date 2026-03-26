@@ -1,19 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, effect, output, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmCodeBlock } from '../code-block/code-block';
-import codeBlocksJson from './code-blocks.json';
+import { codeBlocks } from './code-blocks-data';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { CodeBlockData } from '../../shared/types';
 
 @Component({
-  selector: 'ul[tndm-code-blocks-list]',
-  imports: [TndmCodeBlock],
+  selector: 'tndm-code-blocks-list',
   templateUrl: './code-blocks-list.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './code-blocks-list.scss',
+  imports: [CdkDropList, TndmCodeBlock, CdkDrag],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeBlocksList {
-  readonly codeBlocks = codeBlocksJson;
+  readonly codeBlocks = signal<CodeBlockData[]>([...codeBlocks]);
+  readonly isEmpty = output<void>();
 
-  isChain(item: unknown): item is string[] {
-    return Array.isArray(item);
+  constructor() {
+    effect(() => {
+      if (this.codeBlocks().length === 0) {
+        this.isEmpty.emit();
+      }
+    });
+  }
+
+  noReturnPredicate(): false {
+    return false;
+  }
+
+  removeCodeBlock(executionOrder: number): void {
+    this.codeBlocks.update(array => array.filter(block => block.executionOrder !== executionOrder));
   }
 }

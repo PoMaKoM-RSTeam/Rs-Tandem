@@ -1,27 +1,33 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
 
 @Component({
   selector: 'tndm-code-golf-rank',
   standalone: true,
-  template: `
-    <div class="game-info">
-      <div class="rank-info">
-        <span class="icon">{{ rank().icon }}</span>
-        <div class="details">
-          <div class="rank" [style.color]="rank().color">{{ rank().label }}</div>
-          <div class="bytes-amount">{{ byteCount() }} Bytes</div>
-        </div>
-      </div>
-      <div class="rank-progress">
-        <div class="progress-fill" [style.background-color]="rank().color" [style.width.%]="rank().width"></div>
-      </div>
-    </div>
-  `,
+  templateUrl: 'code-golf-rank.html',
   styleUrl: './code-golf-rank.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolfRank {
-  readonly rank = input.required<GolfRank>();
+  readonly rank = input.required<GolfRank | undefined>();
+  readonly previousBest = input.required<number | null>();
   readonly byteCount = input.required<number>();
+
+  readonly diffInfo = computed(() => {
+    const best = this.previousBest();
+    const current = this.byteCount();
+
+    if (best === null || current === 0) {
+      return null;
+    }
+
+    const diff = current - best;
+
+    return {
+      value: diff,
+      label: diff < 0 ? 'progress' : 'regress',
+      isProgress: diff < 0,
+      isRegress: diff > 0,
+    };
+  });
 }

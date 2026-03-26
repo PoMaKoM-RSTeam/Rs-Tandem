@@ -1,8 +1,34 @@
+@use '../../../../../../styles/variables' as *;
+
+@mixin status-icon($symbol) {
+  content: $symbol;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 :host {
-  border: 1px solid transparent;
-  padding: 2px;
-  &:hover {
-    border-color: green;
-    cursor: pointer;
+  position: relative;
+  padding: 10px;
+  border-bottom: solid 1px $color-grey;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: $color-white;
+  overflow: hidden;
+  &.in-wrong-bucket::after {
+    @include status-icon('❌');
+  }
+  &.is-placed-correctly::after {
+    @include status-icon('✅');
+  }
+
+  &.non-draggable {
+    cursor: default;
   }
 }

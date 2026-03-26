@@ -1,5 +1,14 @@
+@use '../../shared/field-heading' as heading;
+
 .task-buckets-list-content {
+  min-width: 321px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.heading {
+  @include heading.field-heading;
 }

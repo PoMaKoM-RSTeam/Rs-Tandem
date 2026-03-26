@@ -1,5 +1,13 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+@use '../../shared/drag-drop' as dragDrop;
+@use '../../shared/field-heading' as heading;
+
+.initial-code-blocks-list {
+  min-width: 321px;
+  @include dragDrop.drag-drop-container;
+}
+
+@include dragDrop.drag-drop-animations;
+
+.heading {
+  @include heading.field-heading;
 }
