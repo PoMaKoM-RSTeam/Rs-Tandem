@@ -1,0 +1,37 @@
+<div class="page">
+  <header class="header">
+    @if(!authService.isAuthenticated){
+    <div class="header__auth-btns">
+      <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
+      <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
+    </div>
+    } @else {
+    <tndm-navigation />
+    <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" /> }
+  </header>
+
+  <div class="vertical-lines">
+    <div class="line"></div>
+    <div class="line"></div>
+    @if(config().showLines) {
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    }
+  </div>
+
+  <main class="content">
+    <section class="content__top">
+      <h1 class="content__title" [class.content__title-home]="config().headerType === 'home'">{{pageTitle()}}</h1>
+
+      <div class="cross cross_position_top-left"></div>
+      <div class="cross cross_position_top-right"></div>
+      <div class="cross cross_position_bottom-right"></div>
+      <div class="cross cross_position_bottom-left"></div>
+    </section>
+
+    <router-outlet />
+  </main>
+
+  <footer class="footer"></footer>
+</div>
