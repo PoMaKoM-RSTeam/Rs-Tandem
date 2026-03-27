@@ -28,11 +28,6 @@ export class GeminiService {
 
     const { data, error } = await this.supabase.functions.invoke('gemini-proxy', {
       body: {
-        // model: this.MODELS['gemini-3.1-pro'],
-        // model: this.MODELS['gemini-3.1-flash'],
-        // model: this.MODELS['gemini-3.1-flash-lite'],
-        // model: this.MODELS['gemini-2.5-pro'],
-        // model: this.MODELS['gemini-2.5-flash'],
         model: this.MODELS['gemini-2.5-flash-lite'],
         contents: history,
         systemInstruction: {
