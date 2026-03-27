@@ -75,6 +75,7 @@ export class GeminiService {
       return JSON.parse(data.text);
     } catch (parsingError) {
       console.error(`Failed to parse JSON from Gemini. Error: ${parsingError}`);
+      console.log(`Parsed data: ${data.text}`);
       return {
         isExamFinished: false,
         message: `Oops! The AI returned an invalid format. Raw response:

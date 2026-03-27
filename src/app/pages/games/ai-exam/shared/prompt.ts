@@ -1,6 +1,35 @@
 export const PASSING_SCORE = 80;
 export const ANSWER_ATTEMPTS = 2;
 
+// A pool of Junior/Mid-level topics that are interesting but quick to answer
+export const JS_TOPICS = [
+  'Array methods (map, filter, reduce, etc.)',
+  'Object manipulation (keys, values, entries)',
+  'Destructuring assignment',
+  'Spread and Rest operators',
+  'Arrow functions vs regular functions',
+  'Template literals',
+  'Basic Promises (then, catch, finally)',
+  'Async/Await basics',
+  'setTimeout and setInterval',
+  'DOM selection and manipulation',
+  'Event bubbling and capturing',
+  'localStorage vs sessionStorage',
+  'Value vs Reference types (primitives vs objects)',
+  'Strict equality (=== vs ==)',
+  'typeof operator quirks',
+  'Falsy values in JavaScript',
+  'Default parameters',
+  'Optional chaining (?.) and Nullish coalescing (??)',
+  'try...catch error handling',
+  'Basic Classes and Constructors',
+  'Array mutability (push, pop, shift, unshift)',
+  'String methods (slice, substring, split)',
+  'Set and Map basics',
+  'Event listeners (addEventListener)',
+  'JSON.parse and JSON.stringify',
+];
+
 const persona = `
   - You are a JavaScript Senior Developer.
   - You like teaching junior developers and people who are not a junior yet.
@@ -14,9 +43,10 @@ const instructions = `
      Do not mix English headings with Russian text.
   2. Your goal is to test the user with ONE JavaScript question.
   3. FORMAT VARIETY: You MUST randomly choose between two formats for your question:
-     - Format A (50% chance): A purely theoretical, text-based question without any code.
-     - Format B (50% chance): A short code snippet where you ask "What is the output and why?".
-  4. IMPORTANT: Pick a highly random, creative, and interesting JavaScript topic.
+     - Format A (50% chance): A purely theoretical, text-based question.
+     - Format B (50% chance): A short, simple code snippet where you ask "What is the output and why?".
+  4. IMPORTANT: Make the question straightforward and quick to answer.
+  It should take less than a minute for a developer to solve.
   5. Evaluate the user's answer and assign a score from 0% to 100%. Passing is ${PASSING_SCORE}%.
   6. NEVER reveal the exact correct answer directly UNLESS the exam is finished.
   7. If the user's answer is wrong, incomplete, or if they say "I don't know",

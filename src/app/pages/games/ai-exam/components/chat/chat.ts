@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChil
 import { MarkdownComponent } from 'ngx-markdown';
 import { Message, ROLES } from '../../shared/types';
 
-type UpdataChatHistoryParams =
+type UpdateChatHistoryParams =
   | {
       role: typeof ROLES.model;
       content: string;
@@ -11,6 +11,8 @@ type UpdataChatHistoryParams =
       role: typeof ROLES.user;
       content: string;
       remainingAttempts: number;
+      isGeneratingQuestion: boolean;
+      selectedTopics?: string;
     };
 
 @Component({
@@ -27,11 +29,18 @@ export class TndmChat {
 
   readonly allMessages = signal<Message[]>([]);
 
-  updateChatHistory(params: UpdataChatHistoryParams): void {
+  updateChatHistory(params: UpdateChatHistoryParams): void {
     const parts = [{ text: params.content }];
 
     if (params.role === ROLES.user) {
       parts.push({ text: `[System note: Remaining attempts: ${params.remainingAttempts}]` });
+
+      if (params.isGeneratingQuestion) {
+        parts.push({
+          text: `[System note: You MUST ask a question specifically related
+          to one of these topics: ${params.selectedTopics}.]`,
+        });
+      }
     }
 
     const newMessage: Message = {

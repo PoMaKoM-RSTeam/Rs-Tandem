@@ -5,7 +5,14 @@ import { ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
-import { ANSWER_ATTEMPTS } from './shared/prompt';
+import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
+import { shuffle } from 'lodash';
+
+type askAiParams = {
+  messageContent?: string;
+  isGeneratingQuestion: boolean;
+  selectedTopics?: string;
+};
 
 @Component({
   selector: 'tndm-ai-exam',
@@ -34,7 +41,10 @@ export class TndmAiExam {
   async generateQuestion(): Promise<void> {
     if (this.isLoading()) return;
 
-    this.askAi(this.initialQuestion, 'is-initial-question');
+    const shuffled = shuffle(JS_TOPICS);
+    const selectedTopics = shuffled.slice(0, 3).join(', ');
+
+    this.askAi({ isGeneratingQuestion: true, selectedTopics });
     this.isGenerateQuestionDisabled.set(true);
   }
 
@@ -53,7 +63,7 @@ export class TndmAiExam {
       return;
     }
 
-    this.askAi(userAnswer);
+    this.askAi({ messageContent: userAnswer, isGeneratingQuestion: false });
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
@@ -64,7 +74,11 @@ export class TndmAiExam {
     form.requestSubmit();
   }
 
-  private async askAi(content: string, isInitialQuestion?: 'is-initial-question'): Promise<void> {
+  private async askAi({
+    messageContent = this.initialQuestion,
+    isGeneratingQuestion,
+    selectedTopics,
+  }: askAiParams): Promise<void> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
@@ -73,15 +87,18 @@ export class TndmAiExam {
     this.isLoading.set(true);
     textInput.value = '';
 
-    const isFirstMessage = isInitialQuestion === 'is-initial-question';
-    const messageContent = isFirstMessage ? this.initialQuestion : content;
-
     try {
-      chat.updateChatHistory({ role: ROLES.user, content: messageContent, remainingAttempts: this.currentAttempt() });
+      chat.updateChatHistory({
+        role: ROLES.user,
+        content: messageContent,
+        remainingAttempts: this.currentAttempt(),
+        isGeneratingQuestion: isGeneratingQuestion,
+        selectedTopics,
+      });
       const response = await this.gemini.ask(chat.allMessages());
       chat.updateChatHistory({ role: ROLES.model, content: response.message });
 
-      if (isFirstMessage) {
+      if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
       } else {
