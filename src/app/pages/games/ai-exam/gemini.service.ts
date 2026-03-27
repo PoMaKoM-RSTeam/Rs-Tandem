@@ -11,6 +11,14 @@ export type GeminiResponse = {
 @Injectable()
 export class GeminiService {
   private readonly supabase = inject(SupabaseService).client;
+  private readonly MODELS = {
+    'gemini-3.1-pro': 'gemini-3.1-pro-preview',
+    'gemini-3.1-flash': 'gemini-3-flash-preview',
+    'gemini-3.1-flash-lite': 'gemini-3.1-flash-lite-preview',
+    'gemini-2.5-flash': 'gemini-2.5-flash',
+    'gemini-2.5-flash-lite': 'gemini-2.5-flash-lite',
+    'gemini-2.5-pro': 'gemini-2.5-pro',
+  };
 
   async ask(history: Message[]): Promise<GeminiResponse> {
     const maxPassingScore = 100;
@@ -20,7 +28,12 @@ export class GeminiService {
 
     const { data, error } = await this.supabase.functions.invoke('gemini-proxy', {
       body: {
-        model: 'gemini-2.5-flash-lite',
+        // model: this.MODELS['gemini-3.1-pro'],
+        // model: this.MODELS['gemini-3.1-flash'],
+        // model: this.MODELS['gemini-3.1-flash-lite'],
+        // model: this.MODELS['gemini-2.5-pro'],
+        // model: this.MODELS['gemini-2.5-flash'],
+        model: this.MODELS['gemini-2.5-flash-lite'],
         contents: history,
         systemInstruction: {
           parts: [{ text: SYSTEM_INSTRUCTION }],
@@ -32,7 +45,8 @@ export class GeminiService {
             properties: {
               isExamFinished: {
                 type: 'boolean',
-                description: 'Set to true ONLY if the user score is >= PASSING_SCORE or Remaining attempts == 0.',
+                description: `Set to true IF the user score is >= ${PASSING_SCORE} or Remaining attempts == 0.
+                Set to false otherwise.`,
               },
               message: {
                 type: 'string',

@@ -102,7 +102,7 @@ export class TndmAiExam {
       if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);
         this.isSkipQuestionDisabled.set(false);
-      } else {
+      } else if (this.currentAttempt() >= 1) {
         this.currentAttempt.update(attempt => (attempt -= 1));
       }
 
