@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, effect, input, signal, Vi
 import { ReviewCase } from '../../models/review-case.model';
 import { highlightCode } from '../../helpers/highlight-code';
 import { LineState } from '../../models/line-state.model';
+import { TndmReviewTooltip } from '../review-tooltip/review-tooltip';
 
 @Component({
   selector: 'tndm-code-viewer',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'code-viewer' },
+  imports: [TndmReviewTooltip],
   templateUrl: './code-viewer.html',
   styleUrl: './code-viewer.scss',
 })
@@ -17,9 +19,10 @@ export class TndmCodeViewer {
   readonly linesState = signal<LineState[]>([]);
   protected readonly ANIMATION_TIMEOUT = 600;
   protected readonly LINE_SHIFT = 1;
+  readonly tooltipLine = signal<number | null>(null);
+
   private readonly linesEffect = effect(() => {
     const reviewCase = this.reviewCase();
-
     this.linesState.set(
       reviewCase.code.split('\n').map((text, i) => ({
         lineNumber: i + 1,
@@ -29,6 +32,7 @@ export class TndmCodeViewer {
         foundError: null,
       }))
     );
+    this.closeTooltip();
   });
 
   onLineClick(lineNumber: number, event: Event): void {
@@ -42,9 +46,19 @@ export class TndmCodeViewer {
     if (!expected) {
       el.classList.add('viewer_line--wrong');
       setTimeout(() => el.classList.remove('viewer_line--wrong'), this.ANIMATION_TIMEOUT);
+      this.closeTooltip();
     } else {
       el.classList.add('viewer_line--found');
       setTimeout(() => el.classList.remove('viewer_line--found'), this.ANIMATION_TIMEOUT);
+      this.tooltipLine.set(lineNumber);
     }
+    const alreadyFound = this.linesState().find(l => l.lineNumber === lineNumber)?.isFound;
+    if (alreadyFound) {
+      return;
+    }
+  }
+
+  closeTooltip(): void {
+    this.tooltipLine.set(null);
   }
 }

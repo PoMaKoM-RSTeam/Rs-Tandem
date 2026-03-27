@@ -1,10 +1,26 @@
+@use './styles/variables' as v;
+@use './styles/typography' as mx;
+
 :host {
   display: contents;
 }
 
 .review-tooltip {
-  position: absolute;
-  background-color: red;
-  width: 500px;
-  height: 500px;
+  background: v.$color-gray;
+  border: 1px solid v.$border-main-color;
+  border-radius: v.$radius-md;
+  color: v.$color-white;
+}
+
+.review-tooltip_option {
+  background-color: v.$color-orange;
+  color: v.$color-black;
+  @include mx.text-body();
+  padding: v.$radius-sm;
+  cursor: pointer;
+}
+
+.review-tooltip_label {
+  color: v.$color-white;
+  @include mx.text-subtitle();
 }
