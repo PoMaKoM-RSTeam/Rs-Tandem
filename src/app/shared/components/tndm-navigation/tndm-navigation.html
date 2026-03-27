@@ -1,21 +1,9 @@
 <nav class="navigation">
   <ul class="nav">
+    @for (item of navItems; track item.path) {
     <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="appRoutes.codeGolf">code_golf</a>
+      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="item.path"> {{ item.label }} </a>
     </li>
-    <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="appRoutes.asyncSorter">async_sorter</a>
-    </li>
-    <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="appRoutes.typeInvestigator"
-        >type_investigator</a
-      >
-    </li>
-    <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="appRoutes.sandbox">sandbox</a>
-    </li>
-    <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="appRoutes.eventLoop">event_loop</a>
-    </li>
+    }
   </ul>
 </nav>
