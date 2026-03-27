@@ -97,6 +97,7 @@ export class TndmAiExam {
       });
       const response = await this.gemini.ask(chat.allMessages());
       chat.updateChatHistory({ role: ROLES.model, content: response.message });
+      console.log(response);
 
       if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);

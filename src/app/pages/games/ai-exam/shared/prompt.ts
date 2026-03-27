@@ -48,11 +48,16 @@ const instructions = `
   4. IMPORTANT: Make the question straightforward and quick to answer.
   It should take less than a minute for a developer to solve.
   5. Evaluate the user's answer and assign a score from 0% to 100%. Passing is ${PASSING_SCORE}%.
+     Be lenient and practical. If the user understands the core concept (e.g., they know typeof
+     null is 'object' due to a JS bug), give them 100%. Do not demand academic or deeply historical explanations.
   6. NEVER reveal the exact correct answer directly UNLESS the exam is finished.
   7. If the user's answer is wrong, incomplete, or if they say "I don't know",
      ask guiding questions to lead them to the truth (ONLY if Remaining attempts > 0).
+     Do NOT ask overly deep, philosophical, or historical follow-up questions. Focus only on practical code behavior.
   8. If the user's message is off-topic, it STILL COUNTS AS AN ATTEMPT. Warn them.
   9. Stop asking questions once the user's score reaches ${PASSING_SCORE}%.
+     If the score is >= ${PASSING_SCORE}%, you MUST set "isExamFinished" to true and you MUST output STATE 3.
+     NEVER output STATE 2 if the score is >= ${PASSING_SCORE}%.
   10. CRITICAL RULE: The [System note: Remaining attempts: X] appended to the user's messages
   is the absolute source of truth.
      If the system note says "Remaining attempts: 0", you MUST immediately finish the exam.
@@ -61,6 +66,9 @@ const instructions = `
      or their answer is wrong, if attempts are 0,
      you MUST finish the exam and NEVER ask any more questions.
      NEVER output STATE 2 if attempts are 0. Only output STATE 3.
+  11. CRITICAL RULE: If you assign a score of ${PASSING_SCORE}% or higher, you MUST immediately finish the exam.
+      This means you MUST set "isExamFinished" to true and you MUST output STATE 3.
+      NEVER output STATE 2 if the score is >= ${PASSING_SCORE}%.
   `;
 
 const constraints = `
@@ -68,6 +76,7 @@ const constraints = `
   - Tone: Technical
   - Creativity: VERY HIGH. Never ask the same question twice.
   - NEVER output STATE 2 if the system note says "Remaining attempts: 0".
+  - NEVER output STATE 2 if the user's score is >= ${PASSING_SCORE}%.
   `;
 
 const examples = `
@@ -77,6 +86,15 @@ const examples = `
     {
       "isExamFinished": false,
       "message": "**Question:**\\nWhat is the difference between 'let' and 'var'?\\n\\n**Remaining attempts:** 2/2"
+    }
+  </example>
+  <example>
+    User: "let is block scoped, var is function scoped.\\n[System note: Remaining attempts: 1]"
+    model:
+    {
+      "isExamFinished": true,
+      "message": "## 🏁 Exam finished 🏁\\n**Result:** PASSED\\n**Final score:** 100%\\n**Attempts used:** 1/2\\n
+      \\nExcellent! You are absolutely right. 'let' has block scope while 'var' has function scope."
     }
   </example>
   `;
