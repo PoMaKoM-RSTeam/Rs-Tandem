@@ -1,56 +1,42 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { GolfRank } from '../../types/golf-rank';
-import { REGEX_RULES } from '../../types/regex-pattern';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+
 import { TndmCodeGolfEditor } from '../code-golf-editor/code-golf-editor';
 import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
-import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
-import { rxResource } from '@angular/core/rxjs-interop';
+
+import { TndmCodeGolfResults } from '../results-modal/results-modal';
+
+import { CodeGolfService } from '../../services/code-golf.service';
 
 @Component({
   selector: 'tndm-code-golf',
   standalone: true,
-  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton],
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton, TndmCodeGolfResults],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
-  private readonly fetcherService = inject(CodeGolfFetcherService);
+  protected readonly service = inject(CodeGolfService);
 
-  readonly ranksResource = rxResource({
-    stream: () => this.fetcherService.getGolfRanks(),
-  });
-  readonly challengeResource = rxResource({
-    stream: () => this.fetcherService.getRandomChallenge(),
-  });
+  protected readonly isCodeEmpty = computed(() => this.service.rawCode().trim().length === 0);
 
-  readonly rawCode = signal('');
+  protected readonly checkBtnConfig = computed(() => ({
+    label: 'Check Solution',
+    isDisabled: this.isCodeEmpty(),
+  }));
 
-  readonly currentChallenge = computed(() => this.challengeResource.value());
-
-  protected readonly checkBtnConfig = { label: 'Check Solution' };
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
-  readonly byteCount = computed(() => {
-    const code = this.rawCode();
-    if (!code) {
-      return 0;
-    }
-    return code
-      .replace(REGEX_RULES.MultiComment, '')
-      .replace(REGEX_RULES.SingleComment, '')
-      .replace(REGEX_RULES.AllWhitespace, '').length;
-  });
+  protected check(): void {
+    this.service.checkSolution();
+  }
 
-  readonly currentRank = computed((): GolfRank => {
-    const bytes = this.byteCount();
-    const allRanks = this.ranksResource.value() ?? [];
-    return allRanks.find(rank => bytes <= rank.maxBytes) || allRanks[allRanks.length - 1];
-  });
+  protected next(): void {
+    this.service.nextChallenge();
+  }
 
-  protected async nextChallenge(): Promise<void> {
-    this.rawCode.set('');
-    this.challengeResource.reload();
+  protected closeModal(): void {
+    this.service.showResults.set(false);
   }
 }

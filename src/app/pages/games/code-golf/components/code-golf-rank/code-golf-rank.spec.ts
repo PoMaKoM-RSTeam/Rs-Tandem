@@ -1,3 +1,4 @@
+import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TndmCodeGolfRank } from './code-golf-rank';
 import { GolfRank } from '../../types/golf-rank';
@@ -5,8 +6,15 @@ import { GolfRank } from '../../types/golf-rank';
 describe('TndmCodeGolfRank', () => {
   let component: TndmCodeGolfRank;
   let fixture: ComponentFixture<TndmCodeGolfRank>;
+  let componentRef: ComponentRef<TndmCodeGolfRank>;
 
-  const mockRank: GolfRank = { maxBytes: 50, label: 'Senior', color: '#059669', icon: '👑', width: 100 };
+  const mockRank: GolfRank = {
+    label: 'Code Wizard',
+    icon: '🧙‍♂️',
+    color: '#ff0000',
+    maxBytes: 100,
+    width: 50,
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -15,51 +23,88 @@ describe('TndmCodeGolfRank', () => {
 
     fixture = TestBed.createComponent(TndmCodeGolfRank);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
 
-    fixture.componentRef.setInput('rank', mockRank);
-    fixture.componentRef.setInput('byteCount', 42);
+    // Установка обязательных input через ComponentRef для Signals
+    componentRef.setInput('rank', mockRank);
+    componentRef.setInput('previousBest', null);
+    componentRef.setInput('byteCount', 0);
 
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the correct rank label and icon', () => {
-    const iconElement = fixture.nativeElement.querySelector('.icon');
-    const labelElement = fixture.nativeElement.querySelector('.rank');
+  describe('diffInfo computation', () => {
+    it('should return null if previousBest is null', () => {
+      componentRef.setInput('previousBest', null);
+      componentRef.setInput('byteCount', 50);
+      fixture.detectChanges();
 
-    expect(iconElement.textContent).toBe(mockRank.icon);
-    expect(labelElement.textContent).toBe(mockRank.label);
-    expect(labelElement.style.color).toBe('rgb(5, 150, 105)');
+      expect(component.diffInfo()).toBeNull();
+    });
+
+    it('should return null if byteCount is 0', () => {
+      componentRef.setInput('previousBest', 100);
+      componentRef.setInput('byteCount', 0);
+      fixture.detectChanges();
+
+      expect(component.diffInfo()).toBeNull();
+    });
+
+    it('should calculate progress when current bytes are less than best', () => {
+      componentRef.setInput('previousBest', 100);
+      componentRef.setInput('byteCount', 80);
+      fixture.detectChanges();
+
+      const diff = component.diffInfo();
+      expect(diff?.value).toBe(-20);
+      expect(diff?.isProgress).toBe(true);
+      expect(diff?.label).toBe('progress');
+    });
+
+    it('should calculate regress when current bytes are more than best', () => {
+      componentRef.setInput('previousBest', 100);
+      componentRef.setInput('byteCount', 120);
+      fixture.detectChanges();
+
+      const diff = component.diffInfo();
+      expect(diff?.value).toBe(20);
+      expect(diff?.isRegress).toBe(true);
+      expect(diff?.label).toBe('regress');
+    });
   });
 
-  it('should display the correct byte count', () => {
-    const bytesElement = fixture.nativeElement.querySelector('.bytes-amount');
-    expect(bytesElement.textContent).toContain('42 Bytes');
-  });
+  describe('Template rendering', () => {
+    it('should show record badge only if previousBest is provided', () => {
+      componentRef.setInput('previousBest', null);
+      fixture.detectChanges();
+      let badge = fixture.nativeElement.querySelector('.record-badge');
+      expect(badge).toBeFalsy();
 
-  it('should apply correct styles to the progress bar', () => {
-    const progressFill = fixture.nativeElement.querySelector('.progress-fill');
+      componentRef.setInput('previousBest', 50);
+      fixture.detectChanges();
+      badge = fixture.nativeElement.querySelector('.record-badge');
+      expect(badge).toBeTruthy();
+      expect(badge.textContent).toContain('50 Bytes');
+    });
 
-    expect(progressFill.style.width).toBe('100%');
-    expect(progressFill.style.backgroundColor).toBe('rgb(5, 150, 105)');
-  });
+    it('should apply correct color and icon from rank', () => {
+      const rankInfo = fixture.nativeElement.querySelector('.rank-info');
+      const rankTitle = fixture.nativeElement.querySelector('.rank');
+      const icon = fixture.nativeElement.querySelector('.icon');
 
-  it('should update UI when inputs change', () => {
-    const newRank: GolfRank = { maxBytes: 200, label: 'Junior', color: '#d97706', icon: '🐣', width: 50 };
+      expect(rankInfo.style.borderLeftColor).toBe('rgb(255, 0, 0)');
+      expect(rankTitle.style.color).toBe('rgb(255, 0, 0)');
+      expect(icon.textContent).toContain('🧙‍♂️');
+      expect(rankTitle.textContent).toContain('Code Wizard');
+    });
 
-    fixture.componentRef.setInput('rank', newRank);
-    fixture.componentRef.setInput('byteCount', 150);
-    fixture.detectChanges();
-
-    const labelElement = fixture.nativeElement.querySelector('.rank');
-    const bytesElement = fixture.nativeElement.querySelector('.bytes-amount');
-    const progressFill = fixture.nativeElement.querySelector('.progress-fill');
-
-    expect(labelElement.textContent).toBe('Junior');
-    expect(bytesElement.textContent).toContain('150 Bytes');
-    expect(progressFill.style.width).toBe('50%');
+    it('should update progress bar width', () => {
+      const progressFill = fixture.nativeElement.querySelector('.progress-fill');
+      expect(progressFill.style.width).toBe('50%');
+    });
   });
 });

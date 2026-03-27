@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
+import { LoadingOverlayService } from '../../../core/services/loading-overlay/loading-overlay-service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

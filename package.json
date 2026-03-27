@@ -28,6 +28,7 @@
     "@angular/compiler": "^21.1.0",
     "@angular/core": "^21.1.0",
     "@angular/forms": "^21.1.0",
+    "@angular/material": "^21.2.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
     "@supabase/supabase-js": "^2.98.0",
@@ -35,6 +36,7 @@
     "lodash": "^4.17.23",
     "ngx-markdown": "^21.1.0",
     "ollama": "^0.6.3",
+    "ngx-monaco-editor-v2": "^21.1.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
