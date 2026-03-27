@@ -13,6 +13,7 @@ export class TndmNavigation {
   readonly navItems = [
     { label: 'code_golf', path: APP_ROUTES.codeGolf },
     { label: 'async_sorter', path: APP_ROUTES.asyncSorter },
+    { label: 'ai_exam', path: APP_ROUTES.aiExam },
     { label: 'type_investigator', path: APP_ROUTES.typeInvestigator },
     { label: 'sandbox', path: APP_ROUTES.sandbox },
     { label: 'event_loop', path: APP_ROUTES.eventLoop },

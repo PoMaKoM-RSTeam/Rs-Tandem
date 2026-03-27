@@ -3,7 +3,7 @@ import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { GeminiService } from './gemini.service';
 import { ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
-import { ToastService } from '../../../core/toast/toast-service';
+import { ToastService } from '../../../core/services/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
 import { shuffle } from 'lodash';
