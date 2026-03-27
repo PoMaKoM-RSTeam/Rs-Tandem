@@ -5,6 +5,8 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { tndmAuthInterceptor } from '@auth';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { TitleStrategy } from '@angular/router';
+import { TndmTitleStrategy } from './core/title-strategy/tndm-title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +19,6 @@ export const appConfig: ApplicationConfig = {
         baseUrl: 'assets/monaco/vs',
       })
     ),
+    { provide: TitleStrategy, useExisting: TndmTitleStrategy },
   ],
 };
