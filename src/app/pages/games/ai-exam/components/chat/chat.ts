@@ -52,6 +52,10 @@ export class TndmChat {
     this.scrollChatToBottom();
   }
 
+  resetChatHistory(): void {
+    this.allMessages.set([]);
+  }
+
   private scrollChatToBottom(): void {
     requestAnimationFrame(() => {
       const container = this.chatContainer()?.nativeElement;

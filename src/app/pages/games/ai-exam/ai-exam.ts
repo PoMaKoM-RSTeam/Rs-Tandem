@@ -8,7 +8,7 @@ import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
 import { shuffle } from 'lodash';
 
-type askAiParams = {
+type AskAiParams = {
   messageContent?: string;
   isGeneratingQuestion: boolean;
   selectedTopics?: string;
@@ -32,6 +32,7 @@ export class TndmAiExam {
   readonly isGenerateQuestionDisabled = signal(false);
   readonly isAnswerQuestionDisabled = signal(true);
   readonly isSkipQuestionDisabled = signal(true);
+  readonly isExamFinished = signal(false);
 
   readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
   readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
@@ -40,6 +41,9 @@ export class TndmAiExam {
 
   async generateQuestion(): Promise<void> {
     if (this.isLoading()) return;
+
+    this.isExamFinished.set(false);
+    this.chat()?.resetChatHistory();
 
     const shuffled = shuffle(JS_TOPICS);
     const selectedTopics = shuffled.slice(0, 3).join(', ');
@@ -78,7 +82,7 @@ export class TndmAiExam {
     messageContent = this.initialQuestion,
     isGeneratingQuestion,
     selectedTopics,
-  }: askAiParams): Promise<void> {
+  }: AskAiParams): Promise<void> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
@@ -110,6 +114,8 @@ export class TndmAiExam {
         this.isAnswerQuestionDisabled.set(true);
         this.isSkipQuestionDisabled.set(true);
         this.isGenerateQuestionDisabled.set(false);
+        this.isExamFinished.set(true);
+        this.currentAttempt.set(this.MAX_ATTEMPT_NUMBER);
         this.toaster.info(`Exam finished!`, `Check your final score.`);
       }
     } catch (error) {
