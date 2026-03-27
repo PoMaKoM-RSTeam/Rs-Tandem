@@ -1,0 +1,11 @@
+<div lass="review-tooltip">
+  <p class="review-tooltip_label">Select error type:</p>
+  @for (errorType of errorTypes; track errorType) {
+  <button class="review-tooltip_option" type="button" (click)="$event">
+    <span class="review-tooltip_icon" [attr.data-type]="errorType">?</span>
+    {{ errorType }}
+  </button>
+  }
+  <button class="review-tooltip_close" type="button" (click)="$event">✕</button>
+</div>
+`
