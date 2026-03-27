@@ -56,6 +56,14 @@
   font-family: v.$font-family-heading;
   font-size: 80px;
   text-transform: uppercase;
+
+  &-home {
+    width: 100%;
+    margin-right: 0;
+    padding-left: 0;
+    font-size: clamp(40px, 11vw, 200px);
+    text-align: center;
+  }
 }
 
 .content-section {

@@ -37,11 +37,11 @@ export class TndmMainLayout {
 
         return {
           showLines: route.data['showLines'] ?? false,
-          headerType: route.data['headerType'] ?? 'home',
+          headerType: route.data['headerType'] ?? 'default',
         };
       })
     ),
-    { initialValue: { showLines: false, headerType: 'home' } }
+    { initialValue: { showLines: false, headerType: 'default' } }
   );
 
   readonly signInBtnConfig = { label: 'sign in' } as const;

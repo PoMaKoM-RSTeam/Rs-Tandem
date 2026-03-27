@@ -21,6 +21,7 @@ export const routes: Routes = [
         title: 'code_forge',
         data: {
           showLines: true,
+          headerType: 'home',
         },
       },
       {

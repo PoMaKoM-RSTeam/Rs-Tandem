@@ -1,16 +1,13 @@
 <div class="page">
   <header class="header">
-    @switch (config().headerType) { @case ('home') { @if(!authService.isAuthenticated){
+    @if(!authService.isAuthenticated){
     <div class="header__auth-btns">
       <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
       <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
     </div>
-
     } @else {
     <tndm-navigation />
-    <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" /> } } @default {
-    <span class="logo">> code_forge</span>
-    } }
+    <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" /> }
   </header>
 
   <div class="vertical-lines">
@@ -25,7 +22,7 @@
 
   <main class="content">
     <section class="content__top">
-      <h1 class="content__title">{{pageTitle()}}</h1>
+      <h1 class="content__title" [class.content__title-home]="config().headerType === 'home'">{{pageTitle()}}</h1>
 
       <div class="cross cross_position_top-left"></div>
       <div class="cross cross_position_top-right"></div>
