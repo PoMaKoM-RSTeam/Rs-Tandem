@@ -38,7 +38,7 @@
   padding: 10px 15px;
   border-radius: 15px;
   border-top-right-radius: 0;
-  background: variables.$color-light-grey;
+  background: variables.$bg-surface;
 }
 
 .row-with-spinner {
@@ -70,11 +70,11 @@
 
 :host ::ng-deep .chat-container {
   code {
-    background: variables.$color-light-grey;
+    background: variables.$bg-surface;
     padding: 0.2rem 0.4rem;
   }
   pre {
-    background: variables.$color-light-grey;
+    background: variables.$bg-surface;
     padding: 15px;
     border-radius: 10px;
 
