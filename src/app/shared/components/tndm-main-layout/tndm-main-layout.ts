@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AUTH_ROUTES, TndmAuthService } from '@auth';
+import { TndmAuthService } from '@auth';
 import { TndmButton } from '../../ui/tndm-button/tndm-button';
 import { TndmNavigation } from '../tndm-navigation/tndm-navigation';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
-import { APP_ROUTES } from '../../constants/app-routes';
+import { NavigationService } from '../../../core/services/navigation/navigation.service';
 
 @Component({
   selector: 'tndm-main-layout',
@@ -18,8 +18,10 @@ import { APP_ROUTES } from '../../constants/app-routes';
 export class TndmMainLayout {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  readonly authService: TndmAuthService = inject(TndmAuthService);
   private titleStrategy = inject(TndmTitleStrategy);
+  readonly authService: TndmAuthService = inject(TndmAuthService);
+
+  readonly navService: NavigationService = inject(NavigationService);
 
   readonly pageTitle = this.titleStrategy.pageTitle;
 
@@ -53,15 +55,14 @@ export class TndmMainLayout {
   } as const;
 
   onSignInClick(): void {
-    this.router.navigate([AUTH_ROUTES.LOGIN]);
+    this.navService.goToLogin();
   }
 
   onSignUpClick(): void {
-    this.router.navigate([AUTH_ROUTES.REGISTER]);
+    this.navService.goToRegister();
   }
 
   onLogoutClick(): void {
-    this.authService.logout();
-    this.router.navigate([APP_ROUTES.home]);
+    this.navService.logout();
   }
 }

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TndmLoadingOverlay } from './tndm-loading-overlay';
-import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
+import { LoadingOverlayService } from '../../../core/services/loading-overlay/loading-overlay-service';
 import { signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 

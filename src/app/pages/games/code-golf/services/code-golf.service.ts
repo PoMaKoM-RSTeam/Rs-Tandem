@@ -5,7 +5,7 @@ import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
 import { catchError, of, switchMap } from 'rxjs';
-import { ToastService } from '../../../../core/toast/toast-service';
+import { ToastService } from '../../../../core/services/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
 

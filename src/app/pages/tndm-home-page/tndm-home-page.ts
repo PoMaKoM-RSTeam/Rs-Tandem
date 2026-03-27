@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TndmButton } from '../../shared/ui/tndm-button/tndm-button';
-import { AUTH_ROUTES } from '@auth';
 import { Router } from '@angular/router';
+import { NavigationService } from '../../core/services/navigation/navigation.service';
 
 @Component({
   selector: 'tndm-home-page',
@@ -12,10 +12,11 @@ import { Router } from '@angular/router';
 })
 export class TndmHomePage {
   private router = inject(Router);
+  private readonly navService: NavigationService = inject(NavigationService);
 
   readonly joinBtnConfig = { label: 'create an account' } as const;
 
   onSignUpClick(): void {
-    this.router.navigate([AUTH_ROUTES.REGISTER]);
+    this.navService.goToRegister();
   }
 }
