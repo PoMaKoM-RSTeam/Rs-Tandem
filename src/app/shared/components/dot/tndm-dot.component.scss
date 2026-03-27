@@ -1,0 +1,13 @@
+@use '../../../../styles/variables' as vars;
+
+:host {
+  position: absolute;
+}
+
+.dot {
+  transition: transform 0.2s ease;
+  width: 29.17px;
+  height: 29.17px;
+  background-color: vars.$color-grey;
+  border-radius: vars.$radius-round;
+}

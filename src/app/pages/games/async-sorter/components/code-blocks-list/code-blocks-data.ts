@@ -1,10 +1,4 @@
-import { taskType } from '../../shared/types';
-
-export type CodeBlockData = {
-  code: string;
-  taskType: taskType;
-  executionOrder: number;
-};
+import { CodeBlockData } from '../../shared/types';
 
 export const codeBlocks: CodeBlockData[] = [
   {

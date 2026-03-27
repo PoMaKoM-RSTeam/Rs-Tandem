@@ -1,8 +1,22 @@
-<h2>Async sorter</h2>
-
-<tndm-button [btnConfig]="{ label: 'Run loop' }" />
+<tndm-toaster />
+<h2 class="heading">Async sorter</h2>
+<div class="stats-wrapper">
+  <tndm-timer />
+  <tndm-moves-counter [moves]="moves()" [movesBeforeFirstMistake]="movesBeforeFirstMistake()" />
+  <tndm-mistakes-counter [mistakes]="mistakes()" />
+</div>
+<tndm-button [btnConfig]="{ label: 'Run loop', isDisabled: buttonDisabled()}" (clicked)="runLoop()" />
 <section cdkDropListGroup class="fields-wrapper">
-  <tndm-code-blocks-list />
-  <tndm-task-bucket-list />
-  <ul tndm-final-call-stack></ul>
+  <tndm-code-blocks-list (isEmpty)="onSourceListIsEmpty()" />
+  <tndm-task-bucket-list
+    [isButtonPressed]="isButtonPressed()"
+    [isDraggingDisabled]="isDraggingDisabled()"
+    [macroBucket]="macroBucket()"
+    [microBucket]="microBucket()"
+    [syncBucket]="syncBucket()"
+    (codeBlockDropped)="onCodeBlockDropped($event)"
+    (macroBucketChanged)="macroBucket.set($event)"
+    (microBucketChanged)="microBucket.set($event)"
+    (syncBucketChanged)="syncBucket.set($event)" />
+  <ul tndm-final-call-stack [codeBlocks]="finalCallStack()" [invisibleCodeBlocks]="invisibleCodeBlocks()"></ul>
 </section>

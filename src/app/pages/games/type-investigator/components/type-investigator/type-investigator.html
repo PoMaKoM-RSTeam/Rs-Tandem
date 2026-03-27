@@ -1,0 +1,19 @@
+<div class="ti-page">
+  <header class="ti-header">
+    <h1 class="ti-title"><span class="ti-title__accent">Type</span> Investigator</h1>
+    <p class="ti-subtitle">Puzzles, but with TypeScript.</p>
+  </header>
+
+  @if (!activePuzzle()) {
+  <tndm-puzzle-select [puzzles]="allPuzzles()" (puzzleSelected)="onPuzzleSelected($event)" />
+  } @else {
+  <tndm-puzzle-board [puzzle]="activePuzzle()!" (back)="onBack()" (solved)="onPuzzleSolved()" />
+  } @if (solvedIds().size > 0) {
+  <footer class="ti-progress">
+    <span class="ti-progress__label"> Solved: {{ solvedIds().size }} / {{ allPuzzles().length }} </span>
+    <div class="ti-progress__bar">
+      <div class="ti-progress__fill" [style.width.%]="progressPercent()"></div>
+    </div>
+  </footer>
+  }
+</div>

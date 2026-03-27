@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -8,9 +8,22 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
   hostDirectives: [
     {
       directive: CdkDrag,
-      inputs: ['cdkDragData'],
+      inputs: ['cdkDragData', 'cdkDragDisabled'],
     },
   ],
+  host: {
+    '[attr.data-execution-order]': 'executionOrder()',
+    '[class.non-draggable]': 'isButtonPressed()',
+    '[class.in-wrong-bucket]': 'inWrongBucket()',
+    '[class.is-placed-correctly]': 'isPlacedCorrectly()',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmCodeBlock {}
+export class TndmCodeBlock {
+  readonly executionOrder = input.required<number>();
+
+  readonly isButtonPressed = input<boolean>(false);
+
+  readonly inWrongBucket = input<boolean>(false);
+  readonly isPlacedCorrectly = input<boolean>(false);
+}

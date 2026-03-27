@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
 
 @Component({
@@ -9,6 +9,25 @@ import { GolfRank } from '../../types/golf-rank';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolfRank {
-  readonly rank = input.required<GolfRank>();
+  readonly rank = input.required<GolfRank | undefined>();
+  readonly previousBest = input.required<number | null>();
   readonly byteCount = input.required<number>();
+
+  readonly diffInfo = computed(() => {
+    const best = this.previousBest();
+    const current = this.byteCount();
+
+    if (best === null || current === 0) {
+      return null;
+    }
+
+    const diff = current - best;
+
+    return {
+      value: diff,
+      label: diff < 0 ? 'progress' : 'regress',
+      isProgress: diff < 0,
+      isRegress: diff > 0,
+    };
+  });
 }

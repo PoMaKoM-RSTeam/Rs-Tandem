@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TndmTaskBucket } from '../task-bucket/task-bucket';
+import { CodeBlockData, CodeBlockDroppedPayload, TASK_TYPES } from '../../shared/types';
 
 @Component({
   selector: 'tndm-task-bucket-list',
@@ -9,4 +10,19 @@ import { TndmTaskBucket } from '../task-bucket/task-bucket';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './task-buckets-list.scss',
 })
-export class TndmTaskBucketsList {}
+export class TndmTaskBucketsList {
+  readonly TASK_TYPES = TASK_TYPES;
+
+  readonly isDraggingDisabled = input.required<boolean>();
+  readonly isButtonPressed = input.required<boolean>();
+
+  readonly syncBucket = input.required<CodeBlockData[]>();
+  readonly microBucket = input.required<CodeBlockData[]>();
+  readonly macroBucket = input.required<CodeBlockData[]>();
+
+  readonly syncBucketChanged = output<CodeBlockData[]>();
+  readonly microBucketChanged = output<CodeBlockData[]>();
+  readonly macroBucketChanged = output<CodeBlockData[]>();
+
+  readonly codeBlockDropped = output<CodeBlockDroppedPayload>();
+}
