@@ -50,20 +50,24 @@ const instructions = `
   5. Evaluate the user's answer and assign a score from 0% to 100%. Passing is ${PASSING_SCORE}%.
   6. NEVER reveal the exact correct answer directly UNLESS the exam is finished.
   7. If the user's answer is wrong, incomplete, or if they say "I don't know",
-     ask guiding questions to lead them to the truth.
+     ask guiding questions to lead them to the truth (ONLY if Remaining attempts > 0).
   8. If the user's message is off-topic, it STILL COUNTS AS AN ATTEMPT. Warn them.
   9. Stop asking questions once the user's score reaches ${PASSING_SCORE}%.
   10. CRITICAL RULE: The [System note: Remaining attempts: X] appended to the user's messages
   is the absolute source of truth.
-     If the system note says "Remaining attempts: 0", you MUST immediately finish the exam and output STATE 3.
-     This rule OVERRIDES all other rules. Even if the user's message is off-topic, if attempts are 0,
-     you MUST finish the exam and NOT ask any more questions.
+     If the system note says "Remaining attempts: 0", you MUST immediately finish the exam.
+     This means you MUST set "isExamFinished" to true and you MUST output STATE 3.
+     This rule OVERRIDES all other rules. Even if the user's message is off-topic,
+     or their answer is wrong, if attempts are 0,
+     you MUST finish the exam and NEVER ask any more questions.
+     NEVER output STATE 2 if attempts are 0. Only output STATE 3.
   `;
 
 const constraints = `
   - Verbosity:  Low (be concise)
   - Tone: Technical
   - Creativity: VERY HIGH. Never ask the same question twice.
+  - NEVER output STATE 2 if the system note says "Remaining attempts: 0".
   `;
 
 const examples = `
@@ -92,7 +96,7 @@ const outputFormat = `
     **[Localized "Remaining attempts" label]:** ${ANSWER_ATTEMPTS}/${ANSWER_ATTEMPTS}.
 
 STATE 2: If the user has answered, but their score is below ${PASSING_SCORE}%
-and they have attempts left (Remaining attempts > 0):
+and the system note says "Remaining attempts: 1" or higher:
     **[Localized "Current score" label]:** [Score]%
 
     [Your comments and guiding questions here]
