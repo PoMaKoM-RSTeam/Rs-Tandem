@@ -1,13 +1,13 @@
-@use '/styles/variables' as *;
+@use '/styles/variables' as v;
+@use '/styles/typography' as mx;
 
 .page {
   min-height: 100vh;
-  padding: $space-xl $space-md;
-  background-color: $color-light-grey;
-  font-family: $font-family-ui;
+  padding: v.$space-xl v.$space-md;
+  background-color: v.$color-light-grey;
   display: flex;
   flex-direction: column;
-  gap: $space-lg;
+  gap: v.$space-lg;
   align-items: center;
 }
 
@@ -16,14 +16,12 @@
 }
 
 .page_title {
-  margin: 0;
-  font-size: $font-size-lg;
-  color: $text-primary-color;
+  @include mx.text-heading(v.$text-accent-color);
 }
 
 .page_layout {
   display: flex;
-  gap: $space-md;
+  gap: v.$space-md;
   width: 100%;
   max-width: 1060px;
   align-items: flex-start;
@@ -39,9 +37,10 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  background: $color-light-grey;
-  border: 1px dashed $border-main-color;
-  border-radius: $radius-md;
-  color: $text-primary-color;
-  font-size: $font-size-sm;
+  background: v.$color-light-grey;
+  border: 1px dashed v.$border-main-color;
+  border-radius: v.$radius-md;
+  color: v.$text-primary-color;
+  font-size: v.$font-size-sm;
+  @include mx.text-subtitle(v.$text-accent-color);
 }
