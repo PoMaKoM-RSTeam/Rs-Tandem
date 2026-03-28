@@ -70,11 +70,23 @@ export const routes: Routes = [
   },
   {
     path: 'reverse-code-review',
-    loadComponent: () =>
-      import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
-        m => m.TndmReverseCode
-      ),
     title: 'Reverse code review',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
+            m => m.TndmReverseCode
+          ),
+      },
+      {
+        path: ':caseId',
+        loadComponent: () =>
+          import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
+            m => m.TndmReverseCode
+          ),
+      },
+    ],
     canActivate: [tndmAuthGuard],
   },
   {

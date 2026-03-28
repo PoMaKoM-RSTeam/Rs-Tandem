@@ -37,23 +37,13 @@
   }
 
   .viewer_editor {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     background: v.$color-gray;
     overflow-x: auto;
     font-size: v.$font-size-sm;
     line-height: 24px;
     margin: 0;
-  }
-
-  .viewer_gutter {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    min-width: 40px;
-    text-align: right;
-    user-select: none;
-    border-right: 1px solid v.$color-black;
-    flex-shrink: 0;
   }
 
   .viewer_line-num {
@@ -62,6 +52,17 @@
     font-size: 0.75rem;
     height: 24px;
     line-height: 24px;
+    border-right: 1px solid v.$color-black;
+    text-align: right;
+    user-select: none;
+  }
+
+  .viewer_explanation {
+    grid-column: 2/2;
+    padding: v.$space-xs v.$space-md;
+    font-size: 0.7rem;
+    color: v.$color-green;
+    background: rgba(v.$color-green, 0.05);
   }
 
   .viewer_code {
@@ -73,6 +74,58 @@
   .viewer_line {
     padding: 0 v.$space-md - v.$space-xs;
     height: 24px;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background: rgba(v.$color-white, 0.04);
+    }
+
+    &--found {
+      animation: flash-found 0.6s ease-out;
+    }
+
+    &--wrong {
+      animation: flash-wrong 0.6s ease-out;
+    }
+  }
+
+  @keyframes flash-wrong {
+    0% {
+      background: rgba(v.$color-red, 0.35);
+    }
+
+    100% {
+      background: transparent;
+    }
+  }
+
+  @keyframes flash-found {
+    0% {
+      background: rgba(v.$color-green, 0.35);
+    }
+
+    100% {
+      background: transparent;
+    }
+  }
+
+  .viewer_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: v.$space-sm v.$space-md;
+    background: v.$color-gray;
+    border-top: 1px solid v.$color-black;
+  }
+
+  .viewer_progress {
+    color: v.$color-dark-grey;
+  }
+
+  .viewer_score {
+    color: v.$text-accent-color;
+    font-weight: v.$font-weight-bold;
   }
 
   .viewer_text {

@@ -7,8 +7,15 @@
         class="sidebar_item"
         type="button"
         [class.sidebar_item--active]="reviewCase.id === activeCaseId()"
+        [class.sidebar_item--done]="completedIds().has(reviewCase.id)"
         (click)="caseSelected.emit(reviewCase)">
-        <span class="sidebar_index">{{ idx + 1 }}</span>
+        <span class="sidebar_status">
+          @if (completedIds().has(reviewCase.id)) {
+          <span class="sidebar_check">✓</span>
+          } @else {
+          <span class="sidebar_index">{{ idx + INDEX_SHIFT }}</span>
+          }
+        </span>
         <span class="sidebar_name">{{ reviewCase.title }}</span>
         <span class="sidebar_difficulty" [attr.data-diff]="reviewCase.difficulty"> {{ reviewCase.difficulty }} </span>
       </button>
