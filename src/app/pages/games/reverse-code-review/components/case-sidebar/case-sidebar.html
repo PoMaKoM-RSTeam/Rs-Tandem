@@ -11,7 +11,7 @@
         (click)="caseSelected.emit(reviewCase)">
         <span class="sidebar_status">
           @if (completedIds().has(reviewCase.id)) {
-          <span class="sidebar_check">popa</span>
+          <span class="sidebar_check">✓</span>
           } @else {
           <span class="sidebar_index">{{ idx + INDEX_SHIFT }}</span>
           }
