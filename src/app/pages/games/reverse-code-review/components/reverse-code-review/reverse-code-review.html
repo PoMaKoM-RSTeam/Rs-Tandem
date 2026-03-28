@@ -21,3 +21,7 @@
     </main>
   </div>
 </div>
+
+@if (showModal()) {
+<tndm-completion-modal [maxScore]="maxScore()" [score]="lastScore()" (closed)="closeModal()" (nextCase)="nextCase()" />
+}

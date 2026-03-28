@@ -6,11 +6,12 @@ import { TndmCaseSidebar } from '../case-sidebar/case-sidebar';
 import { TndmCodeViewer } from '../code-viewer/code-viewer';
 import { ReviewCase } from '../../models/review-case.model';
 import { REVIEW_CASES_DATA } from '../../data/review-cases.data';
+import { TndmCompletionModal } from '../review-modal/review-modal';
 
 @Component({
   selector: 'tndm-reverse-code-review',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TndmCaseSidebar, TndmCodeViewer],
+  imports: [TndmCaseSidebar, TndmCodeViewer, TndmCompletionModal],
   templateUrl: './reverse-code-review.html',
   styleUrl: './reverse-code-review.scss',
 })
@@ -34,15 +35,15 @@ export class TndmReverseCode {
     return this.allCases().find(c => c.id === id) ?? null;
   });
 
-  // readonly showModal = signal(false);
+  readonly showModal = signal(false);
 
-  // readonly maxScore = computed(() => {
-  //   const active = this.activeCase();
-  //   if (!active) {
-  //     return 0;
-  //   }
-  //   return active.expectedErrors.reduce((sum, e) => sum + e.points, 0);
-  // });
+  readonly maxScore = computed(() => {
+    const active = this.activeCase();
+    if (!active) {
+      return 0;
+    }
+    return active.expectedErrors.reduce((sum, e) => sum + e.points, 0);
+  });
 
   onCaseSelected(reviewCase: ReviewCase): void {
     const hasCase = !!this.caseId();
@@ -62,5 +63,18 @@ export class TndmReverseCode {
       next.add(active.id);
       return next;
     });
+    this.showModal.set(true);
+  }
+
+  closeModal(): void {
+    this.showModal.set(false);
+  }
+
+  nextCase(): void {
+    const cases = this.allCases();
+    const currentIndex = cases.findIndex(c => c.id === this.activeCase()?.id);
+    const next = cases[(currentIndex + 1) % cases.length];
+    this.showModal.set(false);
+    this.router.navigate(['..', next.id], { relativeTo: this.route });
   }
 }

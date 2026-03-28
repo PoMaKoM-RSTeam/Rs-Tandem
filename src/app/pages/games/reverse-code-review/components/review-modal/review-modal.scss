@@ -1,0 +1,56 @@
+@use '/styles/variables' as v;
+@use '/styles/typography' as mx;
+
+:host {
+  display: contents;
+}
+
+.completion-modal_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(v.$color-black, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.completion-modal_dialog {
+  background: v.$color-light-grey;
+  border: 1px solid v.$border-main-color;
+  border-radius: v.$radius-md;
+  padding: v.$space-xl;
+  width: 400px;
+  max-width: calc(100vw - v.$space-xl * 2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-md;
+  text-align: center;
+}
+
+.completion-modal_title {
+  margin: 0;
+  @include mx.text-title(v.$text-accent-color);
+}
+
+.completion-modal_score {
+  margin: 0;
+  @include mx.text-subtitle(v.$color-black);
+}
+
+.completion-modal_message {
+  margin: 0;
+  @include mx.text-body(v.$color-black);
+}
+
+.completion-modal_actions {
+  display: flex;
+  gap: v.$space-sm;
+  width: 100%;
+  margin-top: v.$space-sm;
+
+  > * {
+    flex: 1;
+  }
+}

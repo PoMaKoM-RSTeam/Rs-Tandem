@@ -1,0 +1,15 @@
+<div class="completion-modal_overlay" tabindex="-1" (click)="onOverlayClick($event)" (keydown.escape)="closed.emit()">
+  <div
+    class="completion-modal_dialog"
+    tabindex="0"
+    (click)="onOverlayClick($event)"
+    (keydown.enter)="$event.stopPropagation()">
+    <h2 class="completion-modal_title" id="completion-title">Case Solved!</h2>
+    <p class="completion-modal_score">Score: <strong>{{ score() }}</strong> / {{ maxScore() }} points</p>
+    <p class="completion-modal_message">Code reviewed. Done!</p>
+    <div class="completion-modal_actions">
+      <tndm-button [btnConfig]="{ variant: 'secondary', label: 'Back to Cases' }" (clicked)="closed.emit()" />
+      <tndm-button [btnConfig]="{ label: 'Next Case' }" (clicked)="nextCase.emit()" />
+    </div>
+  </div>
+</div>
