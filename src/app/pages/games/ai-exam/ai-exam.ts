@@ -48,8 +48,8 @@ export class TndmAiExam {
     const shuffled = shuffle(JS_TOPICS);
     const selectedTopics = shuffled.slice(0, 3).join(', ');
 
-    this.askAi({ isGeneratingQuestion: true, selectedTopics });
-    this.isGenerateQuestionDisabled.set(true);
+    const isGenerateSuccessfully = await this.askAi({ isGeneratingQuestion: true, selectedTopics });
+    if (isGenerateSuccessfully) this.isGenerateQuestionDisabled.set(true);
   }
 
   async answerQuestion(event: Event): Promise<void> {
@@ -82,7 +82,7 @@ export class TndmAiExam {
     messageContent = this.initialQuestion,
     isGeneratingQuestion,
     selectedTopics,
-  }: AskAiParams): Promise<void> {
+  }: AskAiParams): Promise<boolean> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
@@ -118,9 +118,12 @@ export class TndmAiExam {
         this.currentAttempt.set(this.MAX_ATTEMPT_NUMBER);
         this.toaster.info(`Exam finished!`, `Check your final score.`);
       }
+
+      return true;
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       console.error(error);
+      return false;
     } finally {
       this.isLoading.set(false);
       if (!this.isAnswerQuestionDisabled()) this.focusAnswerTextarea();
