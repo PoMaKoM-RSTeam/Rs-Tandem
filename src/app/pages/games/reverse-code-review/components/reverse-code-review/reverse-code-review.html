@@ -7,7 +7,7 @@
     <tndm-case-sidebar
       [activeCaseId]="activeCase()?.id ?? null"
       [cases]="allCases()"
-      (caseSelected)="activeCase.set($event)" />
+      (caseSelected)="onCaseSelected($event)" />
 
     <main class="page_main">
       @if (activeCase(); as selectedCase) {
