@@ -21,9 +21,9 @@
     } } @if (tooltipLine() !== null) {
     <tndm-review-tooltip
       [topPx]="tooltipTop()"
+      [wrongType]="wrongType()"
       (closed)="closeTooltip()"
-      (typeSelected)="onTypeSelected($event)"
-      [wrongType]="wrongType()" />
+      (typeSelected)="onTypeSelected($event)" />
     }
   </div>
   <footer class="viewer_footer">

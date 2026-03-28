@@ -7,11 +7,12 @@
     <tndm-case-sidebar
       [activeCaseId]="activeCase()?.id ?? null"
       [cases]="allCases()"
+      [completedIds]="completedIds()"
       (caseSelected)="onCaseSelected($event)" />
 
     <main class="page_main">
       @if (activeCase(); as selectedCase) {
-      <tndm-code-viewer [reviewCase]="selectedCase" />
+      <tndm-code-viewer [reviewCase]="selectedCase" (solved)="onCaseSolved($event)" />
       } @else {
       <div class="page_placeholder">
         <p>Select a case from the sidebar.</p>

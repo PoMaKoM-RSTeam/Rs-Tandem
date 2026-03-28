@@ -8,7 +8,10 @@ import { ReviewCase } from '../../models/review-case.model';
   styleUrl: './case-sidebar.scss',
 })
 export class TndmCaseSidebar {
+  protected readonly INDEX_SHIFT = 1;
+
   readonly cases = input.required<ReviewCase[]>();
   readonly activeCaseId = input.required<string | null>();
+  readonly completedIds = input.required<Set<string>>();
   readonly caseSelected = output<ReviewCase>();
 }

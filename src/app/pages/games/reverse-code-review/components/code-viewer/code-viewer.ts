@@ -101,6 +101,10 @@ export class TndmCodeViewer {
 
     this.markCorrect(lineNumber, expected);
     this.closeTooltip();
+
+    if (this.foundCount() === this.totalErrors()) {
+      this.solved.emit(this.score());
+    }
   }
 
   closeTooltip(): void {

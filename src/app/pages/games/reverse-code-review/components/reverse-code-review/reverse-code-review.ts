@@ -18,6 +18,10 @@ export class TndmReverseCode {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
+  readonly completedIds = signal<Set<string>>(new Set());
+
+  readonly lastScore = signal(0);
+
   readonly allCases = signal<ReviewCase[]>(REVIEW_CASES_DATA);
 
   private readonly caseId = toSignal(this.route.paramMap.pipe(map(p => p.get('caseId'))));
@@ -30,8 +34,33 @@ export class TndmReverseCode {
     return this.allCases().find(c => c.id === id) ?? null;
   });
 
+  // readonly showModal = signal(false);
+
+  // readonly maxScore = computed(() => {
+  //   const active = this.activeCase();
+  //   if (!active) {
+  //     return 0;
+  //   }
+  //   return active.expectedErrors.reduce((sum, e) => sum + e.points, 0);
+  // });
+
   onCaseSelected(reviewCase: ReviewCase): void {
     const hasCase = !!this.caseId();
     this.router.navigate(hasCase ? ['..', reviewCase.id] : [reviewCase.id], { relativeTo: this.route });
+  }
+
+  onCaseSolved(score: number): void {
+    const active = this.activeCase();
+    if (!active) {
+      return;
+    }
+
+    this.lastScore.set(score);
+
+    this.completedIds.update(ids => {
+      const next = new Set(ids);
+      next.add(active.id);
+      return next;
+    });
   }
 }
