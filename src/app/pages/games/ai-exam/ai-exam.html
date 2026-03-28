@@ -1,0 +1,34 @@
+<tndm-toaster />
+<p>
+  Generate a random question and answer it.<br />
+  You have limited attempts to give the right answer. Don't waste them. Every message counts.
+</p>
+
+<div class="button-wrapper">
+  <tndm-button
+    [btnConfig]="{ label: 'Generate question', isDisabled: isGenerateQuestionDisabled()}"
+    [class.await-loading]="isLoading()"
+    (clicked)="generateQuestion()" />
+  <tndm-button
+    [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
+    [class.await-loading]="isLoading()" />
+</div>
+
+<tndm-chat [isLoading]="isLoading()" />
+
+<form #answerForm (submit)="answerQuestion($event)">
+  <label for="user-answer">Write your answer to the question:</label>
+  <textarea
+    #textInput
+    cols="10"
+    id="user-answer"
+    name="user-answer"
+    placeholder="Your answer"
+    rows="4"
+    [class.await-loading]="isLoading()"
+    [disabled]="isAnswerQuestionDisabled() || isLoading()"
+    (keydown)="onTextareaKeydown($event, answerForm)"></textarea>
+  <tndm-button
+    [btnConfig]="{label: 'Answer the question', type: 'submit', isDisabled: isAnswerQuestionDisabled()}"
+    [class.await-loading]="isLoading()" />
+</form>

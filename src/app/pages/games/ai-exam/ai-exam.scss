@@ -1,0 +1,40 @@
+@use '/styles/typography' as typography;
+
+:host {
+  @include typography.text-body();
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+tndm-button {
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.await-loading {
+  cursor: wait;
+}
+
+:host ::ng-deep tndm-button.await-loading .button {
+  cursor: wait;
+  transform: none;
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+textarea {
+  max-width: 400px;
+  padding: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+}

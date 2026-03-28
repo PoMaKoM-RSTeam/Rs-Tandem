@@ -1,0 +1,87 @@
+@use '/styles/typography' as typography;
+@use '/styles/variables' as variables;
+
+.chat-container {
+  @include typography.text-body();
+  max-width: 1000px;
+  min-height: 100px;
+  max-height: 400px;
+  border: 1px solid variables.$color-dark-grey;
+  padding: 15px 15px 15px 40px;
+  white-space: pre-wrap;
+  overflow-y: hidden;
+  scrollbar-gutter: stable;
+
+  &:hover,
+  &:focus-within {
+    overflow-y: auto;
+  }
+}
+
+.chat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-wrapper {
+  max-width: 100%;
+}
+
+.chat-message-user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-message-bubble {
+  max-width: 90%;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border-top-right-radius: 0;
+  background: variables.$bg-surface;
+}
+
+.row-with-spinner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.spinner {
+  align-self: center;
+  width: 37px;
+  max-height: 37px;
+  aspect-ratio: 1 / 1;
+  border: 2px solid variables.$color-dark-grey;
+  border-top: 2px solid variables.$color-accent;
+  border-radius: variables.$radius-round;
+  animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  filter: drop-shadow(0 0 8px variables.$color-orange);
+  will-change: transform;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:host ::ng-deep .chat-container {
+  code {
+    background: variables.$bg-surface;
+    padding: 0.2rem 0.4rem;
+  }
+  pre {
+    background: variables.$bg-surface;
+    padding: 15px;
+    border-radius: 10px;
+
+    code {
+      background: transparent;
+      padding: 0;
+      font-size: 1.05em;
+    }
+  }
+}

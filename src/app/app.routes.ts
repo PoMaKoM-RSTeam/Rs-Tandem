@@ -31,6 +31,12 @@ export const routes: Routes = [
         canActivate: [tndmAuthGuard],
       },
       {
+        path: APP_ROUTES.aiExam,
+        loadComponent: () => import('./pages/games/ai-exam/ai-exam').then(m => m.TndmAiExam),
+        title: 'ai-exam',
+        canActivate: [tndmAuthGuard],
+      },
+      {
         path: APP_ROUTES.codeGolf,
         loadComponent: () => import('./pages/games/code-golf/components/code-golf/code-golf').then(m => m.TndmCodeGolf),
         title: 'Code Golf',

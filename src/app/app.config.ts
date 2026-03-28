@@ -4,6 +4,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAngularSvgIcon } from 'angular-svg-icon';
 import { tndmAuthInterceptor } from '@auth';
+import { provideMarkdown } from 'ngx-markdown';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { TitleStrategy } from '@angular/router';
 import { TndmTitleStrategy } from './core/title-strategy/tndm-title-strategy';
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([tndmAuthInterceptor])),
     provideAngularSvgIcon(),
+    provideMarkdown(),
     importProvidersFrom(
       MonacoEditorModule.forRoot({
         baseUrl: 'assets/monaco/vs',

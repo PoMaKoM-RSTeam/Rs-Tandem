@@ -1,0 +1,18 @@
+<div #chatContainer class="chat-container">
+  <div class="chat-content">
+    @for (message of allMessages(); track $index;) {
+    <div
+      class="message-wrapper"
+      [class.chat-message-user]="message.role === 'user'"
+      [class.row-with-spinner]="$last && isLoading()">
+      @if (message.role === ROLES.model) {
+      <markdown class="ai-question" [data]="getMessageText(message)" />
+      } @else if (message.role === ROLES.user){ @if ($last && isLoading()) {
+      <div class="spinner"></div>
+      }
+      <div class="user-message-bubble">{{ getMessageText(message)}}</div>
+      }
+    </div>
+    }
+  </div>
+</div>
