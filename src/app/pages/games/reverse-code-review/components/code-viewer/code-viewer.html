@@ -21,9 +21,13 @@
         (keydown.enter)="onLineClick(line.lineNumber, $event)">
         <code class="viewer_text" [innerHTML]="highlightedLines()[line.lineNumber - LINE_SHIFT]"></code>
       </div>
-      @if (tooltipLine() === line.lineNumber) {
-      <tndm-review-tooltip (closed)="closeTooltip()" />
+
+      @if (line.isFound && line.foundError) {
+      <div class="viewer_explanation">{{ line.foundError.message }}</div>
       } }
     </div>
+    @if (tooltipLine() !== null) {
+    <tndm-review-tooltip [topPx]="tooltipTop()" (closed)="closeTooltip()" />
+    }
   </div>
 </article>

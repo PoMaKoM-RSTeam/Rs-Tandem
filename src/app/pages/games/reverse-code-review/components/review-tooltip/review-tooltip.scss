@@ -24,3 +24,8 @@
   color: v.$color-white;
   @include mx.text-subtitle();
 }
+
+.review-tooltip_error {
+  margin: 0 0 v.$space-xs;
+  @include mx.text-body(v.$color-error);
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ErrorType } from '../../models/error-type.enum';
 
 @Component({
@@ -8,6 +8,11 @@ import { ErrorType } from '../../models/error-type.enum';
   templateUrl: './review-tooltip.html',
 })
 export class TndmReviewTooltip {
+  readonly topPx = input.required<number>();
+  readonly wrongType = input(false);
+  readonly typeSelected = output<ErrorType>();
+  readonly closed = output<void>();
+
   readonly errorTypes: ErrorType[] = [
     ErrorType.MemoryLeak,
     ErrorType.Performance,
