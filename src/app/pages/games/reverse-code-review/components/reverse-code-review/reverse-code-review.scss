@@ -1,0 +1,46 @@
+@use '/styles/variables' as v;
+@use '/styles/typography' as mx;
+
+.page {
+  min-height: 100vh;
+  padding: v.$space-xl v.$space-md;
+  background-color: v.$color-light-grey;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-lg;
+  align-items: center;
+}
+
+.page_header {
+  text-align: center;
+}
+
+.page_title {
+  @include mx.text-heading(v.$text-accent-color);
+}
+
+.page_layout {
+  display: flex;
+  gap: v.$space-md;
+  width: 100%;
+  max-width: 1060px;
+  align-items: flex-start;
+}
+
+.page_main {
+  flex: 1;
+  min-width: 0;
+}
+
+.page_placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: v.$color-light-grey;
+  border: 1px dashed v.$border-main-color;
+  border-radius: v.$radius-md;
+  color: v.$text-primary-color;
+  font-size: v.$font-size-sm;
+  @include mx.text-subtitle(v.$text-accent-color);
+}
