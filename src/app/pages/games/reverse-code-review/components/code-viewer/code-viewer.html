@@ -5,33 +5,25 @@
   </header>
 
   <div class="viewer_editor">
-    <div class="viewer_gutter">
-      @for (line of linesState(); track line.lineNumber) {
-      <span class="viewer_line-num">{{ line.lineNumber }}</span>
-      }
+    @for (line of linesState(); track line.lineNumber) {
+    <span class="viewer_line-num">{{ line.lineNumber }}</span>
+    <div
+      class="viewer_line"
+      tabindex="0"
+      [class.viewer_line--found]="line.isFound"
+      (click)="onLineClick(line.lineNumber, $event)"
+      (keydown.enter)="onLineClick(line.lineNumber, $event)">
+      <code class="viewer_text" [innerHTML]="highlightedLines()[line.lineNumber - LINE_SHIFT]"></code>
     </div>
 
-    <div class="viewer_code">
-      @for (line of linesState(); track line.lineNumber) {
-      <div
-        class="viewer_line"
-        tabindex="0"
-        [class.viewer_line--found]="line.isFound"
-        (click)="onLineClick(line.lineNumber, $event)"
-        (keydown.enter)="onLineClick(line.lineNumber, $event)">
-        <code class="viewer_text" [innerHTML]="highlightedLines()[line.lineNumber - LINE_SHIFT]"></code>
-      </div>
-
-      @if (line.isFound && line.foundError) {
-      <div class="viewer_explanation">{{ line.foundError.message }}</div>
-      } }
-    </div>
-    @if (tooltipLine() !== null) {
+    @if (line.isFound && line.foundError) {
+    <div class="viewer_explanation">{{ line.foundError.message }}</div>
+    } } @if (tooltipLine() !== null) {
     <tndm-review-tooltip
       [topPx]="tooltipTop()"
-      [wrongType]="wrongType()"
       (closed)="closeTooltip()"
-      (typeSelected)="onTypeSelected($event)" />
+      (typeSelected)="onTypeSelected($event)"
+      [wrongType]="wrongType()" />
     }
   </div>
   <footer class="viewer_footer">
