@@ -14,11 +14,14 @@ export class AsyncSorterFetcherService {
   private readonly supabase = inject(SupabaseService).client;
 
   async uploadGameStats(gameStats: GameStats): Promise<void | PostgrestError | Error> {
-    const { seconds, moves, mistakes, movesBeforeFirstMistake } = gameStats;
+    const session = await this.supabase.auth.getSession();
+    const userId = session.data.session?.user.id;
 
+    const { seconds, moves, mistakes, movesBeforeFirstMistake } = gameStats;
     try {
       const { error } = await this.supabase.from('async_sorter').insert([
         {
+          user_id: userId,
           time_seconds: seconds,
           moves_count: moves,
           mistakes_count: mistakes,
