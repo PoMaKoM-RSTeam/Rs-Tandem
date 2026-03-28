@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ExpectedError, ReviewCase } from '../../models/review-case.model';
 import { highlightCode } from '../../helpers/highlight-code';
 import { LineState } from '../../models/line-state.model';
@@ -19,13 +28,17 @@ export class TndmCodeViewer {
   protected readonly LINE_SHIFT = 1;
 
   readonly reviewCase = input.required<ReviewCase>();
-
+  readonly solved = output<number>();
   readonly highlightedLines = computed(() => highlightCode(this.reviewCase().code));
 
   readonly linesState = signal<LineState[]>([]);
   readonly tooltipLine = signal<number | null>(null);
   readonly wrongType = signal(false);
   readonly tooltipTop = signal(0);
+  readonly score = signal(0);
+
+  readonly foundCount = computed(() => this.linesState().filter(l => l.isFound).length);
+  readonly totalErrors = computed(() => this.reviewCase().expectedErrors.length);
 
   private readonly linesEffect = effect(() => {
     const reviewCase = this.reviewCase();
@@ -39,6 +52,7 @@ export class TndmCodeViewer {
       }))
     );
     this.closeTooltip();
+    this.score.set(0);
   });
 
   onLineClick(lineNumber: number, event: Event): void {
@@ -53,7 +67,6 @@ export class TndmCodeViewer {
       el.classList.add('viewer_line--wrong');
       setTimeout(() => el.classList.remove('viewer_line--wrong'), this.ANIMATION_TIMEOUT);
       this.closeTooltip();
-      this.wrongType.set(false);
       return;
     }
     const alreadyFound = this.linesState().find(l => l.lineNumber === lineNumber)?.isFound;
@@ -87,8 +100,7 @@ export class TndmCodeViewer {
     }
 
     this.markCorrect(lineNumber, expected);
-    this.tooltipLine.set(null);
-    this.wrongType.set(false);
+    this.closeTooltip();
   }
 
   closeTooltip(): void {
@@ -101,6 +113,7 @@ export class TndmCodeViewer {
   }
 
   private markCorrect(lineNumber: number, error: ExpectedError): void {
+    this.score.update(s => s + error.points);
     this.linesState.update(lines =>
       lines.map(l => (l.lineNumber === lineNumber ? { ...l, isFound: true, foundError: error } : l))
     );

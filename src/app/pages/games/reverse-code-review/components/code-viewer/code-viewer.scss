@@ -109,6 +109,24 @@
     }
   }
 
+  .viewer_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: v.$space-sm v.$space-md;
+    background: v.$color-gray;
+    border-top: 1px solid v.$color-black;
+  }
+
+  .viewer_progress {
+    color: v.$color-dark-grey;
+  }
+
+  .viewer_score {
+    color: v.$text-accent-color;
+    font-weight: v.$font-weight-bold;
+  }
+
   .viewer_text {
     margin: 0;
     font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
