@@ -1,0 +1,18 @@
+<aside class="sidebar">
+  <h2 class="sidebar_title">Cases</h2>
+  <ul class="sidebar_list">
+    @for (reviewCase of cases(); track reviewCase.id; let idx = $index) {
+    <li>
+      <button
+        class="sidebar_item"
+        type="button"
+        [class.sidebar_item--active]="reviewCase.id === activeCaseId()"
+        (click)="caseSelected.emit(reviewCase)">
+        <span class="sidebar_index">{{ idx + 1 }}</span>
+        <span class="sidebar_name">{{ reviewCase.title }}</span>
+        <span class="sidebar_difficulty" [attr.data-diff]="reviewCase.difficulty"> {{ reviewCase.difficulty }} </span>
+      </button>
+    </li>
+    }
+  </ul>
+</aside>

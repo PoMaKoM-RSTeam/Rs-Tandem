@@ -1,0 +1,22 @@
+<article class="viewer">
+  <header class="viewer_header">
+    <span class="viewer_filename">{{ reviewCase().title }}</span>
+    <span class="viewer_category">{{ reviewCase().category }}</span>
+  </header>
+
+  <div class="viewer_editor">
+    <div class="viewer_gutter">
+      @for (lineHtml of highlightedLines(); track $index) {
+      <span class="viewer_line-num">{{ $index + 1 }}</span>
+      }
+    </div>
+
+    <div class="viewer_code">
+      @for (lineHtml of highlightedLines(); track $index) {
+      <div class="viewer_line">
+        <code class="viewer_text" [innerHTML]="lineHtml"></code>
+      </div>
+      }
+    </div>
+  </div>
+</article>

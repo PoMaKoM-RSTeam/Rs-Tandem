@@ -1,0 +1,117 @@
+@use '/styles/variables' as v;
+@use '/styles/typography' as mx;
+
+:host {
+  display: contents;
+}
+
+.sidebar {
+  background: v.$color-gray;
+  border: 1px solid v.$color-black;
+  border-radius: v.$radius-md;
+  padding: v.$space-xs;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-xs;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  @include mx.text-body();
+}
+
+.sidebar_title {
+  margin: 0;
+  font-size: v.$font-size-sm;
+  color: v.$color-white;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: v.$space-xs;
+  border-bottom: 1px solid v.$color-black;
+  @include mx.text-subtitle();
+}
+
+.sidebar_list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  gap: v.$space-sm;
+  padding: v.$space-xs v.$space-sm - v.$space-xs;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: v.$radius-sm;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: v.$font-size-sm;
+  color: v.$color-dark-grey;
+  transition: background v.$transition-fast;
+  width: 100%;
+}
+
+.sidebar_item:hover {
+  background: v.$color-black;
+}
+
+.sidebar_item:focus-visible {
+  outline: 2px solid v.$color-grey;
+  outline-offset: 1px;
+}
+
+.sidebar_item--active {
+  background: v.$color-black;
+  border-color: v.$color-orange;
+  color: v.$color-white;
+}
+
+.sidebar_index {
+  font-size: 0.6rem;
+  color: v.$color-dark-grey;
+  min-width: v.$space-md;
+  text-align: center;
+}
+
+.sidebar_item--active .sidebar_index {
+  color: v.$color-orange;
+}
+
+.sidebar_name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar_difficulty {
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-bold;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: v.$radius-md;
+  flex-shrink: 0;
+}
+
+.sidebar_difficulty[data-diff='Junior'],
+.sidebar_difficulty[data-diff='Middle'],
+.sidebar_difficulty[data-diff='Senior'] {
+  background: v.$color-gray;
+}
+.sidebar_difficulty[data-diff='Junior'] {
+  color: v.$color-green;
+}
+
+.sidebar_difficulty[data-diff='Middle'] {
+  color: v.$color-orange;
+}
+
+.sidebar_difficulty[data-diff='Senior'] {
+  color: v.$color-red;
+}
