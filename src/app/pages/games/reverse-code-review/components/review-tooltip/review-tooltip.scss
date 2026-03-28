@@ -1,5 +1,5 @@
-@use './styles/variables' as v;
-@use './styles/typography' as mx;
+@use '/styles/variables' as v;
+@use '/styles/typography' as mx;
 
 :host {
   display: contents;
@@ -7,30 +7,74 @@
 
 .review-tooltip {
   position: absolute;
+  right: 12px;
   z-index: 10;
-  background: v.$color-gray;
+  width: 220px;
+  background: v.$color-light-grey;
   border: 1px solid v.$border-main-color;
   border-radius: v.$radius-md;
-  color: v.$color-white;
+  padding: v.$space-sm;
   display: flex;
   flex-direction: column;
+  gap: v.$space-xs;
+  box-shadow: 0 4px 16px rgba(v.$color-black, 0.4);
   margin-top: 25vh;
 }
 
-.review-tooltip_option {
-  background-color: v.$color-orange;
-  color: v.$color-black;
-  @include mx.text-body();
-  padding: v.$radius-sm;
-  cursor: pointer;
+.review-tooltip_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .review-tooltip_label {
-  color: v.$color-white;
-  @include mx.text-subtitle();
+  @include mx.text-body(v.$text-primary-color);
+  font-weight: v.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.review-tooltip_close {
+  background: none;
+  border: none;
+  color: v.$color-dark-grey;
+  cursor: pointer;
+  font-size: v.$font-size-lg;
+  padding: 0;
+  line-height: 1;
+
+  &:hover {
+    color: v.$text-primary-color;
+  }
 }
 
 .review-tooltip_error {
-  margin: 0 0 v.$space-xs;
+  margin: 0;
   @include mx.text-body(v.$color-error);
+}
+
+.review-tooltip_options {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-xs;
+}
+
+.review-tooltip_option {
+  background: v.$color-white;
+  border: 1px solid v.$color-white;
+  border-radius: v.$radius-sm;
+  color: v.$color-black;
+  font-family: inherit;
+  @include mx.text-body();
+  padding: v.$space-xs v.$space-sm;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background v.$transition-fast,
+    border-color v.$transition-fast;
+
+  &:hover {
+    background-color: v.$color-orange;
+    border-color: v.$color-orange;
+  }
 }
