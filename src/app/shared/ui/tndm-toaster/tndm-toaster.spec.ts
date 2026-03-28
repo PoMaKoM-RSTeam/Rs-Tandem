@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TndmToaster } from './tndm-toaster';
-import { ToastService, ToastType } from '../../../core/toast/toast-service';
+import { ToastService, ToastType } from '../../../core/services/toast/toast-service';
 import { ElementRef, signal, viewChild } from '@angular/core';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 

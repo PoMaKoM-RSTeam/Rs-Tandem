@@ -9,7 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ButtonConfig, TndmButton } from '../tndm-button/tndm-button';
-import { ToastService } from '../../../core/toast/toast-service';
+import { ToastService } from '../../../core/services/toast/toast-service';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { ICONS } from '../../constants/icons.constant';
 
