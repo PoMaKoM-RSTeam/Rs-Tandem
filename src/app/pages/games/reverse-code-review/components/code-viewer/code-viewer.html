@@ -27,7 +27,11 @@
       } }
     </div>
     @if (tooltipLine() !== null) {
-    <tndm-review-tooltip [topPx]="tooltipTop()" (closed)="closeTooltip()" />
+    <tndm-review-tooltip
+      [topPx]="tooltipTop()"
+      (closed)="closeTooltip()"
+      (typeSelected)="onTypeSelected($event)"
+      [wrongType]="wrongType()" />
     }
   </div>
 </article>
