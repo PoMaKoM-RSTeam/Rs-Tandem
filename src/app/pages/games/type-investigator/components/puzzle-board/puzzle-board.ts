@@ -7,11 +7,12 @@ import { buildInitialState } from './helpers/build-initial-state.utils';
 import { applySlotDrop } from './helpers/apply-slot-drop.utils';
 import { applyPaletteDrop } from './helpers/apply-palette-drop.utils';
 import { validateSolution } from './helpers/validate-solution.utils';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-puzzle-board',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkDropListGroup, CdkDropList, CdkDrag, TndmButton],
+  imports: [CdkDropListGroup, CdkDropList, CdkDrag, TndmButton, TranslocoPipe],
   styleUrl: './puzzle-board.scss',
   templateUrl: './puzzle-board.html',
 })

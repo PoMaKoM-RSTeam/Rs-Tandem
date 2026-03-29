@@ -6,8 +6,8 @@
 </div>
 
 <article cdkDropListGroup class="puzzle-board_card">
-  <h2 class="puzzle-board_title">{{ puzzle().title }}</h2>
-  <p class="puzzle-board_desc">{{ puzzle().description }}</p>
+  <h2 class="puzzle-board_title">{{ puzzle().title | transloco }}</h2>
+  <p class="puzzle-board_desc">{{ puzzle().description | transloco }}</p>
 
   <div class="puzzle-board_editor">
     @for (line of puzzle().lines; track $index) {
