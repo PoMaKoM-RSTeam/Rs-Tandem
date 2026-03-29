@@ -1,0 +1,14 @@
+{
+  "typeInvestigator": {
+    "easyReadonly": {
+      "title": "easy-readonly",
+      "description": "Сделай T readonly. Создай mapped type с модификатором readonly.",
+      "hint": "Mapped type: [K in keyof T]. Модификаторы (например, readonly) ставятся перед скобками."
+    },
+    "easyPartial": {
+      "title": "MyPartial",
+      "description": "Сделай все параметры опциональными.",
+      "hint": "Partial. Поставь `?` после второй скобки."
+    }
+  }
+}
