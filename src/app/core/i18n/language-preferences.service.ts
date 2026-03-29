@@ -61,7 +61,7 @@ export class LanguagePreferenceService {
     try {
       localStorage.setItem(STORAGE_KEY, lang);
     } catch (error) {
-      console.warn('damn my stupid baka life, i have got an error', error);
+      console.warn('Error on save', error);
     }
   }
 
@@ -75,7 +75,7 @@ export class LanguagePreferenceService {
         this.saveToStorage(lang);
       }
     } catch (error) {
-      console.error('asved but not loaded', error);
+      console.error('Data saved but not loaded', error);
     }
   }
 
