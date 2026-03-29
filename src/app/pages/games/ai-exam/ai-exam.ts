@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { GeminiService } from './gemini.service';
 import { ExamLanguage, ROLES } from './shared/types';
@@ -13,6 +14,12 @@ type AskAiParams = {
   examLanguage: ExamLanguage;
   isGeneratingQuestion: boolean;
   selectedTopics?: string;
+  isQuestionSkipped?: true;
+};
+
+type generateQuestionParams = {
+  language: ExamLanguage;
+  isQuestionSkipped?: true;
 };
 
 const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
@@ -28,7 +35,7 @@ const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
   providers: [GeminiService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmAiExam {
+export class TndmAiExam implements OnDestroy {
   private readonly gemini = inject(GeminiService);
   private readonly toaster = inject(ToastService);
   private readonly chat = viewChild(TndmChat);
@@ -47,7 +54,40 @@ export class TndmAiExam {
 
   private readonly initialQuestions = INITIAL_QUESTIONS;
 
-  async generateQuestion(language: ExamLanguage): Promise<void> {
+  readonly SKIP_QUESTION_TIMEOUT_SECONDS = 4;
+  readonly skipQuestionSeconds = signal(this.SKIP_QUESTION_TIMEOUT_SECONDS);
+  skipQuestionSubscription: Subscription | undefined;
+
+  startSkipQuestionTimeout(): void {
+    if (this.skipQuestionSubscription) return;
+
+    this.skipQuestionSubscription = interval(1000).subscribe(() => {
+      if (this.skipQuestionSeconds() <= 0) {
+        this.stopSkipQuestionTimeout();
+      } else {
+        this.skipQuestionSeconds.update(seconds => seconds - 1);
+      }
+    });
+  }
+
+  stopSkipQuestionTimeout(): void {
+    this.skipQuestionSubscription?.unsubscribe();
+    this.skipQuestionSubscription = undefined;
+    this.isSkipQuestionDisabled.set(false);
+    this.skipQuestionSeconds.set(this.SKIP_QUESTION_TIMEOUT_SECONDS);
+  }
+
+  ngOnDestroy(): void {
+    this.stopSkipQuestionTimeout();
+  }
+
+  async skipQuestion(): Promise<void> {
+    this.isSkipQuestionDisabled.set(true);
+    await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipped: true });
+    this.startSkipQuestionTimeout();
+  }
+
+  async generateQuestion({ language, isQuestionSkipped }: generateQuestionParams): Promise<void> {
     if (this.isLoading()) return;
 
     this.isExamFinished.set(false);
@@ -62,6 +102,7 @@ export class TndmAiExam {
       examLanguage: language,
       isGeneratingQuestion: true,
       selectedTopics,
+      isQuestionSkipped,
     });
     if (isGenerateSuccessfully) this.isGenerateQuestionDisabled.set(true);
   }
@@ -99,6 +140,7 @@ export class TndmAiExam {
     examLanguage,
     isGeneratingQuestion,
     selectedTopics,
+    isQuestionSkipped,
   }: AskAiParams): Promise<boolean> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
@@ -123,7 +165,7 @@ export class TndmAiExam {
 
       if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);
-        this.isSkipQuestionDisabled.set(false);
+        if (!isQuestionSkipped) this.isSkipQuestionDisabled.set(false);
       } else if (this.currentAttempt() >= 1) {
         this.currentAttempt.update(attempt => (attempt -= 1));
       }
@@ -140,6 +182,7 @@ export class TndmAiExam {
       return true;
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
+      this.stopSkipQuestionTimeout();
       console.error(error);
       return false;
     } finally {

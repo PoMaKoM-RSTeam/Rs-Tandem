@@ -9,15 +9,15 @@
   <tndm-button
     [btnConfig]="{ label: 'New question', isDisabled: isGenerateQuestionDisabled()}"
     [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion('english')" />
+    (clicked)="generateQuestion({language: 'english'})" />
   <tndm-button
     [btnConfig]="{ label: 'Новый вопрос', isDisabled: isGenerateQuestionDisabled()}"
     [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion('russian')" />
+    (clicked)="generateQuestion({language: 'russian'})" />
   <tndm-button
-    [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
+    [btnConfig]="{ label: `Skip question (${skipQuestionSeconds()} sec)`, isDisabled: isSkipQuestionDisabled() }"
     [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion(examLanguage())" />
+    (clicked)="skipQuestion()" />
 </div>
 
 <tndm-chat [isLoading]="isLoading()" />
