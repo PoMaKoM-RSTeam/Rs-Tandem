@@ -1,9 +1,4 @@
 <div class="ti-page">
-  <header class="ti-header">
-    <h1 class="ti-title"><span class="ti-title__accent">Type</span> Investigator</h1>
-    <p class="ti-subtitle">Puzzles, but with TypeScript.</p>
-  </header>
-
   @if (!activePuzzle()) {
   <tndm-puzzle-select [puzzles]="allPuzzles()" (puzzleSelected)="onPuzzleSelected($event)" />
   } @else {
