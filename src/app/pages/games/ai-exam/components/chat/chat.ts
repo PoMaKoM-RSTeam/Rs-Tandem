@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChild } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { Message, ROLES } from '../../shared/types';
+import { ExamLanguage, Message, ROLES } from '../../shared/types';
 
 type UpdateChatHistoryParams =
   | {
@@ -10,6 +10,7 @@ type UpdateChatHistoryParams =
   | {
       role: typeof ROLES.user;
       content: string;
+      examLanguage: ExamLanguage;
       remainingAttempts: number;
       isGeneratingQuestion: boolean;
       selectedTopics?: string;
@@ -33,6 +34,15 @@ export class TndmChat {
     const parts = [{ text: params.content }];
 
     if (params.role === ROLES.user) {
+      const langNote =
+        params.examLanguage === 'english'
+          ? '[System note: Exam language is English. Write your ENTIRE reply in English ' +
+            '(question, feedback, headings, and the JSON "message" string). ' +
+            'Ignore user typos in other languages; keep English for the exam.]'
+          : '[System note: Exam language is Russian. Write your ENTIRE reply in Russian ' +
+            '(question, feedback, headings, and the JSON "message" string). ' +
+            'Ignore user typos in other languages; keep Russian for the exam.]';
+      parts.push({ text: langNote });
       parts.push({ text: `[System note: Remaining attempts: ${params.remainingAttempts}]` });
 
       if (params.isGeneratingQuestion) {

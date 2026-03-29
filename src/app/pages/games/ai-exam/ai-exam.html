@@ -1,14 +1,19 @@
 <tndm-toaster />
 <p>
   Generate a random question and answer it.<br />
-  You have roughly {{MAX_ATTEMPT_NUMBER}} attempts to give the right answer. Don't waste them. Every message counts.
+  You have roughly {{MAX_ATTEMPT_NUMBER}}-{{MAX_ATTEMPT_NUMBER + 1}} attempts to give the right answer. Don't waste
+  them. Every message counts.
 </p>
 
 <div class="button-wrapper">
   <tndm-button
-    [btnConfig]="{ label: 'Generate question', isDisabled: isGenerateQuestionDisabled()}"
+    [btnConfig]="{ label: 'New question', isDisabled: isGenerateQuestionDisabled()}"
     [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion()" />
+    (clicked)="generateQuestion('english')" />
+  <tndm-button
+    [btnConfig]="{ label: 'Новый вопрос', isDisabled: isGenerateQuestionDisabled()}"
+    [class.await-loading]="isLoading()"
+    (clicked)="generateQuestion('russian')" />
   <tndm-button
     [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
     [class.await-loading]="isLoading()" />

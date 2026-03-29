@@ -5,6 +5,8 @@ export const ROLES = {
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
+export type ExamLanguage = 'english' | 'russian';
+
 export type Message = {
   role: Role;
   parts: { text: string }[];

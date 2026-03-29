@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { GeminiService } from './gemini.service';
-import { ROLES } from './shared/types';
+import { ExamLanguage, ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
@@ -9,9 +9,15 @@ import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
 import { shuffle } from 'lodash';
 
 type AskAiParams = {
-  messageContent?: string;
+  messageContent: string;
+  examLanguage: ExamLanguage;
   isGeneratingQuestion: boolean;
   selectedTopics?: string;
+};
+
+const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
+  russian: `Задай вопрос про JavaScript`,
+  english: `Ask a question on JavaScript`,
 };
 
 @Component({
@@ -37,23 +43,33 @@ export class TndmAiExam {
   readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
   readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
 
-  private readonly initialQuestion = `Задай вопрос про JavaScript`;
+  private readonly examLanguage = signal<ExamLanguage | null>(null);
 
-  async generateQuestion(): Promise<void> {
+  private readonly initialQuestions = INITIAL_QUESTIONS;
+
+  async generateQuestion(language: ExamLanguage): Promise<void> {
     if (this.isLoading()) return;
 
     this.isExamFinished.set(false);
     this.chat()?.resetChatHistory();
+    this.examLanguage.set(language);
 
     const shuffled = shuffle(JS_TOPICS);
     const selectedTopics = shuffled.slice(0, 3).join(', ');
 
-    const isGenerateSuccessfully = await this.askAi({ isGeneratingQuestion: true, selectedTopics });
+    const isGenerateSuccessfully = await this.askAi({
+      messageContent: this.initialQuestions[language],
+      examLanguage: language,
+      isGeneratingQuestion: true,
+      selectedTopics,
+    });
     if (isGenerateSuccessfully) this.isGenerateQuestionDisabled.set(true);
   }
 
   async answerQuestion(event: Event): Promise<void> {
     event.preventDefault();
+    const examLanguage = this.examLanguage();
+    if (!examLanguage) throw new Error('Exam language is not set');
 
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) throw new Error('HTMLFormElement expected');
@@ -67,7 +83,7 @@ export class TndmAiExam {
       return;
     }
 
-    this.askAi({ messageContent: userAnswer, isGeneratingQuestion: false });
+    this.askAi({ messageContent: userAnswer, isGeneratingQuestion: false, examLanguage });
   }
 
   onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
@@ -79,7 +95,8 @@ export class TndmAiExam {
   }
 
   private async askAi({
-    messageContent = this.initialQuestion,
+    messageContent,
+    examLanguage,
     isGeneratingQuestion,
     selectedTopics,
   }: AskAiParams): Promise<boolean> {
@@ -95,6 +112,7 @@ export class TndmAiExam {
       chat.updateChatHistory({
         role: ROLES.user,
         content: messageContent,
+        examLanguage,
         remainingAttempts: this.currentAttempt(),
         isGeneratingQuestion: isGeneratingQuestion,
         selectedTopics,
