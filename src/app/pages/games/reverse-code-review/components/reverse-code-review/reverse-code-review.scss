@@ -2,21 +2,11 @@
 @use '/styles/typography' as mx;
 
 .page {
-  min-height: 100vh;
   padding: v.$space-xl v.$space-md;
-  background-color: v.$color-light-grey;
   display: flex;
   flex-direction: column;
   gap: v.$space-lg;
   align-items: center;
-}
-
-.page_header {
-  text-align: center;
-}
-
-.page_title {
-  @include mx.text-heading(v.$text-accent-color);
 }
 
 .page_layout {

@@ -1,29 +1,11 @@
 @use 'styles/variables' as *;
 
 .ti-page {
-  min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: $color-light-grey;
-  color: $color-black;
-  font-family: 'JetBrains Mono', monospace;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
-}
-
-.ti-header {
-  text-align: center;
-}
-
-.ti-title__accent {
-  color: $color-green;
-}
-
-.ti-subtitle {
-  color: $color-gray;
-  margin: 0.4rem 0 0;
-  font-size: 0.9rem;
 }
 
 .ti-progress {

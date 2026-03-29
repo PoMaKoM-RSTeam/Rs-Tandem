@@ -4,6 +4,7 @@ export const APP_ROUTES = {
   asyncSorter: 'async-sorter',
   aiExam: 'ai-exam',
   typeInvestigator: 'type-investigator',
+  reverseCodeReview: 'reverse-code-review',
   eventLoop: 'event-loop',
   pageNotFound: 'page-not-found',
   home: 'home',

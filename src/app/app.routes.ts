@@ -51,49 +51,55 @@ export const routes: Routes = [
         title: 'Sandbox',
         canActivate: [tndmAuthGuard],
       },
+      {
+        path: APP_ROUTES.typeInvestigator,
+        title: 'Type Investigator',
+        data: {
+          showLines: true,
+        },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+                m => m.TndmTypeInvestigator
+              ),
+          },
+          {
+            path: ':puzzleId',
+            loadComponent: () =>
+              import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
+                m => m.TndmTypeInvestigator
+              ),
+          },
+        ],
+        canActivate: [tndmAuthGuard],
+      },
+      {
+        path: APP_ROUTES.reverseCodeReview,
+        title: 'Reverse code review',
+        data: {
+          showLines: true,
+        },
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
+                m => m.TndmReverseCode
+              ),
+          },
+          {
+            path: ':caseId',
+            loadComponent: () =>
+              import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
+                m => m.TndmReverseCode
+              ),
+          },
+        ],
+        canActivate: [tndmAuthGuard],
+      },
     ],
-  },
-  {
-    path: 'type-investigator',
-    title: 'Type Investigator',
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
-            m => m.TndmTypeInvestigator
-          ),
-      },
-      {
-        path: ':puzzleId',
-        loadComponent: () =>
-          import('./pages/games/type-investigator/components/type-investigator/type-investigator').then(
-            m => m.TndmTypeInvestigator
-          ),
-      },
-    ],
-    canActivate: [tndmAuthGuard],
-  },
-  {
-    path: 'reverse-code-review',
-    title: 'Reverse code review',
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
-            m => m.TndmReverseCode
-          ),
-      },
-      {
-        path: ':caseId',
-        loadComponent: () =>
-          import('./pages/games/reverse-code-review/components/reverse-code-review/reverse-code-review').then(
-            m => m.TndmReverseCode
-          ),
-      },
-    ],
-    canActivate: [tndmAuthGuard],
   },
   {
     path: '**',
