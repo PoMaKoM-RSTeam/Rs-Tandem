@@ -43,7 +43,7 @@ export class TndmAiExam {
   readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
   readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
 
-  private readonly examLanguage = signal<ExamLanguage | null>(null);
+  readonly examLanguage = signal<ExamLanguage>('english');
 
   private readonly initialQuestions = INITIAL_QUESTIONS;
 

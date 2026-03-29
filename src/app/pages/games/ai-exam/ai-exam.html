@@ -16,7 +16,8 @@
     (clicked)="generateQuestion('russian')" />
   <tndm-button
     [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
-    [class.await-loading]="isLoading()" />
+    [class.await-loading]="isLoading()"
+    (clicked)="generateQuestion(examLanguage())" />
 </div>
 
 <tndm-chat [isLoading]="isLoading()" />
