@@ -1,0 +1,18 @@
+<div class="lang-switcher">
+  <button
+    class="lang-switcher__btn"
+    type="button"
+    [class.lang-switcher__btn_active]="!isRu()"
+    (click)="switchLang('en')">
+    EN
+  </button>
+
+  <span class="lang-switcher__divider">/</span>
+  <button
+    class="lang-switcher__btn"
+    type="button"
+    [class.lang-switcher__btn_active]="isRu()"
+    (click)="switchLang('ru')">
+    RU
+  </button>
+</div>

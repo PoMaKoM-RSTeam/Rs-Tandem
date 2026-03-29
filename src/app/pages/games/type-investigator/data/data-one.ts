@@ -5,9 +5,9 @@ export const DATA_ONE: Puzzle[] = [
   {
     id: 'easy-readonly',
     difficulty: PuzzleDifficulty.Easy,
-    title: 'easy-readonly', // TODO transloco
-    description: 'Make T readonly. So, make mapped type readonly.', // TODO transloco
-    hintText: 'Mapped type: [K in keyof T]. Set modifiers, such as infer, before brackets. .', // TODO transloco
+    title: 'typeInvestigator.easyReadonly.title',
+    description: 'typeInvestigator.easyReadonly.description',
+    hintText: 'typeInvestigator.easyReadonly.hint',
     availableBlocks: [
       { id: 'one', label: 'readonly', type: 'keyword' },
       { id: 'two', label: 'K', type: 'identifier' },
@@ -82,9 +82,9 @@ export const DATA_ONE: Puzzle[] = [
   {
     id: 'easy-partial',
     difficulty: PuzzleDifficulty.Easy,
-    title: 'MyPartial',
-    description: 'Transform params into optional.', // transloco
-    hintText: 'Parial. Put `?` after second bracket.', // transloco
+    title: 'typeInvestigator.easyPartial.title',
+    description: 'typeInvestigator.easyPartial.description',
+    hintText: 'typeInvestigator.easyPartial.hint',
     availableBlocks: [
       { id: 'one', label: 'T', type: 'identifier' },
       { id: 'two', label: 'K', type: 'identifier' },

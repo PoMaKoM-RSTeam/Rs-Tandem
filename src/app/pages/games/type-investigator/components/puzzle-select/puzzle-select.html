@@ -8,8 +8,8 @@
     [class.puzzle-select_card--medium]="puzzle.difficulty === 'medium'"
     (click)="puzzleSelected.emit(puzzle)">
     <span class="puzzle-select_card__badge">{{ difficultyLabel(puzzle.difficulty) }}</span>
-    <span class="puzzle-select_card__title">{{ puzzle.title }}</span>
-    <span class="puzzle-select_card__desc">{{ puzzle.description }}</span>
+    <span class="puzzle-select_card__title">{{ puzzle.title | transloco }}</span>
+    <span class="puzzle-select_card__desc">{{ puzzle.description | transloco }}</span>
   </button>
   }
 </section>
