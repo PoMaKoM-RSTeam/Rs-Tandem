@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { ToastService } from '../../../core/toast/toast-service';
 import { SupabaseService } from '../../../core/supabase/supabase-service';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { catchError, from, map, Observable } from 'rxjs';
+import { ToastService } from '../../../core/services/toast/toast-service';
 
 type SandboxResponse = {
   html: string;

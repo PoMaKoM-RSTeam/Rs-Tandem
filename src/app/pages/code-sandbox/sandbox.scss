@@ -10,21 +10,12 @@ $color-shadow: rgba(v.$color-black, 0.15);
 :host {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 170px);
   margin: 0 auto;
   padding: v.$space-md;
   box-sizing: border-box;
   background-color: v.$bg-main;
   @include txt.text-body;
-}
-
-.page-header {
-  text-align: center;
-  text-transform: uppercase;
-  margin-bottom: 0;
-  @include txt.text-heading(v.$text-accent-color);
-  font-size: 48px;
-  line-height: 52px;
 }
 
 .sandbox-wrapper {

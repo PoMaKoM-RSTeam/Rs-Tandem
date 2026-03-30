@@ -1,9 +1,10 @@
-<h2 class="page-header">Sandbox</h2>
-
 <div class="sandbox-wrapper" [class.is-fullscreen]="service.isFullscreen()">
   <div class="editor-section">
     <div class="tabs-header-area">
-      <mat-tab-group class="flex-tabs" dynamicHeight [selectedIndex]="service.selectedTab()"
+      <mat-tab-group
+        class="flex-tabs"
+        dynamicHeight
+        [selectedIndex]="service.selectedTab()"
         (selectedIndexChange)="service.selectedTab.set($event)">
         @for (tab of service.tabs; track tab) {
         <mat-tab [label]="tab" />
@@ -18,7 +19,9 @@
     </div>
 
     <div class="editor-container">
-      <ngx-monaco-editor [ngModel]="service.activeCode()" [options]="service.activeEditorOptions()"
+      <ngx-monaco-editor
+        [ngModel]="service.activeCode()"
+        [options]="service.activeEditorOptions()"
         (ngModelChange)="service.updateActiveCode($event)" />
     </div>
   </div>

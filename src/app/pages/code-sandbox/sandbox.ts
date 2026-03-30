@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { SabdboxService } from './services/sandbox.service';
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
-  protected readonly service = inject(SabdboxService)
+  protected readonly service = inject(SabdboxService);
 
   protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
     variant: 'icon',

@@ -1,9 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { TndmAuthStateStoreService } from '@auth';
-import { ToastService } from '../../../core/toast/toast-service';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ToastService } from '../../../core/services/toast/toast-service';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
