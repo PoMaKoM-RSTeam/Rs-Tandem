@@ -1,0 +1,13 @@
+<div class="lang-switcher">
+  @for (lang of languages; track lang; let last = $last) {
+  <button
+    class="lang-switcher__btn"
+    type="button"
+    [class.lang-switcher__btn_active]="activeLang() === lang"
+    (click)="switchLang(lang)">
+    {{ lang }}
+  </button>
+  @if (!last) {
+  <span class="lang-switcher__divider">/</span>
+  } }
+</div>

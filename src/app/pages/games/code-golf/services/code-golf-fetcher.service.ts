@@ -3,7 +3,7 @@ import { Challenge } from '../types/challenge';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { GolfRank } from '../types/golf-rank';
 import { catchError, from, map, Observable, of } from 'rxjs';
-import { ToastService } from '../../../../core/services/toast/toast-service';
+import { ToastService } from '../../../../core/toast/toast-service';
 
 @Injectable({ providedIn: 'root' })
 export class CodeGolfFetcherService {

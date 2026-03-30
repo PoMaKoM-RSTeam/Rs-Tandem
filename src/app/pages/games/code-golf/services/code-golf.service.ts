@@ -5,15 +5,17 @@ import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
 import { catchError, of, switchMap } from 'rxjs';
-import { ToastService } from '../../../../core/services/toast/toast-service';
+import { ToastService } from '../../../../core/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
+import { LanguagePreferenceService } from '../../../../core/i18n/language-preferences.service';
 
 @Injectable({ providedIn: 'root' })
 export class CodeGolfService implements OnDestroy {
   private readonly fetcher = inject(CodeGolfFetcherService);
   private readonly authStore = inject(TndmAuthStateStoreService);
   private readonly toastService = inject(ToastService);
+  private readonly langService = inject(LanguagePreferenceService);
 
   private worker: Worker | undefined;
   private readonly workerTimeout = 5000;
@@ -27,7 +29,7 @@ export class CodeGolfService implements OnDestroy {
   });
 
   readonly challengeResource = rxResource({
-    stream: () => this.fetcher.getRandomChallenge(),
+    stream: () => this.fetcher.getRandomChallenge(this.langService.activeLang()),
   });
 
   readonly currentChallenge = computed(() => this.challengeResource.value());

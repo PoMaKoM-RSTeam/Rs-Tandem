@@ -6,14 +6,15 @@ import { TndmAuthService } from '@auth';
 import { TndmButton } from '../../ui/tndm-button/tndm-button';
 import { TndmNavigation } from '../tndm-navigation/tndm-navigation';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
-import { NavigationService } from '../../../core/services/navigation/navigation.service';
+import { NavigationService } from '../../../core/navigation/navigation.service';
+import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
 
 @Component({
   selector: 'tndm-main-layout',
   templateUrl: './tndm-main-layout.html',
   styleUrl: './tndm-main-layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TndmButton, TndmNavigation],
+  imports: [RouterOutlet, TndmButton, TndmNavigation, TndmLangSwitcher],
 })
 export class TndmMainLayout {
   private router = inject(Router);

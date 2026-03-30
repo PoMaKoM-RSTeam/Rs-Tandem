@@ -8,6 +8,7 @@ import { provideMarkdown } from 'ngx-markdown';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { TitleStrategy } from '@angular/router';
 import { TndmTitleStrategy } from './core/title-strategy/tndm-title-strategy';
+import { translocoConfig } from './core/i18n/transloco.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +23,6 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     { provide: TitleStrategy, useExisting: TndmTitleStrategy },
+    ...translocoConfig,
   ],
 };

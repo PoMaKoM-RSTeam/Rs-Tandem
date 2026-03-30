@@ -1,0 +1,14 @@
+{
+  "typeInvestigator": {
+    "easyReadonly": {
+      "title": "easy-readonly",
+      "description": "Make T readonly. So, make mapped type readonly.",
+      "hint": "Mapped type: [K in keyof T]. Set modifiers, such as infer, before brackets."
+    },
+    "easyPartial": {
+      "title": "MyPartial",
+      "description": "Transform params into optional.",
+      "hint": "Partial. Put `?` after second bracket."
+    }
+  }
+}
