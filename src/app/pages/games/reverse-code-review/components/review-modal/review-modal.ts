@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-completion-modal',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TndmButton],
+  imports: [TndmButton, TranslocoPipe],
   styleUrl: './review-modal.scss',
   templateUrl: './review-modal.html',
 })

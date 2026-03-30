@@ -1,11 +1,11 @@
 <div class="review-tooltip" [style.top.px]="topPx()">
   <div class="review-tooltip_header">
-    <span class="review-tooltip_label">Select error type:</span>
+    <span class="review-tooltip_label">{{ 'reverseCodeReview.selectErrorType' | transloco }}</span>
     <button class="review-tooltip_close" type="button" (click)="closed.emit()">&times;</button>
   </div>
 
   @if (wrongType()) {
-  <p class="review-tooltip_error">Wrong category, try again.</p>
+  <p class="review-tooltip_error">{{ 'reverseCodeReview.wrongCategory' | transloco }}</p>
   }
 
   <div class="review-tooltip_options">

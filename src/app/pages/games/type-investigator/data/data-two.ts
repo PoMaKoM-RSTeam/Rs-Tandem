@@ -5,9 +5,9 @@ export const DATA_TWO: Puzzle[] = [
   {
     id: 'medium-nonullable',
     difficulty: PuzzleDifficulty.Medium,
-    title: 'MyNonNullable',
-    description: 'Write Conditional Type that removes null and undefined from T.', //transloco
-    hintText: 'Conditional Type: T extends null | undefined ? never : T', //transloco
+    title: 'typeInvestigator.mediumNonNullable.title',
+    description: 'typeInvestigator.mediumNonNullable.description',
+    hintText: 'typeInvestigator.mediumNonNullable.hint',
     availableBlocks: [
       { id: 'one', label: 'T', type: 'identifier' },
       { id: 'two', label: 'extends', type: 'keyword' },
@@ -68,10 +68,9 @@ export const DATA_TWO: Puzzle[] = [
   {
     id: 'medium-returntype',
     difficulty: PuzzleDifficulty.Medium,
-    title: 'MyReturnType',
-    description: 'Write a type that extracts the return type of function `T` (infer).', //transloco
-    hintText:
-      'infer R allows you to "capture" the type in a conditional expression. It follows the pattern (...:[]) => R', //tl
+    title: 'typeInvestigator.mediumReturntype.title',
+    description: 'typeInvestigator.mediumReturntype.description',
+    hintText: 'typeInvestigator.mediumReturntype.hint',
     availableBlocks: [
       { id: 'one', label: 'T', type: 'identifier' },
       { id: 'two', label: 'R', type: 'identifier' },

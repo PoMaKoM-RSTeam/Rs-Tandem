@@ -27,7 +27,12 @@
     }
   </div>
   <footer class="viewer_footer">
-    <span class="viewer_progress">Found {{ foundCount() }} / {{ totalErrors() }} errors</span>
-    <span class="viewer_score">Score: {{ score() }} points</span>
+    <span class="viewer_progress">
+      {{ 'reverseCodeReview.found' | transloco }} {{ foundCount() }} / {{ totalErrors() }} {{ 'reverseCodeReview.errors'
+      | transloco }}
+    </span>
+    <span class="viewer_score">
+      {{ 'reverseCodeReview.score' | transloco }} {{ score() }} {{ 'reverseCodeReview.points' | transloco }}
+    </span>
   </footer>
 </article>

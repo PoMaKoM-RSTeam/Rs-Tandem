@@ -7,11 +7,12 @@ import { TndmCodeViewer } from '../code-viewer/code-viewer';
 import { ReviewCase } from '../../models/review-case.model';
 import { REVIEW_CASES_DATA } from '../../data/review-cases.data';
 import { TndmCompletionModal } from '../review-modal/review-modal';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-reverse-code-review',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TndmCaseSidebar, TndmCodeViewer, TndmCompletionModal],
+  imports: [TndmCaseSidebar, TndmCodeViewer, TndmCompletionModal, TranslocoPipe],
   templateUrl: './reverse-code-review.html',
   styleUrl: './reverse-code-review.scss',
 })

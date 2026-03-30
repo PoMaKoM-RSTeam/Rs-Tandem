@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ReviewCase } from '../../models/review-case.model';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-case-sidebar',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TranslocoPipe],
   templateUrl: './case-sidebar.html',
   styleUrl: './case-sidebar.scss',
 })
