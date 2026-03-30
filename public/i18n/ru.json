@@ -7,7 +7,7 @@
     },
     "easyPartial": {
       "title": "MyPartial",
-      "description": "Сделайте параметры optional (необязательными).",
+      "description": "Сделайте параметры необязательными (опциональными).",
       "hint": "Partial. Поставьте `?` после второй скобки."
     },
     "mediumNonNullable": {
@@ -24,7 +24,10 @@
       "title": "ReadonlyPartial",
       "description": "Создайте тип, который делает все свойства объекта T одновременно readonly и optional.",
       "hint": "Оба модификатора можно применять вместе: readonly [K in keyof T]?"
-    }
+    },
+    "solved": "Пазл решён!",
+    "empty": "Все блоки уже размещены",
+    "available": "Доступные блоки"
   },
   "auth": {
     "title": "Добро пожаловать в Tandem",

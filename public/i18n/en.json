@@ -24,7 +24,10 @@
       "title": "ReadonlyPartial",
       "description": "Create a type that makes all properties of object T both readonly and optional.",
       "hint": "Both modifiers can be applied together: readonly [K in keyof T]?"
-    }
+    },
+    "solved": "Puzzle solved!",
+    "empty": "All blocks placed",
+    "available": "Available blocks"
   },
   "auth": {
     "title": "Welcome to Tandem",
