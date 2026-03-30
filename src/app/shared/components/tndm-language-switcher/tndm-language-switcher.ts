@@ -1,5 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { LanguagePreferenceService, SupportedLang } from '../../../core/i18n/language-preferences.service';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  LanguagePreferenceService,
+  SUPPORTED_LANGS,
+  SupportedLang,
+} from '../../../core/i18n/language-preferences.service';
 
 @Component({
   selector: 'tndm-lang-switcher',
@@ -11,7 +15,7 @@ export class TndmLangSwitcher {
   private readonly langService = inject(LanguagePreferenceService);
 
   readonly activeLang = this.langService.activeLang;
-  readonly isRu = computed(() => this.activeLang() === 'ru');
+  readonly languages = SUPPORTED_LANGS;
 
   switchLang(lang: SupportedLang): void {
     this.langService.setLang(lang);
