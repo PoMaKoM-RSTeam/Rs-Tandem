@@ -5,26 +5,37 @@ import { map } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase-service';
 import { TndmAuthStateStoreService } from '@auth';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { ToastService } from '../services/toast/toast-service';
+import { LoadingOverlayService } from '../services/loading-overlay/loading-overlay-service';
 
 const STORAGE_KEY = 'tndm_lang';
 const TABLE = 'user_preferences';
 
 export type SupportedLang = 'en' | 'ru';
 
+export const SUPPORTED_LANGS: SupportedLang[] = ['en', 'ru'];
+
+export function isSupportedLang(value: unknown): value is SupportedLang {
+  return (SUPPORTED_LANGS as unknown[]).includes(value);
+}
+
 @Injectable({ providedIn: 'root' })
 export class LanguagePreferenceService {
   private readonly transloco = inject(TranslocoService);
   private readonly supabase: SupabaseClient = inject(SupabaseService).client;
   private readonly authStore = inject(TndmAuthStateStoreService);
+  private readonly toastService = inject(ToastService);
+  private readonly loadingOverlay = inject(LoadingOverlayService);
 
-  private readonly defaultLang: SupportedLang = 'en';
+  private readonly defaultLang: SupportedLang = SUPPORTED_LANGS[0];
 
   readonly activeLang = toSignal(
-    this.transloco.langChanges$.pipe(map(lang => (lang === 'en' || lang === 'ru' ? lang : this.defaultLang))),
+    this.transloco.langChanges$.pipe(map(lang => (isSupportedLang(lang) ? lang : this.defaultLang))),
     { initialValue: this.defaultLang }
   );
 
   constructor() {
+    //todo
     const saved = this.getFromStorage();
     if (saved) {
       this.transloco.setActiveLang(saved);
@@ -33,7 +44,7 @@ export class LanguagePreferenceService {
     effect(() => {
       const user = this.authStore.user();
       if (user) {
-        this.loadFromServer(user.id);
+        this.loadLangPreference(user.id);
       }
     });
   }
@@ -44,42 +55,50 @@ export class LanguagePreferenceService {
 
     const userId = this.authStore.user()?.id;
     if (userId) {
-      this.saveToServer(userId, lang);
+      this.saveLangPreference(userId, lang);
     }
   }
 
   private getFromStorage(): SupportedLang | null {
     try {
       const value = localStorage.getItem(STORAGE_KEY);
-      return value === 'en' || value === 'ru' ? value : null;
+      return isSupportedLang(value) ? value : this.defaultLang;
     } catch {
-      return null;
+      return this.defaultLang;
     }
   }
 
   private saveToStorage(lang: SupportedLang): void {
     try {
       localStorage.setItem(STORAGE_KEY, lang);
-    } catch (error) {
-      console.warn('Error on save', error);
+      // this.toastService.success('Language', 'Language preference is saved locally');
+    } catch {
+      this.toastService.warning('Language', 'Failed to save language preference locally');
     }
   }
 
-  private async loadFromServer(userId: string): Promise<void> {
+  private async loadLangPreference(userId: string): Promise<void> {
+    this.loadingOverlay.show(); //todo
     try {
       const { data, error } = await this.supabase.from(TABLE).select('lang').eq('user_id', userId).maybeSingle();
       if (error || !data) return;
       const lang = data.lang;
-      if (lang === 'en' || lang === 'ru') {
+      if (isSupportedLang(lang)) {
         this.transloco.setActiveLang(lang);
         this.saveToStorage(lang);
       }
-    } catch (error) {
-      console.error('Data saved but not loaded', error);
+    } catch {
+      this.toastService.warning('Language', 'Failed to load language preference from server');
+    } finally {
+      this.loadingOverlay.hide();
     }
   }
 
-  private async saveToServer(userId: string, lang: SupportedLang): Promise<void> {
-    await this.supabase.from(TABLE).upsert({ user_id: userId, lang }, { onConflict: 'user_id' });
+  private async saveLangPreference(userId: string, lang: SupportedLang): Promise<void> {
+    try {
+      await this.supabase.from(TABLE).upsert({ user_id: userId, lang }, { onConflict: 'user_id' });
+    } catch {
+      this.toastService.warning('Language', 'Failed to save language preference to server');
+    }
   }
 }
