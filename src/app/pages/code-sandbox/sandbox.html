@@ -12,8 +12,8 @@
       </mat-tab-group>
 
       <div class="editor-controls">
-        <tndm-button [btnConfig]="downloadBtnConfig" (clicked)="download()" />
-        <tndm-button [btnConfig]="uploadBtnConfig" (clicked)="save()" />
+        <tndm-button [btnConfig]="downloadBtnConfig" (clicked)="service.download()" />
+        <tndm-button [btnConfig]="saveBtnConfig" (clicked)="service.save()" />
         <tndm-button [btnConfig]="fullscreenBtnConfig()" (clicked)="toggleFullscreen()" />
       </div>
     </div>

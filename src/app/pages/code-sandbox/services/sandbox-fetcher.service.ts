@@ -21,18 +21,12 @@ export class SandboxFetcherService {
     SAVE_DATA: 'save_sandbox_data',
   } as const;
 
-  saveSandboxData(userId: string, html: string, css: string, js: string): Observable<void> {
+  saveData(userId: string, html: string, css: string, js: string): Observable<void> {
     return this.callRpc<void>(this.RPC_FUNCTIONS.SAVE_DATA, {
       p_user_id: userId,
       p_html: html,
       p_css: css,
       p_js: js,
-    });
-  }
-
-  getSandboxData(userId: string): Observable<SandboxResponse | undefined> {
-    return this.callRpc<SandboxResponse | undefined>(this.RPC_FUNCTIONS.GET_DATA, {
-      p_user_id: userId,
     }).pipe(
       catchError(error => {
         this.toastService.danger('Error saving result', error.message || 'Try again');
@@ -41,10 +35,17 @@ export class SandboxFetcherService {
     );
   }
 
+  getData(userId: string): Observable<SandboxResponse | undefined> {
+    return this.callRpc<SandboxResponse[] | undefined>(this.RPC_FUNCTIONS.GET_DATA, {
+      p_user_id: userId,
+    }).pipe(map(data => (data && data.length > 0 ? data[0] : undefined)));
+  }
+
   private callRpc<T>(fn: string, params?: Record<string, unknown>): Observable<T> {
     return from(this.supabase.rpc(fn, params)).pipe(
       map(({ data, error }) => {
         if (error) {
+          // Logging
           throw error;
         }
         return data as T;

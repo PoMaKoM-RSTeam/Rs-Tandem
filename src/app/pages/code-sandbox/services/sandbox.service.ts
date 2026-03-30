@@ -4,11 +4,12 @@ import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ToastService } from '../../../core/services/toast/toast-service';
+import { take } from 'rxjs';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
 @Injectable({ providedIn: 'root' })
-export class SabdboxService {
+export class SandboxService {
   private readonly fetcher = inject(SandboxFetcherService);
   private readonly authStore = inject(TndmAuthStateStoreService);
   private readonly toastService = inject(ToastService);
@@ -67,12 +68,43 @@ export class SabdboxService {
   });
 
   save(): void {
-    console.log('save');
-    //  console.log(this.sandboxResource.value());
+    const id = this.userId();
+    if (id) {
+      this.fetcher
+        .saveData(id, this.htmlCode(), this.cssCode(), this.jsCode())
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.toastService.success('Success', 'You result saved');
+          },
+          error: err => {
+            this.toastService.danger('Ошибка при сохранении', err.message);
+          },
+        });
+    }
   }
 
   download(): void {
-    console.log('download');
-    //  console.log(this.sandboxResource.value());
+    const id = this.userId();
+    if (id) {
+      this.fetcher
+        .getData(id)
+        .pipe(take(1))
+        .subscribe({
+          next: data => {
+            if (data) {
+              this.htmlCode.set(data.html);
+              this.cssCode.set(data.css);
+              this.jsCode.set(data.js);
+              this.toastService.success('Success', 'Data loaded successfully!');
+            } else {
+              this.toastService.warning('Attention', 'No saved data found.');
+            }
+          },
+          error: err => {
+            this.toastService.danger('Error fetching data', err.message || 'Try again');
+          },
+        });
+    }
   }
 }

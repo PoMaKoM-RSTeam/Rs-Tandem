@@ -4,7 +4,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
-import { SabdboxService } from './services/sandbox.service';
+import { SandboxService } from './services/sandbox.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,7 +15,7 @@ import { SabdboxService } from './services/sandbox.service';
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
-  protected readonly service = inject(SabdboxService);
+  protected readonly service = inject(SandboxService);
 
   protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
     variant: 'icon',
@@ -29,9 +29,9 @@ export class TndmSandbox {
     size: 'lg',
   };
 
-  protected readonly uploadBtnConfig: ButtonConfig = {
+  protected readonly saveBtnConfig: ButtonConfig = {
     variant: 'icon',
-    icon: 'upload',
+    icon: 'save',
     size: 'lg',
   };
 
@@ -41,7 +41,4 @@ export class TndmSandbox {
       window.dispatchEvent(new Event('resize'));
     }, 100);
   }
-
-  protected save(): void {}
-  protected download(): void {}
 }
