@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { AuthProvider } from '../types/types';
 import { loginValidator } from '@auth/validators/login-validator';
 import { TndmAuthService } from '@auth/tndm-auth-service';
-import { ToastService } from '../../core/services/toast/toast-service';
+import { ToastService } from '../../core/toast/toast-service';
 import { AUTH_ROUTES } from '@auth';
 import { AUTH_ERROR_MESSAGES } from '../constants/auth-error-messages';
 

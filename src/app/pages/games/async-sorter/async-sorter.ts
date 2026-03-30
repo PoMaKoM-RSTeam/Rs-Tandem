@@ -10,7 +10,7 @@ import { AsyncSorterFetcherService } from './services/async-sorter-fetcher.servi
 import { TndmMovesCounter } from './components/moves-counter/moves-counter';
 import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-counter';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
-import { ToastService } from '../../../core/services/toast/toast-service';
+import { ToastService } from '../../../core/toast/toast-service';
 
 @Component({
   selector: 'tndm-async-sorter',

@@ -5,8 +5,8 @@ import { map } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase-service';
 import { TndmAuthStateStoreService } from '@auth';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { ToastService } from '../services/toast/toast-service';
-import { LoadingOverlayService } from '../services/loading-overlay/loading-overlay-service';
+import { ToastService } from '../toast/toast-service';
+import { LoadingOverlayService } from '../loading-overlay/loading-overlay-service';
 
 const STORAGE_KEY = 'tndm_lang';
 const TABLE = 'user_preferences';

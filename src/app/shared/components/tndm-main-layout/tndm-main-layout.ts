@@ -6,7 +6,7 @@ import { TndmAuthService } from '@auth';
 import { TndmButton } from '../../ui/tndm-button/tndm-button';
 import { TndmNavigation } from '../tndm-navigation/tndm-navigation';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
-import { NavigationService } from '../../../core/services/navigation/navigation.service';
+import { NavigationService } from '../../../core/navigation/navigation.service';
 import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
 
 @Component({

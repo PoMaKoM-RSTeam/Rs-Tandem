@@ -1,7 +1,7 @@
 import { AUTH_ROUTES, TndmAuthService } from '@auth';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { APP_ROUTES } from '../../../shared/constants/app-routes';
+import { APP_ROUTES } from '../../shared/constants/app-routes';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationService {

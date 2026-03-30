@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TndmButton } from '../../shared/ui/tndm-button/tndm-button';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../core/services/navigation/navigation.service';
+import { NavigationService } from '../../core/navigation/navigation.service';
 
 @Component({
   selector: 'tndm-home-page',
