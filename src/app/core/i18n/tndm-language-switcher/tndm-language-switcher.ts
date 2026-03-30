@@ -1,9 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {
-  LanguagePreferenceService,
-  SUPPORTED_LANGS,
-  SupportedLang,
-} from '../../../core/i18n/language-preferences.service';
+import { LanguagePreferenceService, SUPPORTED_LANGS, SupportedLang } from '../language-preferences.service';
 
 @Component({
   selector: 'tndm-lang-switcher',
