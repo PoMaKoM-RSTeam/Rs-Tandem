@@ -1,11 +1,13 @@
 <tndm-toaster />
-<h2 class="heading">Async sorter</h2>
+<h2 class="heading">{{ 'asyncSorter.heading' | transloco }}</h2>
 <div class="stats-wrapper">
   <tndm-timer />
   <tndm-moves-counter [moves]="moves()" [movesBeforeFirstMistake]="movesBeforeFirstMistake()" />
   <tndm-mistakes-counter [mistakes]="mistakes()" />
 </div>
-<tndm-button [btnConfig]="{ label: 'Run loop', isDisabled: buttonDisabled()}" (clicked)="runLoop()" />
+<tndm-button
+  [btnConfig]="{ label: ('asyncSorter.runLoop' | transloco), isDisabled: buttonDisabled()}"
+  (clicked)="runLoop()" />
 <section cdkDropListGroup class="fields-wrapper">
   <tndm-code-blocks-list (isEmpty)="onSourceListIsEmpty()" />
   <tndm-task-bucket-list
