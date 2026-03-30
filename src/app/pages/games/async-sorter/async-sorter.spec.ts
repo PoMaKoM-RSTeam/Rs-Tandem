@@ -6,13 +6,14 @@ import { TndmCodeBlocksList } from './components/code-blocks-list/code-blocks-li
 import { TndmTaskBucketsList } from './components/task-buckets-list/task-buckets-list';
 import { TndmFinalCallStack } from './components/final-call-stack/final-call-stack';
 import { CodeBlockData, TASK_TYPES } from './shared/types';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 describe('TndmAsyncSorter', () => {
   let component: TndmAsyncSorter;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TndmAsyncSorter],
+      imports: [TndmAsyncSorter, TranslocoPipe],
     }).compileComponents();
 
     const fixture = TestBed.createComponent(TndmAsyncSorter);
