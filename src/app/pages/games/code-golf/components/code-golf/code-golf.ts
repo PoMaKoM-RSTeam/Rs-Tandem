@@ -7,22 +7,27 @@ import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeGolfResults } from '../results-modal/results-modal';
 
 import { CodeGolfService } from '../../services/code-golf.service';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tndm-code-golf',
   standalone: true,
-  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton, TndmCodeGolfResults],
+  imports: [TndmCodeGolfEditor, TndmCodeGolfRank, TndmButton, TndmCodeGolfResults, TranslocoPipe],
   templateUrl: 'code-golf.html',
   styleUrl: './code-golf.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
+  private readonly translocoService = inject(TranslocoService);
   protected readonly service = inject(CodeGolfService);
 
   protected readonly isCodeEmpty = computed(() => this.service.rawCode().trim().length === 0);
 
+  private readonly translatedCheckLabel = toSignal(this.translocoService.selectTranslate('golf.check'));
+
   protected readonly checkBtnConfig = computed(() => ({
-    label: 'Check Solution',
+    label: this.translatedCheckLabel() ?? 'Check Solution',
     isDisabled: this.isCodeEmpty(),
   }));
 

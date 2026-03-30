@@ -85,5 +85,9 @@
     "nextCase": "Next Case",
     "selectErrorType": "Select error type:",
     "wrongCategory": "Wrong category, try again."
+  },
+  "golf": {
+    "next": "Next Challenge",
+    "check": "Check solution"
   }
 }
