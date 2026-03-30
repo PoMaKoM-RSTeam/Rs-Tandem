@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TndmButton } from '../../shared/ui/tndm-button/tndm-button';
 import { Router } from '@angular/router';
 import { NavigationService } from '../../core/navigation/navigation.service';
+
 import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
