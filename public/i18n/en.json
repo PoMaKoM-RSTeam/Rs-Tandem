@@ -37,11 +37,11 @@
     "description": "Master the tech interview through interactive challenges. Debug the Event Loop, solve TS Investigator mysteries, and win at Code Golf.",
     "joinButton": "create an account"
   },
-  "notFound": {
+  "nfound": {
     "title": "Page not found",
     "subtitle": "404",
     "body": "The page you requested does not exist. You may have entered an invalid address or the page has been removed.",
-    "toMainButton": "go to the main page"
+    "mainbtn": "go to the main page"
   },
   "sandbox": {
     "livePreview": "Live Preview"
