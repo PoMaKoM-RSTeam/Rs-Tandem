@@ -134,7 +134,6 @@ const outputFormat = `
  Choose ONE of the following formats for the "message" property based on the current state:
 
  TEMPLATE 1: If you are asking the very first question:
-    **[Localized "Question" label]:**
     [Your JavaScript question here]
     (Do not mention attempts.)
 

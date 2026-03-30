@@ -5,7 +5,9 @@ import { PASSING_SCORE, SYSTEM_INSTRUCTION } from './shared/prompt';
 
 export type GeminiResponse = {
   isExamFinished: boolean;
+  isExamPassed: boolean;
   message: string;
+  score: number;
 };
 
 @Injectable()
@@ -28,6 +30,7 @@ export class GeminiService {
 
     const { data, error } = await this.supabase.functions.invoke('gemini-proxy', {
       body: {
+        useFreeTier: true,
         // model: this.MODELS['gemini-3.1-flash'],
         model: this.MODELS['gemini-3.1-flash-lite'],
         // model: this.MODELS['gemini-2.5-flash-lite'],
@@ -45,12 +48,20 @@ export class GeminiService {
                 description: `Set to true IF the user score is >= ${PASSING_SCORE} or Remaining attempts == 0.
                 Set to false otherwise.`,
               },
+              isExamPassed: {
+                type: 'boolean',
+                description: `Set only when isExamFinished is true: true if the user passed, false if the user failed.`,
+              },
+              score: {
+                type: 'number',
+                description: `Numeric exam score from 0 to 100.`,
+              },
               message: {
                 type: 'string',
                 description: 'The markdown-formatted message to show to the user.',
               },
             },
-            required: ['isExamFinished', 'message'],
+            required: ['isExamFinished', 'isExamPassed', 'score', 'message'],
           },
         },
       },
@@ -60,6 +71,8 @@ export class GeminiService {
       console.error('API or Supabase Edge Function error:', error);
       return {
         isExamFinished: false,
+        isExamPassed: false,
+        score: 0,
         message: `Oops! I experienced a brain freeze 🥶.
         Check the console to see the full error message.`,
       };
@@ -68,6 +81,8 @@ export class GeminiService {
     if (!data) {
       return {
         isExamFinished: false,
+        isExamPassed: false,
+        score: 0,
         message: `Oops! The response I received from the server is empty 😢`,
       };
     }
@@ -76,6 +91,8 @@ export class GeminiService {
       console.warn(data);
       return {
         isExamFinished: false,
+        isExamPassed: false,
+        score: 0,
         message: `Oops! The response I received from the server is a mess.
         I couldn't find the text I'm supposed to show you.
         Check the console to see what I received from the server.`,
@@ -89,6 +106,8 @@ export class GeminiService {
       console.log(`Parsed data: ${data.text}`);
       return {
         isExamFinished: false,
+        isExamPassed: false,
+        score: 0,
         message: `Oops! The AI returned an invalid format. Raw response:
         ${data.text}`,
       };

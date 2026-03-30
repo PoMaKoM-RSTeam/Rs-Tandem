@@ -8,6 +8,7 @@ import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
 import { shuffle } from 'lodash';
+import { DatabaseService } from './database.service';
 
 type AskAiParams = {
   messageContent: string;
@@ -22,6 +23,11 @@ type generateQuestionParams = {
   isQuestionSkipped?: true;
 };
 
+type FinishExamParams = {
+  isExamPassed: boolean;
+  score: number;
+};
+
 const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
   russian: `Задай вопрос про JavaScript`,
   english: `Ask a question on JavaScript`,
@@ -32,12 +38,14 @@ const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
   imports: [TndmButton, TndmToaster, TndmChat],
-  providers: [GeminiService],
+  providers: [GeminiService, DatabaseService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmAiExam implements OnDestroy {
   private readonly gemini = inject(GeminiService);
   private readonly toaster = inject(ToastService);
+  private readonly database = inject(DatabaseService);
+
   private readonly chat = viewChild(TndmChat);
   private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
 
@@ -47,8 +55,9 @@ export class TndmAiExam implements OnDestroy {
   readonly isSkipQuestionDisabled = signal(true);
   readonly isExamFinished = signal(false);
 
-  readonly MAX_ATTEMPT_NUMBER = ANSWER_ATTEMPTS;
-  readonly currentAttempt = signal(this.MAX_ATTEMPT_NUMBER);
+  readonly MAX_ALLOWED_ATTEMPTS = ANSWER_ATTEMPTS;
+  readonly attemptsLeft = signal(this.MAX_ALLOWED_ATTEMPTS);
+  readonly currentQuestion = signal<string | null>(null);
 
   readonly examLanguage = signal<ExamLanguage>('english');
 
@@ -97,14 +106,18 @@ export class TndmAiExam implements OnDestroy {
     const shuffled = shuffle(JS_TOPICS);
     const selectedTopics = shuffled.slice(0, 3).join(', ');
 
-    const isGenerateSuccessfully = await this.askAi({
+    const question = await this.askAi({
       messageContent: this.initialQuestions[language],
       examLanguage: language,
       isGeneratingQuestion: true,
       selectedTopics,
       isQuestionSkipped,
     });
-    if (isGenerateSuccessfully) this.isGenerateQuestionDisabled.set(true);
+
+    if (question) {
+      this.isGenerateQuestionDisabled.set(true);
+      this.currentQuestion.set(question);
+    }
   }
 
   async answerQuestion(event: Event): Promise<void> {
@@ -141,7 +154,7 @@ export class TndmAiExam implements OnDestroy {
     isGeneratingQuestion,
     selectedTopics,
     isQuestionSkipped,
-  }: AskAiParams): Promise<boolean> {
+  }: AskAiParams): Promise<string | undefined> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
@@ -155,7 +168,7 @@ export class TndmAiExam implements OnDestroy {
         role: ROLES.user,
         content: messageContent,
         examLanguage,
-        remainingAttempts: this.currentAttempt(),
+        remainingAttempts: this.attemptsLeft(),
         isGeneratingQuestion: isGeneratingQuestion,
         selectedTopics,
       });
@@ -166,28 +179,46 @@ export class TndmAiExam implements OnDestroy {
       if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);
         if (!isQuestionSkipped) this.isSkipQuestionDisabled.set(false);
-      } else if (this.currentAttempt() >= 1) {
-        this.currentAttempt.update(attempt => (attempt -= 1));
+      } else if (this.attemptsLeft() >= 1) {
+        this.attemptsLeft.update(attempt => (attempt -= 1));
       }
 
-      if (response.isExamFinished) {
-        this.isAnswerQuestionDisabled.set(true);
-        this.isSkipQuestionDisabled.set(true);
-        this.isGenerateQuestionDisabled.set(false);
-        this.isExamFinished.set(true);
-        this.currentAttempt.set(this.MAX_ATTEMPT_NUMBER);
-        this.toaster.info(`Exam finished!`, `Check your final score.`);
-      }
+      if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
 
-      return true;
+      return response.message;
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       this.stopSkipQuestionTimeout();
       console.error(error);
-      return false;
+      return undefined;
     } finally {
       this.isLoading.set(false);
       if (!this.isAnswerQuestionDisabled()) this.focusAnswerTextarea();
+    }
+  }
+
+  private async finishExam({ isExamPassed, score }: FinishExamParams): Promise<void> {
+    const error = await this.database.uploadExamResults({
+      attemptsUsed: this.MAX_ALLOWED_ATTEMPTS - this.attemptsLeft(),
+      question: this.currentQuestion(),
+      maxAllowedAttempts: this.MAX_ALLOWED_ATTEMPTS,
+      isExamPassed,
+      score,
+    });
+    if (error) {
+      this.toaster.warning(`Failed to save results to DB`, error.message);
+      console.error(error);
+    }
+
+    this.isAnswerQuestionDisabled.set(true);
+    this.isSkipQuestionDisabled.set(true);
+    this.isGenerateQuestionDisabled.set(false);
+    this.isExamFinished.set(true);
+    this.attemptsLeft.set(this.MAX_ALLOWED_ATTEMPTS);
+    if (isExamPassed) {
+      this.toaster.success(`Exam finished 🥳`, `You passed!`);
+    } else {
+      this.toaster.info(`You didn't make it 😢`, `Good luck next time`);
     }
   }
 
