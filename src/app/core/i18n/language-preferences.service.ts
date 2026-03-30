@@ -28,6 +28,7 @@ export class LanguagePreferenceService {
   private readonly loadingOverlay = inject(LoadingOverlayService);
 
   private readonly defaultLang: SupportedLang = SUPPORTED_LANGS[0];
+  private loadedForUserId: string | null = null;
 
   readonly activeLang = toSignal(
     this.transloco.langChanges$.pipe(map(lang => (isSupportedLang(lang) ? lang : this.defaultLang))),
@@ -35,7 +36,6 @@ export class LanguagePreferenceService {
   );
 
   constructor() {
-    //todo
     const saved = this.getFromStorage();
     if (saved) {
       this.transloco.setActiveLang(saved);
@@ -71,14 +71,17 @@ export class LanguagePreferenceService {
   private saveToStorage(lang: SupportedLang): void {
     try {
       localStorage.setItem(STORAGE_KEY, lang);
-      // this.toastService.success('Language', 'Language preference is saved locally');
     } catch {
       this.toastService.warning('Language', 'Failed to save language preference locally');
     }
   }
 
   private async loadLangPreference(userId: string): Promise<void> {
-    this.loadingOverlay.show(); //todo
+    if (this.loadedForUserId === userId) {
+      return;
+    }
+    this.loadedForUserId = userId;
+    this.loadingOverlay.show();
     try {
       const { data, error } = await this.supabase.from(TABLE).select('lang').eq('user_id', userId).maybeSingle();
       if (error || !data) return;
@@ -88,6 +91,7 @@ export class LanguagePreferenceService {
         this.saveToStorage(lang);
       }
     } catch {
+      this.loadedForUserId = null;
       this.toastService.warning('Language', 'Failed to load language preference from server');
     } finally {
       this.loadingOverlay.hide();
