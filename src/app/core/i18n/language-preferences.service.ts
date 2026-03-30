@@ -105,4 +105,10 @@ export class LanguagePreferenceService {
       this.toastService.warning('Language', 'Failed to save language preference to server');
     }
   }
+
+  resetLang(): void {
+    localStorage.removeItem(STORAGE_KEY);
+    this.loadedForUserId = null;
+    this.transloco.setActiveLang(this.defaultLang);
+  }
 }
