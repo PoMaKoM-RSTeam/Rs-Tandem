@@ -1,8 +1,8 @@
 <div class="page">
   <header class="header">
     @if(!authService.isAuthenticated){
+    <tndm-lang-switcher />
     <div class="header__auth-btns">
-      <tndm-lang-switcher />
       <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
       <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
     </div>
