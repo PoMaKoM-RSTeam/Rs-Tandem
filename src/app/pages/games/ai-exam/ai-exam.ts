@@ -255,7 +255,7 @@ export class TndmAiExam implements OnDestroy {
       if (!isQuestionSkipping) this.isSkipQuestionDisabled.set(false);
     }
 
-    if (this.attemptsLeft() >= 1) this.attemptsLeft.update(attempts => attempts - 1);
+    if (!isQuestionGeneration && this.attemptsLeft() >= 1) this.attemptsLeft.update(attempts => attempts - 1);
 
     if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
 
