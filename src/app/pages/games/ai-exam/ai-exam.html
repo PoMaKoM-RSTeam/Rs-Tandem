@@ -12,13 +12,11 @@
       isDisabled: isGenerateQuestionDisabled()
     }"
     [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion({language: 'english'})" />
+    (clicked)="generateQuestion()" />
   <tndm-button
-    [btnConfig]="{ label: 'Новый вопрос', isDisabled: isGenerateQuestionDisabled()}"
-    [class.await-loading]="isLoading()"
-    (clicked)="generateQuestion({language: 'russian'})" />
-  <tndm-button
-    [btnConfig]="{label: ('aiExam.skipQuestion' | transloco: { seconds: skipQuestionSeconds()}), isDisabled: isSkipQuestionDisabled() }"
+    [btnConfig]="{
+      label: ('aiExam.skipQuestion' | transloco: { seconds: skipQuestionSeconds()}),
+      isDisabled: isSkipQuestionDisabled() }"
     [class.await-loading]="isLoading()"
     (clicked)="skipQuestion()" />
 </div>

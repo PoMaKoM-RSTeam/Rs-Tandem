@@ -10,6 +10,7 @@ import { ANSWER_ATTEMPTS, JS_TOPICS } from './services/gemini/prompt';
 import { shuffle } from 'lodash';
 import { DatabaseService } from './services/database.service';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { LanguagePreferenceService } from '../../../core/i18n/language-preferences.service';
 
 type AskAiParams = {
   messageContent: string;
@@ -30,7 +31,6 @@ type AskAiResult =
     };
 
 type GenerateQuestionParams = {
-  language: ExamLanguage;
   isQuestionSkipping?: true;
 };
 
@@ -74,6 +74,7 @@ export class TndmAiExam implements OnDestroy {
   private readonly gemini = inject(GeminiService);
   private readonly toaster = inject(ToastService);
   private readonly database = inject(DatabaseService);
+  private readonly languagePreferenceService = inject(LanguagePreferenceService);
 
   private readonly chat = viewChild(TndmChat);
   private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
@@ -89,25 +90,24 @@ export class TndmAiExam implements OnDestroy {
 
   readonly currentQuestion = signal<string | null>(null);
   private readonly initialQuestions: Record<ExamLanguage, string> = {
-    russian: `Задай вопрос про JavaScript`,
-    english: `Ask a question on JavaScript`,
+    ru: `Задай вопрос про JavaScript`,
+    en: `Ask a question on JavaScript`,
   };
 
-  readonly examLanguage = signal<ExamLanguage>('english');
+  readonly examLanguage = signal<ExamLanguage>('en');
 
   readonly SKIP_QUESTION_TIMEOUT_SECONDS = 4;
   readonly skipQuestionSeconds = signal(this.SKIP_QUESTION_TIMEOUT_SECONDS);
   skipQuestionSubscription: Subscription | null = null;
 
-  async generateQuestion({ language, isQuestionSkipping }: GenerateQuestionParams): Promise<GenerateQuestionResult> {
+  async generateQuestion({ isQuestionSkipping }: GenerateQuestionParams = {}): Promise<GenerateQuestionResult> {
     if (this.isLoading()) return { status: 'early-return' };
 
-    this.isExamFinished.set(false);
-    this.chat()?.resetChatHistory();
-    this.examLanguage.set(language);
+    const language = this.languagePreferenceService.activeLang();
+    this.setPreQuestionGenerationState(language);
 
-    const shuffled = shuffle(JS_TOPICS);
-    const selectedTopics = shuffled.slice(0, 3).join(', ');
+    const shuffledTopics = shuffle(JS_TOPICS);
+    const selectedTopics = shuffledTopics.slice(0, 3).join(', ');
 
     const response = await this.askAi({
       messageContent: this.initialQuestions[language],
@@ -220,6 +220,12 @@ export class TndmAiExam implements OnDestroy {
     return { chat, textInput };
   }
 
+  private setPreQuestionGenerationState(language: ExamLanguage): void {
+    this.isExamFinished.set(false);
+    this.chat()?.resetChatHistory();
+    this.examLanguage.set(language);
+  }
+
   private setPreRequestState(textInput: HTMLTextAreaElement): void {
     this.isLoading.set(true);
     textInput.value = '';
@@ -297,7 +303,7 @@ export class TndmAiExam implements OnDestroy {
 
     this.isSkipQuestionDisabled.set(true);
 
-    const result = await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipping: true });
+    const result = await this.generateQuestion({ isQuestionSkipping: true });
 
     switch (result.status) {
       case 'ok':

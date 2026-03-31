@@ -35,7 +35,7 @@ export class TndmChat {
 
     if (params.role === ROLES.user) {
       const langNote =
-        params.examLanguage === 'english'
+        params.examLanguage === 'en'
           ? `[System note: Exam language is English. Write your ENTIRE reply in English ` +
             '(question, feedback, headings, and the JSON "message" string). ' +
             'Ignore user typos in other languages; keep English for the exam.]'
