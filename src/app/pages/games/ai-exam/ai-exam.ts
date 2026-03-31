@@ -94,46 +94,6 @@ export class TndmAiExam implements OnDestroy {
   readonly skipQuestionSeconds = signal(this.SKIP_QUESTION_TIMEOUT_SECONDS);
   skipQuestionSubscription: Subscription | null = null;
 
-  startSkipQuestionTimeout(): void {
-    if (this.skipQuestionSubscription) return;
-
-    this.skipQuestionSubscription = interval(1000).subscribe(() => {
-      if (this.skipQuestionSeconds() <= 0) {
-        this.stopSkipQuestionTimeout();
-      } else {
-        this.skipQuestionSeconds.update(seconds => seconds - 1);
-      }
-    });
-  }
-
-  stopSkipQuestionTimeout(): void {
-    this.skipQuestionSubscription?.unsubscribe();
-    this.skipQuestionSubscription = null;
-    this.isSkipQuestionDisabled.set(false);
-    this.skipQuestionSeconds.set(this.SKIP_QUESTION_TIMEOUT_SECONDS);
-  }
-
-  ngOnDestroy(): void {
-    this.stopSkipQuestionTimeout();
-  }
-
-  async skipQuestion(): Promise<void> {
-    if (this.isLoading()) return;
-
-    this.isSkipQuestionDisabled.set(true);
-
-    const result = await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipping: true });
-
-    switch (result.status) {
-      case 'ok':
-        this.startSkipQuestionTimeout();
-        break;
-      case 'error':
-        this.isSkipQuestionDisabled.set(false);
-        break;
-    }
-  }
-
   async generateQuestion({ language, isQuestionSkipping }: GenerateQuestionParams): Promise<GenerateQuestionResult> {
     if (this.isLoading()) return { status: 'early-return' };
 
