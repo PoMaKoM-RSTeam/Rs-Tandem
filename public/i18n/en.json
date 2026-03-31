@@ -84,7 +84,13 @@
     "backToCases": "Back to Cases",
     "nextCase": "Next Case",
     "selectErrorType": "Select error type:",
-    "wrongCategory": "Wrong category, try again."
+    "wrongCategory": "Wrong category, try again.",
+    "err": {
+      "memoryLeak": "Memory Leak",
+      "performance": "Performance",
+      "bestPractice": "Best Practice / Style",
+      "security": "Security"
+    }
   },
   "golf": {
     "next": "Next Challenge",

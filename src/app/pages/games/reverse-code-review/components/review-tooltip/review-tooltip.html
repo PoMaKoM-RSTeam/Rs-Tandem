@@ -10,7 +10,9 @@
 
   <div class="review-tooltip_options">
     @for (errorType of errorTypes; track errorType) {
-    <button class="review-tooltip_option" type="button" (click)="typeSelected.emit(errorType)">{{ errorType }}</button>
+    <button class="review-tooltip_option" type="button" (click)="typeSelected.emit(errorType)">
+      {{ errorType | transloco }}
+    </button>
     }
   </div>
 </div>
