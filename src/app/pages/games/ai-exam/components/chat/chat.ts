@@ -12,7 +12,7 @@ type UpdateChatHistoryParams =
       content: string;
       examLanguage: ExamLanguage;
       remainingAttempts: number;
-      isGeneratingQuestion: boolean;
+      isQuestionGeneration: boolean;
       selectedTopics?: string;
     };
 
@@ -45,7 +45,7 @@ export class TndmChat {
       parts.push({ text: langNote });
       parts.push({ text: `[System note: Remaining attempts: ${params.remainingAttempts}]` });
 
-      if (params.isGeneratingQuestion) {
+      if (params.isQuestionGeneration) {
         parts.push({
           text: `[System note: You MUST ask a question specifically related
           to one of these topics: ${params.selectedTopics}.]`,

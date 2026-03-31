@@ -33,7 +33,7 @@
     rows="4"
     [class.await-loading]="isLoading()"
     [disabled]="isAnswerQuestionDisabled() || isLoading()"
-    (keydown)="onTextareaKeydown($event, answerForm)"></textarea>
+    (keydown)="onTextInputKeydown($event, answerForm)"></textarea>
   <tndm-button
     [btnConfig]="{label: 'Answer the question', type: 'submit', isDisabled: isAnswerQuestionDisabled()}"
     [class.await-loading]="isLoading()" />

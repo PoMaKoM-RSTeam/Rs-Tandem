@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, sign
 import { interval, Subscription } from 'rxjs';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { GeminiService } from './services/gemini/gemini.service';
-import { ExamLanguage, ROLES } from './shared/types';
+import { ExamLanguage, GeminiResponse, ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
@@ -13,9 +13,9 @@ import { DatabaseService } from './services/database.service';
 type AskAiParams = {
   messageContent: string;
   examLanguage: ExamLanguage;
-  isGeneratingQuestion: boolean;
+  isQuestionGeneration: boolean;
   selectedTopics?: string;
-  isQuestionSkipped?: true;
+  isQuestionSkipping?: true;
 };
 
 type AskAiResult =
@@ -30,7 +30,7 @@ type AskAiResult =
 
 type GenerateQuestionParams = {
   language: ExamLanguage;
-  isQuestionSkipped?: true;
+  isQuestionSkipping?: true;
 };
 
 type GenerateQuestionResult =
@@ -49,6 +49,12 @@ type GenerateQuestionResult =
 type FinishExamParams = {
   isExamPassed: boolean;
   score: number;
+};
+
+type ProcessApiResponseParams = {
+  isQuestionGeneration: boolean;
+  isQuestionSkipping?: true;
+  response: GeminiResponse;
 };
 
 @Component({
@@ -116,7 +122,7 @@ export class TndmAiExam implements OnDestroy {
 
     this.isSkipQuestionDisabled.set(true);
 
-    const result = await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipped: true });
+    const result = await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipping: true });
 
     switch (result.status) {
       case 'ok':
@@ -128,7 +134,7 @@ export class TndmAiExam implements OnDestroy {
     }
   }
 
-  async generateQuestion({ language, isQuestionSkipped }: GenerateQuestionParams): Promise<GenerateQuestionResult> {
+  async generateQuestion({ language, isQuestionSkipping }: GenerateQuestionParams): Promise<GenerateQuestionResult> {
     if (this.isLoading()) return { status: 'early-return' };
 
     this.isExamFinished.set(false);
@@ -141,9 +147,9 @@ export class TndmAiExam implements OnDestroy {
     const response = await this.askAi({
       messageContent: this.initialQuestions[language],
       examLanguage: language,
-      isGeneratingQuestion: true,
+      isQuestionGeneration: true,
       selectedTopics,
-      isQuestionSkipped,
+      isQuestionSkipping,
     });
 
     if (response.status === 'ok') {
@@ -173,18 +179,19 @@ export class TndmAiExam implements OnDestroy {
       return;
     }
 
-    this.askAi({ messageContent: userAnswer, isGeneratingQuestion: false, examLanguage });
+    this.askAi({ messageContent: userAnswer, isQuestionGeneration: false, examLanguage });
   }
 
   private async askAi({
     messageContent,
     examLanguage,
-    isGeneratingQuestion,
+    isQuestionGeneration,
     selectedTopics,
-    isQuestionSkipped,
+    isQuestionSkipping,
   }: AskAiParams): Promise<AskAiResult> {
-    this.isLoading.set(true);
-    textInput.value = '';
+    const { chat, textInput } = this.getUiChatElements();
+
+    this.setPreRequestState(textInput);
 
     try {
       chat.updateChatHistory({
@@ -192,35 +199,17 @@ export class TndmAiExam implements OnDestroy {
         content: messageContent,
         examLanguage,
         remainingAttempts: this.attemptsLeft(),
-        isGeneratingQuestion: isGeneratingQuestion,
+        isQuestionGeneration,
         selectedTopics,
       });
       const response = await this.gemini.ask(chat.allMessages());
       chat.updateChatHistory({ role: ROLES.model, content: response.message });
 
-      console.log(response);
-
-      if (isGeneratingQuestion) {
-        this.isAnswerQuestionDisabled.set(false);
-        if (!isQuestionSkipped) this.isSkipQuestionDisabled.set(false);
-      }
-
-      if (this.attemptsLeft() >= 1) this.attemptsLeft.update(attempts => attempts - 1);
-
-      if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
-
-      return { status: 'ok', message: response.message };
+      return this.processApiResponse({ isQuestionGeneration, isQuestionSkipping, response });
     } catch (error) {
-      this.toaster.warning(`API error`, `Failed to send request`);
-      this.stopSkipQuestionTimeout();
-
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(errorMessage);
-
-      return { status: 'error', errorMessage };
+      return this.processApiError(error);
     } finally {
-      this.isLoading.set(false);
-      if (!this.isAnswerQuestionDisabled()) this.focusTextInput();
+      this.setAfterRequestState();
     }
   }
 
@@ -263,5 +252,53 @@ export class TndmAiExam implements OnDestroy {
 
     event.preventDefault();
     form.requestSubmit();
+  }
+
+  private getUiChatElements(): { chat: TndmChat; textInput: HTMLTextAreaElement } {
+    const chat = this.chat();
+    const textInput = this.textInput()?.nativeElement;
+    if (!chat) throw new Error('Chat element not found');
+    if (!textInput) throw new Error('textInput element not found');
+
+    return { chat, textInput };
+  }
+
+  private setPreRequestState(textInput: HTMLTextAreaElement): void {
+    this.isLoading.set(true);
+    textInput.value = '';
+  }
+
+  private setAfterRequestState(): void {
+    this.isLoading.set(false);
+    if (!this.isAnswerQuestionDisabled()) this.focusTextInput();
+  }
+
+  private processApiResponse({
+    isQuestionGeneration,
+    isQuestionSkipping,
+    response,
+  }: ProcessApiResponseParams): AskAiResult {
+    console.log(response);
+
+    if (isQuestionGeneration) {
+      this.isAnswerQuestionDisabled.set(false);
+      if (!isQuestionSkipping) this.isSkipQuestionDisabled.set(false);
+    }
+
+    if (this.attemptsLeft() >= 1) this.attemptsLeft.update(attempts => attempts - 1);
+
+    if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
+
+    return { status: 'ok', message: response.message };
+  }
+
+  private processApiError(error: unknown): AskAiResult {
+    this.toaster.warning(`API error`, `Failed to send request`);
+    this.stopSkipQuestionTimeout();
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(errorMessage);
+
+    return { status: 'error', errorMessage };
   }
 }

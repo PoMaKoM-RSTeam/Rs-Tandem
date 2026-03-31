@@ -11,3 +11,10 @@ export type Message = {
   role: Role;
   parts: { text: string }[];
 };
+
+export type GeminiResponse = {
+  isExamFinished: boolean;
+  isExamPassed: boolean;
+  message: string;
+  score: number;
+};

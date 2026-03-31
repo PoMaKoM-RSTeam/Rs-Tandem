@@ -1,14 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Message } from '../../shared/types';
+import { GeminiResponse, Message } from '../../shared/types';
 import { SupabaseService } from '../../../../../core/supabase/supabase-service';
 import { PASSING_SCORE, SYSTEM_INSTRUCTION } from './prompt';
-
-export type GeminiResponse = {
-  isExamFinished: boolean;
-  isExamPassed: boolean;
-  message: string;
-  score: number;
-};
 
 @Injectable()
 export class GeminiService {
