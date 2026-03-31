@@ -9,6 +9,7 @@ import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './services/gemini/prompt';
 import { shuffle } from 'lodash';
 import { DatabaseService } from './services/database.service';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 type AskAiParams = {
   messageContent: string;
@@ -65,7 +66,7 @@ type SetFinishExamStateParams = {
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
-  imports: [TndmButton, TndmToaster, TndmChat],
+  imports: [TndmButton, TndmToaster, TndmChat, TranslocoPipe],
   providers: [GeminiService, DatabaseService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

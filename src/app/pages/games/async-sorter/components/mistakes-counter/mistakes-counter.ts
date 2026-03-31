@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-
+import { TranslocoPipe } from '@jsverse/transloco';
 @Component({
   selector: 'tndm-mistakes-counter',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './mistakes-counter.html',
   styleUrl: './mistakes-counter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

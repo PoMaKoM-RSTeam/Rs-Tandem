@@ -11,6 +11,7 @@ import { TndmMovesCounter } from './components/moves-counter/moves-counter';
 import { TndmMistakesCounter } from './components/mistakes-counter/mistakes-counter';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-async-sorter',
@@ -26,6 +27,7 @@ import { ToastService } from '../../../core/toast/toast-service';
     TndmTimer,
     TndmMovesCounter,
     TndmMistakesCounter,
+    TranslocoPipe,
   ],
   providers: [AsyncSorterFetcherService],
   changeDetection: ChangeDetectionStrategy.OnPush,

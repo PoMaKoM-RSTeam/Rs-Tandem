@@ -13,13 +13,14 @@ import { highlightCode } from '../../helpers/highlight-code';
 import { LineState } from '../../models/line-state.model';
 import { ErrorType } from '../../models/error-type.enum';
 import { TndmReviewTooltip } from '../review-tooltip/review-tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-code-viewer',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'code-viewer' },
-  imports: [TndmReviewTooltip],
+  imports: [TndmReviewTooltip, TranslocoPipe],
   templateUrl: './code-viewer.html',
   styleUrl: './code-viewer.scss',
 })

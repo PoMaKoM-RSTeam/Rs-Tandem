@@ -22,5 +22,5 @@
 
 <div class="controls">
   <tndm-button [btnConfig]="checkBtnConfig()" (click)="service.checkSolution()" />
-  <tndm-button [btnConfig]="nextBtnConfig" (click)="service.nextChallenge()" />
+  <tndm-button [btnConfig]="{ label: ('golf.next' | transloco) }" (click)="service.nextChallenge()" />
 </div>

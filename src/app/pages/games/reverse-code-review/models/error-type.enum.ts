@@ -1,6 +1,6 @@
 export enum ErrorType {
-  MemoryLeak = 'Memory Leak',
-  Performance = 'Performance',
-  BestPractice = 'Best Practice / Style',
-  Security = 'Security',
+  MemoryLeak = 'reverseCodeReview.err.memoryLeak',
+  Performance = 'reverseCodeReview.err.performance',
+  BestPractice = 'reverseCodeReview.err.bestPractice',
+  Security = 'reverseCodeReview.err.security',
 }

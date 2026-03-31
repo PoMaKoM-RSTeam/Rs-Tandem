@@ -9,6 +9,91 @@
       "title": "MyPartial",
       "description": "Transform params into optional.",
       "hint": "Partial. Put `?` after second bracket."
+    },
+    "mediumNonNullable": {
+      "title": "MyNonNullable",
+      "description": "Write Conditional Type that removes null and undefined from T.",
+      "hint": "Conditional Type: T extends null | undefined ? never : T"
+    },
+    "mediumReturntype": {
+      "title": "MyReturnType",
+      "description": "Write a type that extracts the return type of function `T` (infer).",
+      "hint": "infer R allows you to \"capture\" the type in a conditional expression. It follows the pattern (...:[]) => R"
+    },
+    "hardReadonlyPartial": {
+      "title": "ReadonlyPartial",
+      "description": "Create a type that makes all properties of object T both readonly and optional.",
+      "hint": "Both modifiers can be applied together: readonly [K in keyof T]?"
+    },
+    "solved": "Puzzle solved!",
+    "empty": "All blocks placed",
+    "available": "Available blocks"
+  },
+  "auth": {
+    "title": "Welcome to Tandem",
+    "subtitle": "Please sign-in or sign-up to start using our App"
+  },
+  "home": {
+    "description": "Master the tech interview through interactive challenges. Debug the Event Loop, solve TS Investigator mysteries, and win at Code Golf.",
+    "joinButton": "create an account"
+  },
+  "nfound": {
+    "title": "Page not found",
+    "subtitle": "404",
+    "body": "The page you requested does not exist. You may have entered an invalid address or the page has been removed.",
+    "mainbtn": "go to the main page"
+  },
+  "sandbox": {
+    "livePreview": "Live Preview"
+  },
+  "aiExam": {
+    "description": "Generate a random question and answer it.",
+    "descriptionLine2": "You have roughly {{maxAllowedAttempts}}-{{oneMoreThanMax}} attempts to give the right answer. Don't waste them. Every message counts.",
+    "generateQuestion": "Generate question",
+    "skipQuestion": "Skip question ({{seconds}} sec)",
+    "answerLabel": "Write your answer to the question:",
+    "answerPlaceholder": "Your answer",
+    "answerButton": "Answer the question",
+    "messageRequired": "Message required",
+    "provideMessage": "Provide a message to AI",
+    "examFinished": "Exam finished!",
+    "checkScore": "Check your final score.",
+    "apiError": "API error",
+    "failedRequest": "Failed to send request"
+  },
+  "asyncSorter": {
+    "heading": "Async sorter",
+    "runLoop": "Run loop",
+    "codeBlocks": "Code Blocks",
+    "finalCallStack": "Final Call Stack",
+    "wrongMoves": "Wrong moves:",
+    "moves": "Moves:",
+    "movesBeforeFirstMistake": "Moves before first mistake:",
+    "timeElapsed": "Time elapsed:",
+    "failedSave": "Failed to save results to DB"
+  },
+  "reverseCodeReview": {
+    "selectCase": "Select a case from the sidebar.",
+    "cases": "Cases",
+    "found": "Found",
+    "errors": "errors",
+    "score": "Score:",
+    "points": "points",
+    "caseSolved": "Case Solved!",
+    "codeReviewedDone": "Code reviewed. Done!",
+    "backToCases": "Back to Cases",
+    "nextCase": "Next Case",
+    "selectErrorType": "Select error type:",
+    "wrongCategory": "Wrong category, try again.",
+    "err": {
+      "memoryLeak": "Memory Leak",
+      "performance": "Performance",
+      "bestPractice": "Best Practice / Style",
+      "security": "Security"
     }
+  },
+  "golf": {
+    "next": "Next Challenge",
+    "check": "Check solution"
   }
 }

@@ -4,12 +4,17 @@
     tabindex="0"
     (click)="onOverlayClick($event)"
     (keydown.enter)="$event.stopPropagation()">
-    <h2 class="completion-modal_title" id="completion-title">Case Solved!</h2>
-    <p class="completion-modal_score">Score: <strong>{{ score() }}</strong> / {{ maxScore() }} points</p>
-    <p class="completion-modal_message">Code reviewed. Done!</p>
+    <h2 class="completion-modal_title" id="completion-title">{{ 'reverseCodeReview.caseSolved' | transloco }}</h2>
+    <p class="completion-modal_score">
+      {{ 'reverseCodeReview.score' | transloco }} <strong>{{ score() }}</strong> / {{ maxScore() }} {{
+      'reverseCodeReview.points' | transloco }}
+    </p>
+    <p class="completion-modal_message">{{ 'reverseCodeReview.codeReviewedDone' | transloco }}</p>
     <div class="completion-modal_actions">
-      <tndm-button [btnConfig]="{ variant: 'secondary', label: 'Back to Cases' }" (clicked)="closed.emit()" />
-      <tndm-button [btnConfig]="{ label: 'Next Case' }" (clicked)="nextCase.emit()" />
+      <tndm-button
+        [btnConfig]="{ variant: 'secondary', label: ('reverseCodeReview.backToCases' | transloco) }"
+        (clicked)="closed.emit()" />
+      <tndm-button [btnConfig]="{ label: ('reverseCodeReview.nextCase' | transloco) }" (clicked)="nextCase.emit()" />
     </div>
   </div>
 </div>
