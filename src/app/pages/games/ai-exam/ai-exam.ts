@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { GeminiService } from './gemini.service';
+import { GeminiService } from './services/gemini/gemini.service';
 import { ExamLanguage, ROLES } from './shared/types';
 import { TndmToaster } from '../../../shared/ui/tndm-toaster/tndm-toaster';
 import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
-import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
+import { ANSWER_ATTEMPTS, JS_TOPICS } from './services/gemini/prompt';
 import { shuffle } from 'lodash';
-import { DatabaseService } from './database.service';
+import { DatabaseService } from './services/database.service';
 
 type AskAiParams = {
   messageContent: string;
@@ -18,19 +18,37 @@ type AskAiParams = {
   isQuestionSkipped?: true;
 };
 
-type generateQuestionParams = {
+type AskAiResult =
+  | {
+      status: 'ok';
+      message: string;
+    }
+  | {
+      status: 'error';
+      errorMessage: string;
+    };
+
+type GenerateQuestionParams = {
   language: ExamLanguage;
   isQuestionSkipped?: true;
 };
 
+type GenerateQuestionResult =
+  | {
+      status: 'early-return';
+    }
+  | {
+      status: 'error';
+      errorMessage: string;
+    }
+  | {
+      status: 'ok';
+      question: string;
+    };
+
 type FinishExamParams = {
   isExamPassed: boolean;
   score: number;
-};
-
-const INITIAL_QUESTIONS: Record<ExamLanguage, string> = {
-  russian: `Задай вопрос про JavaScript`,
-  english: `Ask a question on JavaScript`,
 };
 
 @Component({
@@ -57,15 +75,18 @@ export class TndmAiExam implements OnDestroy {
 
   readonly MAX_ALLOWED_ATTEMPTS = ANSWER_ATTEMPTS;
   readonly attemptsLeft = signal(this.MAX_ALLOWED_ATTEMPTS);
+
   readonly currentQuestion = signal<string | null>(null);
+  private readonly initialQuestions: Record<ExamLanguage, string> = {
+    russian: `Задай вопрос про JavaScript`,
+    english: `Ask a question on JavaScript`,
+  };
 
   readonly examLanguage = signal<ExamLanguage>('english');
 
-  private readonly initialQuestions = INITIAL_QUESTIONS;
-
   readonly SKIP_QUESTION_TIMEOUT_SECONDS = 4;
   readonly skipQuestionSeconds = signal(this.SKIP_QUESTION_TIMEOUT_SECONDS);
-  skipQuestionSubscription: Subscription | undefined;
+  skipQuestionSubscription: Subscription | null = null;
 
   startSkipQuestionTimeout(): void {
     if (this.skipQuestionSubscription) return;
@@ -81,7 +102,7 @@ export class TndmAiExam implements OnDestroy {
 
   stopSkipQuestionTimeout(): void {
     this.skipQuestionSubscription?.unsubscribe();
-    this.skipQuestionSubscription = undefined;
+    this.skipQuestionSubscription = null;
     this.isSkipQuestionDisabled.set(false);
     this.skipQuestionSeconds.set(this.SKIP_QUESTION_TIMEOUT_SECONDS);
   }
@@ -91,13 +112,24 @@ export class TndmAiExam implements OnDestroy {
   }
 
   async skipQuestion(): Promise<void> {
+    if (this.isLoading()) return;
+
     this.isSkipQuestionDisabled.set(true);
-    await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipped: true });
-    this.startSkipQuestionTimeout();
+
+    const result = await this.generateQuestion({ language: this.examLanguage(), isQuestionSkipped: true });
+
+    switch (result.status) {
+      case 'ok':
+        this.startSkipQuestionTimeout();
+        break;
+      case 'error':
+        this.isSkipQuestionDisabled.set(false);
+        break;
+    }
   }
 
-  async generateQuestion({ language, isQuestionSkipped }: generateQuestionParams): Promise<void> {
-    if (this.isLoading()) return;
+  async generateQuestion({ language, isQuestionSkipped }: GenerateQuestionParams): Promise<GenerateQuestionResult> {
+    if (this.isLoading()) return { status: 'early-return' };
 
     this.isExamFinished.set(false);
     this.chat()?.resetChatHistory();
@@ -106,7 +138,7 @@ export class TndmAiExam implements OnDestroy {
     const shuffled = shuffle(JS_TOPICS);
     const selectedTopics = shuffled.slice(0, 3).join(', ');
 
-    const question = await this.askAi({
+    const response = await this.askAi({
       messageContent: this.initialQuestions[language],
       examLanguage: language,
       isGeneratingQuestion: true,
@@ -114,10 +146,13 @@ export class TndmAiExam implements OnDestroy {
       isQuestionSkipped,
     });
 
-    if (question) {
+    if (response.status === 'ok') {
       this.isGenerateQuestionDisabled.set(true);
-      this.currentQuestion.set(question);
+      this.currentQuestion.set(response.message);
+      return { status: 'ok', question: response.message };
     }
+
+    return { status: 'error', errorMessage: response.errorMessage };
   }
 
   async answerQuestion(event: Event): Promise<void> {
@@ -154,7 +189,7 @@ export class TndmAiExam implements OnDestroy {
     isGeneratingQuestion,
     selectedTopics,
     isQuestionSkipped,
-  }: AskAiParams): Promise<string | undefined> {
+  }: AskAiParams): Promise<AskAiResult> {
     const chat = this.chat();
     const textInput = this.textInput()?.nativeElement;
     if (!chat) throw new Error('Chat element not found');
@@ -180,20 +215,23 @@ export class TndmAiExam implements OnDestroy {
         this.isAnswerQuestionDisabled.set(false);
         if (!isQuestionSkipped) this.isSkipQuestionDisabled.set(false);
       } else if (this.attemptsLeft() >= 1) {
-        this.attemptsLeft.update(attempt => (attempt -= 1));
+        this.attemptsLeft.update(attempts => attempts - 1);
       }
 
       if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
 
-      return response.message;
+      return { status: 'ok', message: response.message };
     } catch (error) {
       this.toaster.warning(`API error`, `Failed to send request`);
       this.stopSkipQuestionTimeout();
-      console.error(error);
-      return undefined;
+
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(errorMessage);
+
+      return { status: 'error', errorMessage };
     } finally {
       this.isLoading.set(false);
-      if (!this.isAnswerQuestionDisabled()) this.focusAnswerTextarea();
+      if (!this.isAnswerQuestionDisabled()) this.focusTextInput();
     }
   }
 
@@ -222,7 +260,7 @@ export class TndmAiExam implements OnDestroy {
     }
   }
 
-  private focusAnswerTextarea(): void {
+  private focusTextInput(): void {
     requestAnimationFrame(() => {
       const textInput = this.textInput()?.nativeElement;
       if (!textInput) return;

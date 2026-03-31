@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { SupabaseService } from '../../../core/supabase/supabase-service';
+import { SupabaseService } from '../../../../core/supabase/supabase-service';
 import { PostgrestError } from '@supabase/supabase-js';
 
 type ExamResults = {
