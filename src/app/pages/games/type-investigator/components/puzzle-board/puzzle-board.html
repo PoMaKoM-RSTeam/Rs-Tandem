@@ -48,7 +48,7 @@
   </div>
 
   <div class="puzzle-board_palette-section">
-    <p class="puzzle-board_palette-label" id="palette-label">Available blocks</p>
+    <p class="puzzle-board_palette-label" id="palette-label">{{"typeInvestigator.available" | transloco}}</p>
     <div
       cdkDropList
       class="puzzle-board_palette"
@@ -70,7 +70,7 @@
         <div cdkDragPlaceholder class="puzzle-board_placeholder"></div>
       </div>
       } } @if (state().paletteBlockIds.length === 0) {
-      <span class="puzzle-board_palette-empty">All blocks placed</span>
+      <span class="puzzle-board_palette-empty">{{"typeInvestigator.empty" | transloco}}</span>
       }
     </div>
   </div>
@@ -81,13 +81,13 @@
   </div>
 
   @if (showHint()) {
-  <aside class="puzzle-board_hint">{{ puzzle().hintText }}</aside>
+  <aside class="puzzle-board_hint">{{ puzzle().hintText | transloco }}</aside>
   }
   <button class="puzzle-board_hint-toggle" type="button" (click)="toggleHint()">
     {{ showHint() ? 'Hide hint' : 'Show hint' }}
   </button>
 
   @if (isSolved()) {
-  <div class="puzzle-board_success">Puzzle solved!</div>
+  <div class="puzzle-board_success">{{"typeInvestigator.solved" | transloco}}</div>
   }
 </article>

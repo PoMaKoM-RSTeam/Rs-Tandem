@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, OnDestroy, signal } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-timer',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './timer.html',
   styleUrl: './timer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

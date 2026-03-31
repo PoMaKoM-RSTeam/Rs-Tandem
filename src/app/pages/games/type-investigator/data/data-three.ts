@@ -5,9 +5,9 @@ export const DATA_THREE: Puzzle[] = [
   {
     id: 'hard-readonly-partial',
     difficulty: PuzzleDifficulty.Hard,
-    title: 'ReadonlyPartial',
-    description: 'Create a type that makes all properties of object T both readonly and optional.',
-    hintText: 'Both modifiers can be applied together: readonly [K in keyof T]?',
+    title: 'typeInvestigator.hardReadonlyPartial.title',
+    description: 'typeInvestigator.hardReadonlyPartial.description',
+    hintText: 'typeInvestigator.hardReadonlyPartial.hint',
     availableBlocks: [
       { id: 'one', label: 'T', type: 'identifier' },
       { id: 'two', label: 'K', type: 'identifier' },

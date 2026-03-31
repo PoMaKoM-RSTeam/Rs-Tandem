@@ -7,6 +7,7 @@ import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './shared/prompt';
 import { shuffle } from 'lodash';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 type AskAiParams = {
   messageContent?: string;
@@ -18,7 +19,7 @@ type AskAiParams = {
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
-  imports: [TndmButton, TndmToaster, TndmChat],
+  imports: [TndmButton, TndmToaster, TndmChat, TranslocoPipe],
   providers: [GeminiService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

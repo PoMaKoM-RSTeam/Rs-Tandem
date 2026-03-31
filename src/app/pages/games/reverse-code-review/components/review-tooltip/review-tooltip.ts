@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ErrorType } from '../../models/error-type.enum';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-review-tooltip',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TranslocoPipe],
   styleUrl: './review-tooltip.scss',
   templateUrl: './review-tooltip.html',
 })

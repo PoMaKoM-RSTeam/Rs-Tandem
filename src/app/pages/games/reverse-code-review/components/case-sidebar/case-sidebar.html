@@ -1,5 +1,5 @@
 <aside class="sidebar">
-  <h2 class="sidebar_title">Cases</h2>
+  <h2 class="sidebar_title">{{ 'reverseCodeReview.cases' | transloco }}</h2>
   <ul class="sidebar_list">
     @for (reviewCase of cases(); track reviewCase.id; let idx = $index) {
     <li>

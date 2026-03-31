@@ -1,14 +1,99 @@
 {
   "typeInvestigator": {
     "easyReadonly": {
-      "title": "easy-readonly",
-      "description": "Сделай T readonly. Создай mapped type с модификатором readonly.",
-      "hint": "Mapped type: [K in keyof T]. Модификаторы (например, readonly) ставятся перед скобками."
+      "title": "MyReadonly",
+      "description": "Сделайте T readonly. То есть создайте mapped type с модификатором readonly.",
+      "hint": "Mapped type: [K in keyof T]. Модификаторы (например, infer) ставятся перед квадратными скобками."
     },
     "easyPartial": {
       "title": "MyPartial",
-      "description": "Сделай все параметры опциональными.",
-      "hint": "Partial. Поставь `?` после второй скобки."
+      "description": "Сделайте параметры необязательными (опциональными).",
+      "hint": "Partial. Поставьте `?` после второй скобки."
+    },
+    "mediumNonNullable": {
+      "title": "MyNonNullable",
+      "description": "Напишите Conditional Type, который убирает null и undefined из T.",
+      "hint": "Conditional Type: T extends null | undefined ? never : T"
+    },
+    "mediumReturntype": {
+      "title": "MyReturnType",
+      "description": "Напишите тип, который извлекает возвращаемый тип функции T (с помощью infer).",
+      "hint": "infer R позволяет «захватить» тип внутри условного выражения. Паттерн: (...args: any[]) => R"
+    },
+    "hardReadonlyPartial": {
+      "title": "ReadonlyPartial",
+      "description": "Создайте тип, который делает все свойства объекта T одновременно readonly и optional.",
+      "hint": "Оба модификатора можно применять вместе: readonly [K in keyof T]?"
+    },
+    "solved": "Пазл решён!",
+    "empty": "Все блоки уже размещены",
+    "available": "Доступные блоки"
+  },
+  "auth": {
+    "title": "Добро пожаловать в Tandem",
+    "subtitle": "Чтобы использовать наше приложение, пожалуйста, войдите или зарегистрируйтесь."
+  },
+  "home": {
+    "description": "Подготовься к техническому интервью, выполняя интерактивные задания. Отлаживай Event Loop, разгадывай тайны TS Investigator и побеждай в Code Golf.",
+    "joinButton": "создать аккаунт"
+  },
+  "nfound": {
+    "title": "Страница не найдена",
+    "subtitle": "404",
+    "body": "Запрошенная вами страница не существует. Возможно, вы ввели неверный адрес или страница была удалена.",
+    "mainbtn": "Перейти на главную страницу"
+  },
+  "sandbox": {
+    "livePreview": "Предпросмотр"
+  },
+  "aiExam": {
+    "description": "Сгенерируй случайный вопрос и ответь на него.",
+    "descriptionLine2": "У тебя ограниченное количество попыток. Не трать их впустую. Каждое сообщение на счету.",
+    "generateQuestion": "Сгенерировать вопрос",
+    "skipQuestion": "Пропустить вопрос",
+    "answerLabel": "Напиши ответ на вопрос:",
+    "answerPlaceholder": "Твой ответ",
+    "answerButton": "Ответить на вопрос",
+    "messageRequired": "Сообщение обязательно",
+    "provideMessage": "Напиши сообщение для ИИ",
+    "examFinished": "Экзамен завершён!",
+    "checkScore": "Проверь свой итоговый результат.",
+    "apiError": "Ошибка API",
+    "failedRequest": "Не удалось отправить запрос"
+  },
+  "asyncSorter": {
+    "heading": "Async-сортировщик",
+    "runLoop": "Запустить цикл",
+    "codeBlocks": "Блоки кода",
+    "finalCallStack": "Итоговый Call Stack",
+    "wrongMoves": "Ошибочные ходы:",
+    "moves": "Ходы:",
+    "movesBeforeFirstMistake": "Ходов до первой ошибки:",
+    "timeElapsed": "Прошло времени:",
+    "failedSave": "Не удалось сохранить результаты в БД"
+  },
+  "reverseCodeReview": {
+    "selectCase": "Выберите кейс из боковой панели.",
+    "cases": "Кейсы",
+    "found": "Найдено",
+    "errors": "ошибок",
+    "score": "Счёт:",
+    "points": "очков",
+    "caseSolved": "Кейс решён!",
+    "codeReviewedDone": "Код проверен. Готово!",
+    "backToCases": "К списку кейсов",
+    "nextCase": "Следующий кейс",
+    "selectErrorType": "Выберите тип ошибки:",
+    "wrongCategory": "Неверная категория, попробуйте ещё раз.",
+    "err": {
+      "memoryLeak": "Утечка памяти",
+      "performance": "Производительность",
+      "bestPractice": "«Лучшие практики»",
+      "security": "Безопасность"
     }
+  },
+  "golf": {
+    "next": "Следующее задание",
+    "check": "Проверить решение"
   }
 }

@@ -4,6 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { DEFAULT_SANDBOX_CODE } from './sandbox.constants';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
@@ -11,7 +12,7 @@ type Tab = 'HTML' | 'CSS' | 'JS';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  imports: [FormsModule, MatTabsModule, MonacoEditorModule],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TranslocoPipe],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],
 })

@@ -1,34 +1,44 @@
 <tndm-toaster />
 <p>
-  Generate a random question and answer it.<br />
-  You have limited attempts to give the right answer. Don't waste them. Every message counts.
+  {{ 'aiExam.description' | transloco }}<br />
+  {{ 'aiExam.descriptionLine2' | transloco }}
 </p>
 
 <div class="button-wrapper">
   <tndm-button
-    [btnConfig]="{ label: 'Generate question', isDisabled: isGenerateQuestionDisabled()}"
+    [btnConfig]="{
+      label: ('aiExam.generateQuestion' | transloco),
+      isDisabled: isGenerateQuestionDisabled()
+    }"
     [class.await-loading]="isLoading()"
     (clicked)="generateQuestion()" />
   <tndm-button
-    [btnConfig]="{ label: 'Skip question', isDisabled: isSkipQuestionDisabled() }"
+    [btnConfig]="{
+      label: ('aiExam.skipQuestion' | transloco),
+      isDisabled: isSkipQuestionDisabled()
+    }"
     [class.await-loading]="isLoading()" />
 </div>
 
 <tndm-chat [isLoading]="isLoading()" />
 
 <form #answerForm (submit)="answerQuestion($event)">
-  <label for="user-answer">Write your answer to the question:</label>
+  <label for="user-answer">{{ 'aiExam.answerLabel' | transloco }}</label>
   <textarea
     #textInput
     cols="10"
     id="user-answer"
     name="user-answer"
-    placeholder="Your answer"
+    placeholder="{{ 'aiExam.answerPlaceholder' | transloco }}"
     rows="4"
     [class.await-loading]="isLoading()"
     [disabled]="isAnswerQuestionDisabled() || isLoading()"
     (keydown)="onTextareaKeydown($event, answerForm)"></textarea>
   <tndm-button
-    [btnConfig]="{label: 'Answer the question', type: 'submit', isDisabled: isAnswerQuestionDisabled()}"
+    [btnConfig]="{
+      label: ('aiExam.answerButton' | transloco),
+      type: 'submit',
+      isDisabled: isAnswerQuestionDisabled()
+    }"
     [class.await-loading]="isLoading()" />
 </form>
