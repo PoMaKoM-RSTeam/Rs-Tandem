@@ -157,6 +157,7 @@ export class TndmAiExam implements OnDestroy {
 
   async answerQuestion(event: Event): Promise<void> {
     event.preventDefault();
+
     const examLanguage = this.examLanguage();
     if (!examLanguage) throw new Error('Exam language is not set');
 
@@ -175,14 +176,6 @@ export class TndmAiExam implements OnDestroy {
     this.askAi({ messageContent: userAnswer, isGeneratingQuestion: false, examLanguage });
   }
 
-  onTextareaKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
-    if (event.key !== 'Enter' || event.shiftKey) return;
-    if (this.isLoading() || this.isAnswerQuestionDisabled()) return;
-
-    event.preventDefault();
-    form.requestSubmit();
-  }
-
   private async askAi({
     messageContent,
     examLanguage,
@@ -190,11 +183,6 @@ export class TndmAiExam implements OnDestroy {
     selectedTopics,
     isQuestionSkipped,
   }: AskAiParams): Promise<AskAiResult> {
-    const chat = this.chat();
-    const textInput = this.textInput()?.nativeElement;
-    if (!chat) throw new Error('Chat element not found');
-    if (!textInput) throw new Error('textInput element not found');
-
     this.isLoading.set(true);
     textInput.value = '';
 
@@ -209,14 +197,15 @@ export class TndmAiExam implements OnDestroy {
       });
       const response = await this.gemini.ask(chat.allMessages());
       chat.updateChatHistory({ role: ROLES.model, content: response.message });
+
       console.log(response);
 
       if (isGeneratingQuestion) {
         this.isAnswerQuestionDisabled.set(false);
         if (!isQuestionSkipped) this.isSkipQuestionDisabled.set(false);
-      } else if (this.attemptsLeft() >= 1) {
-        this.attemptsLeft.update(attempts => attempts - 1);
       }
+
+      if (this.attemptsLeft() >= 1) this.attemptsLeft.update(attempts => attempts - 1);
 
       if (response.isExamFinished) this.finishExam({ isExamPassed: response.isExamPassed, score: response.score });
 
@@ -266,5 +255,13 @@ export class TndmAiExam implements OnDestroy {
       if (!textInput) return;
       textInput.focus();
     });
+  }
+
+  onTextInputKeydown(event: KeyboardEvent, form: HTMLFormElement): void {
+    if (event.key !== 'Enter' || event.shiftKey) return;
+    if (this.isLoading() || this.isAnswerQuestionDisabled()) return;
+
+    event.preventDefault();
+    form.requestSubmit();
   }
 }
