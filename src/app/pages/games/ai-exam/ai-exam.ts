@@ -57,6 +57,10 @@ type ProcessApiResponseParams = {
   response: GeminiResponse;
 };
 
+type SetFinishExamStateParams = {
+  isExamPassed: boolean;
+};
+
 @Component({
   selector: 'tndm-ai-exam',
   templateUrl: 'ai-exam.html',
@@ -181,21 +185,13 @@ export class TndmAiExam implements OnDestroy {
       isExamPassed,
       score,
     });
+
     if (error) {
       this.toaster.warning(`Failed to save results to DB`, error.message);
       console.error(error);
     }
 
-    this.isAnswerQuestionDisabled.set(true);
-    this.isSkipQuestionDisabled.set(true);
-    this.isGenerateQuestionDisabled.set(false);
-    this.isExamFinished.set(true);
-    this.attemptsLeft.set(this.MAX_ALLOWED_ATTEMPTS);
-    if (isExamPassed) {
-      this.toaster.success(`Exam finished 🥳`, `You passed!`);
-    } else {
-      this.toaster.info(`You didn't make it 😢`, `Good luck next time`);
-    }
+    this.setFinishExamState({ isExamPassed });
   }
 
   private focusTextInput(): void {
@@ -226,6 +222,20 @@ export class TndmAiExam implements OnDestroy {
   private setPreRequestState(textInput: HTMLTextAreaElement): void {
     this.isLoading.set(true);
     textInput.value = '';
+  }
+
+  private setFinishExamState({ isExamPassed }: SetFinishExamStateParams): void {
+    this.isAnswerQuestionDisabled.set(true);
+    this.isSkipQuestionDisabled.set(true);
+    this.isGenerateQuestionDisabled.set(false);
+    this.isExamFinished.set(true);
+    this.attemptsLeft.set(this.MAX_ALLOWED_ATTEMPTS);
+
+    if (isExamPassed) {
+      this.toaster.success(`Exam finished 🥳`, `You passed!`);
+    } else {
+      this.toaster.info(`You didn't make it 😢`, `Good luck next time`);
+    }
   }
 
   private setAfterRequestState(): void {
