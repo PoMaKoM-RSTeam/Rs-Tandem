@@ -1,5 +1,3 @@
-/// <reference lib="webworker" />
-
 import { TestResult } from '../types/worker.types';
 
 addEventListener('message', ({ data }) => {
