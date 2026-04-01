@@ -4,12 +4,13 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
 import { SandboxService } from './services/sandbox.service';
+import { SandboxFetcherService } from './services/sandbox-fetcher.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  providers: [SandboxService],
+  providers: [SandboxService, SandboxFetcherService],
   imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],

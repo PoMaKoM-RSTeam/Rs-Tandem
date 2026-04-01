@@ -10,7 +10,7 @@ type SandboxResponse = {
   js: string;
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class SandboxFetcherService {
   private readonly toastService = inject(ToastService);
   private readonly supabaseService = inject(SupabaseService);
