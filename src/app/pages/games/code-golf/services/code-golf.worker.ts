@@ -20,7 +20,7 @@ addEventListener('message', ({ data }) => {
     postMessage({ results, allPassed });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown execution error';
-    postMessage({ success: false, errorMessage });
+    postMessage({ allPassed: false, error: errorMessage });
   }
 });
 
