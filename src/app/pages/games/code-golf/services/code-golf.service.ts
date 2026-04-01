@@ -18,7 +18,6 @@ export class CodeGolfService implements OnDestroy {
   private readonly langService = inject(LanguagePreferenceService);
 
   private worker: Worker | undefined;
-  private readonly workerTimeout = 5000;
 
   readonly rawCode = signal('');
   readonly showResults = signal(false);
