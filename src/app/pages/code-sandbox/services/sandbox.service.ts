@@ -3,8 +3,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TndmAuthStateStoreService } from '@auth';
 import { ToastService } from '../../../core/services/toast/toast-service';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
+import { LoadingOverlayService } from '../../../core/services/loading-overlay/loading-overlay-service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
-import { take } from 'rxjs';
+import { finalize, take } from 'rxjs';
 import type * as Monaco from 'monaco-editor';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
@@ -15,6 +16,7 @@ export class SandboxService {
   private readonly authStore = inject(TndmAuthStateStoreService);
   private readonly toastService = inject(ToastService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly loadingService = inject(LoadingOverlayService);
 
   private editorInstance: Monaco.editor.IStandaloneCodeEditor | null = null;
 
@@ -84,9 +86,15 @@ export class SandboxService {
     const id = this.checkAuth('Error saving result');
     if (!id) return;
 
+    this.loadingService.show();
+
     this.fetcher
       .saveData(id, this.htmlCode(), this.cssCode(), this.jsCode())
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => this.loadingService.hide())
+      )
+
       .subscribe({
         next: () => {
           this.toastService.success('Success', 'You code saved');
@@ -101,9 +109,14 @@ export class SandboxService {
     const id = this.checkAuth('Error fetching data');
     if (!id) return;
 
+    this.loadingService.show();
+
     this.fetcher
       .getData(id)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => this.loadingService.hide())
+      )
       .subscribe({
         next: data => {
           if (data) {
