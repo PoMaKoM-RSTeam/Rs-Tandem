@@ -15,7 +15,14 @@ import { SandboxService } from './services/sandbox.service';
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
-  protected readonly service = inject(SandboxService);
+  private readonly service = inject(SandboxService);
+
+  protected readonly isFullscreen = this.service.isFullscreen;
+  protected readonly selectedTab = this.service.selectedTab;
+  protected readonly tabs = this.service.tabs;
+  protected readonly activeCode = this.service.activeCode;
+  protected readonly activeEditorOptions = this.service.activeEditorOptions;
+  protected readonly previewContent = this.service.previewContent;
 
   protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
     variant: 'icon',
@@ -34,6 +41,22 @@ export class TndmSandbox {
     icon: 'save',
     size: 'lg',
   };
+
+  protected onTabChange(index: number): void {
+    this.selectedTab.set(index);
+  }
+
+  protected updateCode(value: string): void {
+    this.service.updateActiveCode(value);
+  }
+
+  protected save(): void {
+    this.service.save();
+  }
+
+  protected download(): void {
+    this.service.download();
+  }
 
   protected toggleFullscreen(): void {
     this.service.isFullscreen.update(v => !v);
