@@ -22,22 +22,35 @@ export class TndmCodeGolf {
   private readonly translocoService = inject(TranslocoService);
   protected readonly service = inject(CodeGolfService);
 
-  protected readonly isCodeEmpty = computed(() => this.service.rawCode().trim().length === 0);
+  protected readonly byteCount = this.service.byteCount;
+  protected readonly previousBest = this.service.previousBest;
+  protected readonly currentRank = this.service.currentRank;
+  protected readonly currentChallenge = this.service.currentChallenge;
+  protected readonly isChallengeLoading = this.service.challengeResource.isLoading;
+  protected readonly showResults = this.service.showResults;
+  protected readonly result = this.service.result;
+
+  protected get rawCode(): string {
+    return this.service.rawCode();
+  }
+  protected set rawCode(value: string) {
+    this.service.rawCode.set(value);
+  }
 
   private readonly translatedCheckLabel = toSignal(this.translocoService.selectTranslate('golf.check'));
 
   protected readonly checkBtnConfig = computed(() => ({
     label: this.translatedCheckLabel() ?? 'Check Solution',
-    isDisabled: this.isCodeEmpty(),
+    isDisabled: this.service.rawCode().trim().length === 0,
   }));
 
   protected readonly nextBtnConfig = { label: 'Next Challenge' };
 
-  protected check(): void {
+  protected checkSolution(): void {
     this.service.checkSolution();
   }
 
-  protected next(): void {
+  protected nextChallenge(): void {
     this.service.nextChallenge();
   }
 
