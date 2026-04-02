@@ -1,8 +1,6 @@
 <tndm-code-golf-rank [byteCount]="byteCount()" [previousBest]="previousBest()" [rank]="currentRank()" />
 
-@if (isChallengeLoading()) {
-<p class="challenge-info">Loading Challenge...</p>
-} @else if (currentChallenge(); as challenge) {
+@if (currentChallenge(); as challenge) {
 <div class="challenge-wrapper">
   <h2 class="challenge-title">{{ challenge.title }}</h2>
   <p class="challenge-description">{{ challenge.description }}</p>
@@ -17,5 +15,5 @@
 
 <div class="controls">
    <tndm-button [btnConfig]="checkBtnConfig()" (click)="checkSolution()" />
-  <tndm-button [btnConfig]="nextBtnConfig" (click)="nextChallenge()" />
+  <tndm-button [btnConfig]="{ label: ('golf.next' | transloco) }" (click)="nextChallenge()" />
 </div>
