@@ -1,13 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
-import { DEFAULT_SANDBOX_CODE } from './sandbox.constants';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
-
-type Tab = 'HTML' | 'CSS' | 'JS';
+import { SabdboxService } from './services/sandbox.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,20 +15,11 @@ type Tab = 'HTML' | 'CSS' | 'JS';
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
-  private sanitizer = inject(DomSanitizer);
-
-  readonly tabs: Tab[] = ['HTML', 'CSS', 'JS'];
-  readonly selectedTab = signal<number>(0);
-
-  readonly htmlCode = signal(DEFAULT_SANDBOX_CODE.html);
-  readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
-  readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
-
-  readonly isFullscreen = signal(false);
+  protected readonly service = inject(SabdboxService)
 
   protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
     variant: 'icon',
-    icon: this.isFullscreen() ? 'fullscreenExit' : 'fullscreen',
+    icon: this.service.isFullscreen() ? 'fullscreenExit' : 'fullscreen',
     size: 'lg',
   }));
 
@@ -48,7 +36,7 @@ export class TndmSandbox {
   };
 
   protected toggleFullscreen(): void {
-    this.isFullscreen.update(v => !v);
+    this.service.isFullscreen.update(v => !v);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
@@ -56,44 +44,4 @@ export class TndmSandbox {
 
   protected save(): void {}
   protected download(): void {}
-
-  readonly tabConfig = {
-    HTML: { code: this.htmlCode, lang: 'html' },
-    CSS: { code: this.cssCode, lang: 'css' },
-    JS: { code: this.jsCode, lang: 'javascript' },
-  } as const;
-
-  readonly editorOptions = {
-    theme: 'vs',
-    automaticLayout: true,
-    scrollBeyondLastLine: false,
-    minimap: { enabled: false },
-  };
-
-  readonly editorConfigs = computed(() => ({
-    HTML: { ...this.editorOptions, language: this.tabConfig.HTML.lang },
-    CSS: { ...this.editorOptions, language: this.tabConfig.CSS.lang },
-    JS: { ...this.editorOptions, language: this.tabConfig.JS.lang },
-  }));
-
-  readonly previewContent = computed<SafeHtml>(() => {
-    const rawHtml = `
-      <html>
-        <head>
-          <style>${this.cssCode()}</style>
-        </head>
-        <body>
-          ${this.htmlCode()}
-          <script>
-            try {
-              ${this.jsCode()}
-            } catch (e) {
-              document.body.innerHTML += '<pre style="color:red;">'+e+'</pre>';
-            }
-          </script>
-        </body>
-      </html>
-    `;
-    return this.sanitizer.bypassSecurityTrustHtml(rawHtml);
-  });
 }
