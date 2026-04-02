@@ -1,16 +1,14 @@
 <div class="sandbox-wrapper" [class.is-fullscreen]="isFullscreen()">
   <div class="editor-section">
-    <div class="tabs-container">
-      <mat-tab-group dynamicHeight [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
+    <div class="tabs-header-area">
+      <mat-tab-group
+        class="flex-tabs"
+        dynamicHeight
+        [selectedIndex]="selectedTab()"
+        (selectedIndexChange)="selectedTab.set($event)"
+      >
         @for (tab of tabs; track tab) {
-        <mat-tab [label]="tab">
-          <div class="editor-container">
-            <ngx-monaco-editor
-              [ngModel]="tabConfig[tab].code()"
-              [options]="editorConfigs()[tab]"
-              (ngModelChange)="tabConfig[tab].code.set($event)" />
-          </div>
-        </mat-tab>
+          <mat-tab [label]="tab" />
         }
       </mat-tab-group>
 
@@ -19,6 +17,13 @@
         <tndm-button [btnConfig]="uploadBtnConfig" (clicked)="save()" />
         <tndm-button [btnConfig]="fullscreenBtnConfig()" (clicked)="toggleFullscreen()" />
       </div>
+    </div>
+
+    <div class="editor-container">
+      <ngx-monaco-editor
+        [ngModel]="tabConfig[tabs[selectedTab()]].code()"
+        [options]="editorConfigs()[tabs[selectedTab()]]"
+        (ngModelChange)="tabConfig[tabs[selectedTab()]].code.set($event)" />
     </div>
   </div>
 

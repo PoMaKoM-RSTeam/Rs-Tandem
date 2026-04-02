@@ -7,15 +7,9 @@ $editor-z-index: 1000;
 
 :host {
   display: block;
-  box-sizing: border-box;
   height: 100vh;
   padding: v.$space-md;
   background-color: v.$bg-main;
-
-  @media (max-width: v.$bp-desktop) {
-    height: auto;
-    overflow-y: auto;
-  }
 }
 
 .sandbox-wrapper {
@@ -23,69 +17,66 @@ $editor-z-index: 1000;
   grid-template-columns: 1fr 1fr;
   gap: v.$space-md;
   height: 100%;
-  position: relative;
-  transition: grid-template-columns 0.3s ease;
-
-  @media (max-width: v.$bp-desktop) {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-  }
+  transition: all 0.3s ease;
 
   &.is-fullscreen {
     grid-template-columns: 1fr 0;
+    gap: 0;
 
     .editor-section {
       position: fixed;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
       z-index: $editor-z-index;
-      background: v.$bg-surface;
       border: none;
+      @include mx.corner-borders(0, 0, transparent, 0);
     }
 
     .preview-section {
       display: none;
     }
-
-    .editor-container {
-      height: calc(100vh - #{$tab-header-height});
-    }
   }
 }
 
 .editor-section {
-  position: relative;
   display: flex;
   flex-direction: column;
   background-color: v.$bg-surface;
   border: 1px solid v.$border-main-color;
+  overflow: hidden;
   @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
 }
 
-.editor-controls {
-  position: absolute;
-  top: 4px;
-  right: 12px;
-  z-index: 20;
+.tabs-header-area {
   display: flex;
-  gap: 8px;
   align-items: center;
+  background-color: v.$bg-surface;
+  border-bottom: 1px solid v.$border-main-color;
+  height: $tab-header-height;
+
+  .flex-tabs {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.editor-controls {
+  display: flex;
+  align-items: center;
+  gap: v.$space-xs;
+  padding: 0 v.$space-sm;
+  height: 100%;
 }
 
 .editor-container {
   flex: 1;
-  height: calc(100vh - 120px);
   background-color: #1e1e1e;
-  overflow: hidden;
-
-  @media (max-width: v.$bp-desktop) {
-    height: 450px;
-  }
+  position: relative;
 
   ngx-monaco-editor {
+    position: absolute;
+    inset: 0;
     height: 100% !important;
+    width: 100% !important;
   }
 }
 
@@ -96,40 +87,49 @@ $editor-z-index: 1000;
   border: 1px solid v.$border-main-color;
   @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
 
-  @media (max-width: v.$bp-desktop) {
-    height: 500px;
-  }
-
   .preview-header {
-    padding: v.$space-sm v.$space-md;
-    background-color: v.$color-black;
-    @include txt.text-ui(v.$color-orange, 12px);
-    text-transform: uppercase;
+    height: $tab-header-height;
+    display: flex;
+    align-items: center;
+    padding: 0 v.$space-md;
+    background-color: v.$bg-surface;
+    border-bottom: 1px solid v.$border-main-color;
+    @include txt.text-ui(v.$color-black, 12px);
+    font-weight: 600;
   }
 
   iframe {
     flex: 1;
-    background-color: v.$color-white;
+    background-color: #fff;
   }
 }
 
 :host ::v-deep {
   .mat-mdc-tab-header {
-    background-color: v.$color-black;
-    // Увеличиваем отступ, чтобы 3 кнопки не перекрывали табы
-    padding-right: 140px;
+    border-bottom: none !important;
+    background-color: transparent !important;
+  }
+
+  .mat-mdc-tab-labels {
+    background-color: transparent !important;
   }
 
   .mdc-tab__text-label {
-    @include txt.text-ui(v.$color-white, v.$font-size-sm, v.$font-weight-normal);
+    @include txt.text-ui(v.$color-black, v.$font-size-sm, 500);
+    opacity: 0.6;
     text-transform: uppercase;
   }
 
   .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color: v.$color-orange !important;
+    opacity: 1;
   }
 
   .mat-mdc-tab-group-indicator {
     background-color: v.$color-orange !important;
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    display: none;
   }
 }
