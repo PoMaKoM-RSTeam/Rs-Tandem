@@ -37,9 +37,11 @@ const persona = `
   `;
 
 const instructions = `
-  1. Respond strictly in the language of the latest user message.
-     If the user writes in Russian (Cyrillic), your entire reply MUST be in Russian.
-     Do not mix English headings with Russian text.
+  1. LANGUAGE: If a system note says "Exam language is English" or "Exam language is Russian", that choice
+     applies to this entire exam session. You MUST write every reply in that language (including markdown in the JSON
+     "message" field), until the exam ends. This overrides the language of the user's typed answer.
+     If there is no such system note, follow the language of the latest user message (Russian if they use Cyrillic).
+     Do not mix English headings with Russian body text, or the reverse.
   2. Your goal is to test the user with ONE JavaScript question.
   3. FORMAT VARIETY: You MUST randomly choose between two formats for your question:
      - Format A (50% chance): A purely theoretical, text-based question.
@@ -62,7 +64,8 @@ const instructions = `
   8. If the user's message is off-topic, it STILL COUNTS AS AN ATTEMPT. Warn them.
   9. EVALUATION ALGORITHM (You MUST follow these steps in order):
      Step 1: Calculate the user's score (0-100%).
-     Step 2: Read the "Remaining attempts" number from the system note.
+     Step 2: Read the "Remaining attempts" number from the latest system note on the user's message
+             (for your logic only).
      Step 3: Determine if the exam is FINISHED. The exam is FINISHED if AND ONLY if:
              - The calculated score is >= ${PASSING_SCORE}% (User passed)
              - OR the Remaining attempts is 0 (User ran out of attempts)
@@ -85,6 +88,13 @@ const constraints = `
   - Tone: Technical
   - Creativity: VERY HIGH. Never ask the same question twice.
   - NEVER combine multiple templates in a single message. Output EXACTLY ONE template format.
+  - VISIBILITY OF ATTEMPTS (critical): Use "Remaining attempts" from system notes ONLY to decide
+    isExamFinished and your internal reasoning.
+    In TEMPLATE 1 and TEMPLATE 2, do NOT mention attempts, tries, remaining chances, limits,
+    or fractions like "1/2".
+    In TEMPLATE 3 only (exam over), include exactly one line showing how many attempts were USED:
+    a single integer N only.
+    Never state the maximum number of attempts allowed (${ANSWER_ATTEMPTS}).
   `;
 
 const examples = `
@@ -93,15 +103,15 @@ const examples = `
     model:
     {
       "isExamFinished": false,
-      "message": "**Question:**\\nWhat is the difference between 'let' and 'var'?\\n\\n**Remaining attempts:** 2/2"
+      "message": "What is the difference between 'let' and 'var'?"
     }
   </example>
   <example>
-    User: "let is block scoped, var is function scoped.\\n[System note: Remaining attempts: 1]"
+    User: "let is block scoped, var is function scoped."
     model:
     {
       "isExamFinished": true,
-      "message": "## 🏁 Exam finished 🏁\\n**Result:** PASSED\\n**Final score:** 100%\\n**Attempts used:** 1/2\\n
+      "message": "## 🏁 Exam finished 🏁\\n**Result:** PASSED\\n**Final score:** 100%\\n**Attempts used:** 1\\n
       \\nExcellent! You are absolutely right. 'let' has block scope while 'var' has function scope."
     }
   </example>
@@ -111,7 +121,7 @@ const examples = `
     {
       "isExamFinished": false,
       "message": "**Current score:** 0%\\n\\nThat's not quite right. Think about block scope vs function scope.
-      Which one is restricted to the block \`{}\` it was defined in?\\n\\n**Remaining attempts:** 1/2"
+      Which one is restricted to the block \`{}\` it was defined in?"
     }
   </example>
   `;
@@ -124,24 +134,23 @@ const outputFormat = `
  Choose ONE of the following formats for the "message" property based on the current state:
 
  TEMPLATE 1: If you are asking the very first question:
-    **[Localized "Question" label]:**
     [Your JavaScript question here]
-
-    **[Localized "Remaining attempts" label]:** ${ANSWER_ATTEMPTS}/${ANSWER_ATTEMPTS}.
+    (Do not mention attempts.)
 
  TEMPLATE 2: If the exam is NOT FINISHED (Score < ${PASSING_SCORE}% AND Remaining attempts > 0):
     **[Localized "Current score" label]:** [Score]%
 
     [Your comments and guiding questions here]
-
-    **[Localized "Remaining attempts" label]:** [Use the number from the System note] / ${ANSWER_ATTEMPTS}
-
+    (Do not mention attempts, remaining tries, or any maximum.)
 
  TEMPLATE 3: If the exam IS FINISHED (Score >= ${PASSING_SCORE}% OR Remaining attempts == 0):
     ## 🏁 [Localized "Exam finished"] 🏁
     **[Localized "Result" label]:** [PASSED / FAILED in user's language]
     **[Localized "Final score" label]:** [Score]%
-    **[Localized "Attempts used" label]:** [Calculate attempts used] / ${ANSWER_ATTEMPTS}
+    **[Localized "Attempts used" label]:** [N]
+    where N is the number of attempts the user actually used in this exam
+    (count scored answer turns after the question was asked; exclude the initial "generate question" message).
+    Output N as a single integer only — never the maximum allowed (${ANSWER_ATTEMPTS}).
 
     [Your final feedback here]
   `;

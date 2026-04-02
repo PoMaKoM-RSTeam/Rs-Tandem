@@ -1,7 +1,8 @@
 <tndm-toaster />
 <p>
   {{ 'aiExam.description' | transloco }}<br />
-  {{ 'aiExam.descriptionLine2' | transloco }}
+  {{ 'aiExam.descriptionLine2' | transloco: { maxAllowedAttempts: MAX_ALLOWED_ATTEMPTS, oneMoreThanMax:
+  MAX_ALLOWED_ATTEMPTS + 1 } }}
 </p>
 
 <div class="button-wrapper">
@@ -14,10 +15,10 @@
     (clicked)="generateQuestion()" />
   <tndm-button
     [btnConfig]="{
-      label: ('aiExam.skipQuestion' | transloco),
-      isDisabled: isSkipQuestionDisabled()
-    }"
-    [class.await-loading]="isLoading()" />
+      label: ('aiExam.skipQuestion' | transloco: { seconds: skipQuestionSeconds()}),
+      isDisabled: isSkipQuestionDisabled() }"
+    [class.await-loading]="isLoading()"
+    (clicked)="skipQuestion()" />
 </div>
 
 <tndm-chat [isLoading]="isLoading()" />
@@ -33,7 +34,7 @@
     rows="4"
     [class.await-loading]="isLoading()"
     [disabled]="isAnswerQuestionDisabled() || isLoading()"
-    (keydown)="onTextareaKeydown($event, answerForm)"></textarea>
+    (keydown)="onTextInputKeydown($event, answerForm)"></textarea>
   <tndm-button
     [btnConfig]="{
       label: ('aiExam.answerButton' | transloco),

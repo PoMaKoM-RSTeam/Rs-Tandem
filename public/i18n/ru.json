@@ -48,9 +48,9 @@
   },
   "aiExam": {
     "description": "Сгенерируй случайный вопрос и ответь на него.",
-    "descriptionLine2": "У тебя ограниченное количество попыток. Не трать их впустую. Каждое сообщение на счету.",
+    "descriptionLine2": "У тебя примерно {{maxAllowedAttempts}}-{{oneMoreThanMax}} попытки. Не трать их впустую. Каждое сообщение засчитывается.",
     "generateQuestion": "Сгенерировать вопрос",
-    "skipQuestion": "Пропустить вопрос",
+    "skipQuestion": "Пропустить вопрос ({{seconds}} сек)",
     "answerLabel": "Напиши ответ на вопрос:",
     "answerPlaceholder": "Твой ответ",
     "answerButton": "Ответить на вопрос",

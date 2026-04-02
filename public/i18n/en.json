@@ -48,9 +48,9 @@
   },
   "aiExam": {
     "description": "Generate a random question and answer it.",
-    "descriptionLine2": "You have limited attempts to give the right answer. Don't waste them. Every message counts.",
+    "descriptionLine2": "You have roughly {{maxAllowedAttempts}}-{{oneMoreThanMax}} attempts to give the right answer. Don't waste them. Every message counts.",
     "generateQuestion": "Generate question",
-    "skipQuestion": "Skip question",
+    "skipQuestion": "Skip question ({{seconds}} sec)",
     "answerLabel": "Write your answer to the question:",
     "answerPlaceholder": "Your answer",
     "answerButton": "Answer the question",

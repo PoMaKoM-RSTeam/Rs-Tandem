@@ -1,8 +1,11 @@
 @use '/styles/typography' as typography;
 @use '/styles/variables' as variables;
 
+$font-size-code: 0.85em;
+
 .chat-container {
-  @include typography.text-body();
+  font-family: variables.$font-family-ui;
+  font-size: 1.15em;
   max-width: 1000px;
   min-height: 100px;
   max-height: 400px;
@@ -11,6 +14,7 @@
   white-space: pre-wrap;
   overflow-y: hidden;
   scrollbar-gutter: stable;
+  line-height: 1.5;
 
   &:hover,
   &:focus-within {
@@ -72,9 +76,11 @@
   code {
     background: variables.$bg-surface;
     padding: 0.2rem 0.4rem;
+    font-size: $font-size-code;
   }
   pre {
     background: variables.$bg-surface;
+    font-size: $font-size-code;
     padding: 15px;
     border-radius: 10px;
 
