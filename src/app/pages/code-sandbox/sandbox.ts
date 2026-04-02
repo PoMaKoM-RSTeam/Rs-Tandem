@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
 import { SandboxService } from './services/sandbox.service';
 
@@ -10,15 +9,16 @@ import { SandboxService } from './services/sandbox.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton, TranslocoPipe],
+  providers: [SandboxService],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
   private readonly service = inject(SandboxService);
 
-  protected readonly isFullscreen = this.service.isFullscreen;
-  protected readonly selectedTab = this.service.selectedTab;
+  protected readonly isFullscreen = this.service.isFullscreen.asReadonly();
+  protected readonly selectedTab = this.service.selectedTab.asReadonly();
   protected readonly tabs = this.service.tabs;
   protected readonly activeCode = this.service.activeCode;
   protected readonly activeEditorOptions = this.service.activeEditorOptions;
@@ -43,7 +43,7 @@ export class TndmSandbox {
   };
 
   protected onTabChange(index: number): void {
-    this.selectedTab.set(index);
+    this.service.selectedTab.set(index);
   }
 
   protected updateCode(value: string): void {
@@ -59,9 +59,6 @@ export class TndmSandbox {
   }
 
   protected toggleFullscreen(): void {
-    this.service.isFullscreen.update(v => !v);
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 100);
+    this.service.toggleFullscreen();
   }
 }

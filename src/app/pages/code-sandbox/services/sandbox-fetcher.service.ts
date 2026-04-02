@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from '../../../core/supabase/supabase-service';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { catchError, from, map, Observable } from 'rxjs';
+import { from, map, Observable } from 'rxjs';
 import { ToastService } from '../../../core/services/toast/toast-service';
 
 type SandboxResponse = {
@@ -27,12 +27,7 @@ export class SandboxFetcherService {
       p_html: html,
       p_css: css,
       p_js: js,
-    }).pipe(
-      catchError(error => {
-        this.toastService.danger('Error saving result', error.message || 'Try again');
-        throw error;
-      })
-    );
+    });
   }
 
   getData(userId: string): Observable<SandboxResponse | undefined> {
