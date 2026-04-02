@@ -2,35 +2,122 @@
 @use './styles/variables' as v;
 @use './styles/mixins' as mx;
 
+$tab-header-height: 48px;
+$editor-z-index: 1000;
+
 :host {
   display: block;
   box-sizing: border-box;
   height: 100vh;
   padding: v.$space-md;
   background-color: v.$bg-main;
+
+  @media (max-width: v.$bp-desktop) {
+    height: auto;
+    overflow-y: auto;
+  }
 }
 
 .sandbox-wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: v.$space-md;
   height: 100%;
-  width: 100%;
+  position: relative;
+  transition: grid-template-columns 0.3s ease;
+
+  @media (max-width: v.$bp-desktop) {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  &.is-fullscreen {
+    grid-template-columns: 1fr 0;
+
+    .editor-section {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: $editor-z-index;
+      background: v.$bg-surface;
+      border: none;
+    }
+
+    .preview-section {
+      display: none;
+    }
+
+    .editor-container {
+      height: calc(100vh - #{$tab-header-height});
+    }
+  }
 }
 
-.editor-section,
-.preview-section {
-  flex: 1;
+.editor-section {
+  position: relative;
   display: flex;
   flex-direction: column;
-  min-width: 0;
   background-color: v.$bg-surface;
   border: 1px solid v.$border-main-color;
   @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
 }
 
-:host ::v-deep {
-  .mat-mdc-tab-labels {
+.editor-controls {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.editor-container {
+  flex: 1;
+  height: calc(100vh - 120px);
+  background-color: #1e1e1e;
+  overflow: hidden;
+
+  @media (max-width: v.$bp-desktop) {
+    height: 450px;
+  }
+
+  ngx-monaco-editor {
+    height: 100% !important;
+  }
+}
+
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  background-color: v.$bg-surface;
+  border: 1px solid v.$border-main-color;
+  @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
+
+  @media (max-width: v.$bp-desktop) {
+    height: 500px;
+  }
+
+  .preview-header {
+    padding: v.$space-sm v.$space-md;
     background-color: v.$color-black;
+    @include txt.text-ui(v.$color-orange, 12px);
+    text-transform: uppercase;
+  }
+
+  iframe {
+    flex: 1;
+    background-color: v.$color-white;
+  }
+}
+
+:host ::v-deep {
+  .mat-mdc-tab-header {
+    background-color: v.$color-black;
+    // Увеличиваем отступ, чтобы 3 кнопки не перекрывали табы
+    padding-right: 140px;
   }
 
   .mdc-tab__text-label {
@@ -44,50 +131,5 @@
 
   .mat-mdc-tab-group-indicator {
     background-color: v.$color-orange !important;
-  }
-}
-
-.editor-container {
-  height: calc(100vh - 120px);
-  background-color: #1e1e1e;
-}
-
-ngx-monaco-editor {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.preview-header {
-  padding: v.$space-sm v.$space-md;
-  background-color: v.$color-black;
-  border-bottom: 1px solid v.$border-main-color;
-  @include txt.text-ui(v.$color-orange, 12px);
-  letter-spacing: 1px;
-}
-
-iframe {
-  flex: 1;
-  width: 100%;
-  border: none;
-  background-color: v.$color-white;
-}
-
-@media (max-width: v.$bp-desktop) {
-  :host {
-    height: auto;
-    overflow-y: auto;
-  }
-
-  .sandbox-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .editor-container {
-    height: 450px;
-  }
-
-  .preview-section {
-    height: 500px;
   }
 }

@@ -5,6 +5,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { DEFAULT_SANDBOX_CODE } from './sandbox.constants';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
@@ -12,7 +13,7 @@ type Tab = 'HTML' | 'CSS' | 'JS';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TranslocoPipe],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton, TranslocoPipe],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],
 })
@@ -25,6 +26,36 @@ export class TndmSandbox {
   readonly htmlCode = signal(DEFAULT_SANDBOX_CODE.html);
   readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
   readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
+
+  readonly isFullscreen = signal(false);
+
+  protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
+    variant: 'icon',
+    icon: this.isFullscreen() ? 'fullscreenExit' : 'fullscreen',
+    size: 'lg',
+  }));
+
+  protected readonly downloadBtnConfig: ButtonConfig = {
+    variant: 'icon',
+    icon: 'download',
+    size: 'lg',
+  };
+
+  protected readonly uploadBtnConfig: ButtonConfig = {
+    variant: 'icon',
+    icon: 'upload',
+    size: 'lg',
+  };
+
+  protected toggleFullscreen(): void {
+    this.isFullscreen.update(v => !v);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+  }
+
+  protected save(): void {}
+  protected download(): void {}
 
   readonly tabConfig = {
     HTML: { code: this.htmlCode, lang: 'html' },
