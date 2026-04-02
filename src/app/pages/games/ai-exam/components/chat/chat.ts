@@ -2,6 +2,11 @@ import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChil
 import { MarkdownComponent } from 'ngx-markdown';
 import { ExamLanguage, Message, ROLES } from '../../shared/types';
 
+const LANGUAGE_MAP: Record<ExamLanguage, string> = {
+  en: 'English',
+  ru: 'Russian',
+};
+
 type UpdateChatHistoryParams =
   | {
       role: typeof ROLES.model;
@@ -15,6 +20,8 @@ type UpdateChatHistoryParams =
       isQuestionGeneration: boolean;
       selectedTopics?: string;
     };
+
+type TextParts = { text: string }[];
 
 @Component({
   selector: 'tndm-chat',
@@ -31,27 +38,7 @@ export class TndmChat {
   readonly allMessages = signal<Message[]>([]);
 
   updateChatHistory(params: UpdateChatHistoryParams): void {
-    const parts = [{ text: params.content }];
-
-    if (params.role === ROLES.user) {
-      const langNote =
-        params.examLanguage === 'en'
-          ? `[System note: Exam language is English. Write your ENTIRE reply in English ` +
-            '(question, feedback, headings, and the JSON "message" string). ' +
-            'Ignore user typos in other languages; keep English for the exam.]'
-          : '[System note: Exam language is Russian. Write your ENTIRE reply in Russian ' +
-            '(question, feedback, headings, and the JSON "message" string). ' +
-            'Ignore user typos in other languages; keep Russian for the exam.]';
-      parts.push({ text: langNote });
-      parts.push({ text: `[System note: Remaining attempts: ${params.remainingAttempts}]` });
-
-      if (params.isQuestionGeneration) {
-        parts.push({
-          text: `[System note: You MUST ask a question specifically related
-          to one of these topics: ${params.selectedTopics}.]`,
-        });
-      }
-    }
+    const parts = this.buildUserMessageParts(params);
 
     const newMessage: Message = {
       role: params.role,
@@ -81,5 +68,28 @@ export class TndmChat {
     if (!textPart) throw new Error('Text part not found');
 
     return textPart.text;
+  }
+
+  private buildUserMessageParts(params: UpdateChatHistoryParams): TextParts {
+    const defaultPart = { text: params.content };
+
+    if (params.role === ROLES.user) {
+      const langName = LANGUAGE_MAP[params.examLanguage] || 'English';
+
+      const systemNotes = [
+        `[System note: Exam language is ${langName}. Write your ENTIRE reply in ${langName} ` +
+          `(question, feedback, headings, and the JSON "message" string). ` +
+          `Ignore user typos in other languages; keep ${langName} for the exam.]`,
+        `[System note: Remaining attempts: ${params.remainingAttempts}]`,
+        params.isQuestionGeneration
+          ? `[System note: You MUST ask a question specifically related
+        to one of these topics: ${params.selectedTopics}.]`
+          : null,
+      ].filter(Boolean) as string[];
+
+      return [defaultPart, ...systemNotes.map(note => ({ text: note }))];
+    }
+
+    return [defaultPart];
   }
 }

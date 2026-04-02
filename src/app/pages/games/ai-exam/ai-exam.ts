@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
 import { GeminiService } from './services/gemini/gemini.service';
@@ -8,7 +8,7 @@ import { ToastService } from '../../../core/toast/toast-service';
 import { TndmChat } from './components/chat/chat';
 import { ANSWER_ATTEMPTS, JS_TOPICS } from './services/gemini/prompt';
 import { shuffle } from 'lodash';
-import { DatabaseService } from './services/database.service';
+import { AiExamDatabaseService } from './services/database.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { LanguagePreferenceService } from '../../../core/i18n/language-preferences.service';
 
@@ -67,14 +67,19 @@ type SetFinishExamStateParams = {
   templateUrl: 'ai-exam.html',
   styleUrl: 'ai-exam.scss',
   imports: [TndmButton, TndmToaster, TndmChat, TranslocoPipe],
-  providers: [GeminiService, DatabaseService],
+  providers: [GeminiService, AiExamDatabaseService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmAiExam implements OnDestroy {
+export class TndmAiExam {
   private readonly gemini = inject(GeminiService);
   private readonly toaster = inject(ToastService);
-  private readonly database = inject(DatabaseService);
+  private readonly database = inject(AiExamDatabaseService);
   private readonly languagePreferenceService = inject(LanguagePreferenceService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.stopSkipQuestionTimeout());
+  }
 
   private readonly chat = viewChild(TndmChat);
   private readonly textInput = viewChild<ElementRef<HTMLTextAreaElement>>('textInput');
@@ -282,7 +287,9 @@ export class TndmAiExam implements OnDestroy {
   private startSkipQuestionTimeout(): void {
     if (this.skipQuestionSubscription) return;
 
-    this.skipQuestionSubscription = interval(1000).subscribe(() => {
+    const msInOneSecond = 1000;
+
+    this.skipQuestionSubscription = interval(msInOneSecond).subscribe(() => {
       if (this.skipQuestionSeconds() <= 0) {
         this.stopSkipQuestionTimeout();
       } else {
@@ -313,9 +320,5 @@ export class TndmAiExam implements OnDestroy {
         this.isSkipQuestionDisabled.set(false);
         break;
     }
-  }
-
-  ngOnDestroy(): void {
-    this.stopSkipQuestionTimeout();
   }
 }

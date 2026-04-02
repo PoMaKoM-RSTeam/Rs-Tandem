@@ -11,7 +11,7 @@ type ExamResults = {
 };
 
 @Injectable()
-export class DatabaseService {
+export class AiExamDatabaseService {
   private readonly supabase = inject(SupabaseService).client;
   private readonly TABLE_NAME = 'ai_exam';
 
