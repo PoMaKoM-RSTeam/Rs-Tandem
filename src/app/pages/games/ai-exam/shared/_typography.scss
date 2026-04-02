@@ -1,0 +1,6 @@
+@use '/styles/variables' as variables;
+
+@mixin font-that-supports-russian() {
+  font-family: variables.$font-family-ui;
+  font-size: 1.15em;
+}

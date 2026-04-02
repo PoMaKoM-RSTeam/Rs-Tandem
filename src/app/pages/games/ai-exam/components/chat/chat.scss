@@ -1,11 +1,11 @@
 @use '/styles/typography' as typography;
 @use '/styles/variables' as variables;
+@use '../../shared/typography' as exam;
 
 $font-size-code: 0.85em;
 
 .chat-container {
-  font-family: variables.$font-family-ui;
-  font-size: 1.15em;
+  @include exam.font-that-supports-russian();
   max-width: 1000px;
   min-height: 100px;
   max-height: 400px;
