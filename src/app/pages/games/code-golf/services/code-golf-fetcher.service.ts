@@ -5,7 +5,7 @@ import { GolfRank } from '../types/golf-rank';
 import { catchError, from, map, Observable, of } from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class CodeGolfFetcherService {
   private readonly SUPABASE_URL = 'https://bqfoaeuuwilliipmpovu.supabase.co';
   private readonly SUPABASE_KEY = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
