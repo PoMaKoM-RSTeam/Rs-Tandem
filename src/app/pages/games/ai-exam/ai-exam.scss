@@ -1,5 +1,6 @@
 @use '/styles/typography' as typography;
 @use '/styles/variables' as variables;
+@use './shared/typography' as exam;
 
 :host {
   @include typography.text-body();
@@ -7,6 +8,12 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.description,
+.text-input-instruction,
+.text-input {
+  @include exam.font-that-supports-russian();
 }
 
 tndm-button {
@@ -31,7 +38,6 @@ tndm-button {
 textarea {
   max-width: 600px;
   padding: 5px;
-  font-family: variables.$font-family-ui;
   font-size: 1.1em;
 }
 
