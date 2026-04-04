@@ -2,17 +2,16 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TndmButton } from '../../ui/tndm-button/tndm-button';
 import { TndmHeader } from '../tndm-header/tndm-header';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
-import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
+import { TndmAiAgent } from '../../../core/tndm-ai-agent/tndm-ai-agent';
 
 @Component({
   selector: 'tndm-main-layout',
   templateUrl: './tndm-main-layout.html',
   styleUrl: './tndm-main-layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TndmButton, TndmHeader, TndmLangSwitcher],
+  imports: [RouterOutlet, TndmHeader],
 })
 export class TndmMainLayout {
   private router = inject(Router);

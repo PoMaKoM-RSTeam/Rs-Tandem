@@ -1,3 +1,5 @@
+@use './variables' as vars;
+
 @mixin corner-borders($size: 8px, $thickness: 2px, $color: currentColor, $position: 0) {
   position: relative;
 
@@ -21,5 +23,44 @@
     right: $position;
     bottom: $position;
     transform: rotate(180deg);
+  }
+}
+
+@mixin cross-base(
+  $size: 30px,
+  $line-length: 14px,
+  $line-thickness: 2px,
+  $bg: vars.$bg-main,
+  $color: vars.$color-accent
+) {
+  position: absolute;
+  z-index: 2;
+  width: $size;
+  height: $size;
+  background-color: $bg;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: $color;
+  }
+
+  &::before {
+    top: 50%;
+    left: 50%;
+    width: $line-length;
+    height: $line-thickness;
+    transform: translate(-50%, -50%);
+  }
+
+  &::after {
+    top: 50%;
+    left: 50%;
+    width: $line-thickness;
+    height: $line-length;
+    transform: translate(-50%, -50%);
   }
 }

@@ -1,5 +1,6 @@
 @use 'styles/typography' as t;
 @use 'styles/variables' as v;
+@use 'styles/mixins' as m;
 @use 'styles/adaptive' as a;
 
 :host {
@@ -74,7 +75,6 @@
 
 .vertical-lines {
   position: absolute;
-  top: 0;
   left: 0;
   top: 53px;
   bottom: 0;
@@ -83,7 +83,6 @@
   z-index: 0;
   display: flex;
   justify-content: space-between;
-  box-sizing: border-box;
   width: 100vw;
   padding: 0 40px;
   pointer-events: none;
@@ -100,39 +99,7 @@
 }
 
 .cross {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: v.$bg-main;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-
-  @include a.mobile() {
-    display: none;
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    background-color: v.$color-accent;
-  }
-
-  &::before {
-    top: 50%;
-    left: 50%;
-    width: 14px;
-    height: 2px;
-    transform: translate(-50%, -50%);
-  }
-
-  &::after {
-    top: 50%;
-    left: 50%;
-    width: 2px;
-    height: 14px;
-    transform: translate(-50%, -50%);
-  }
+  @include m.cross-base($bg: v.$bg-main, $color: v.$color-accent);
 
   &_position_top-left {
     top: -1px;
