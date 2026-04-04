@@ -1,0 +1,15 @@
+<div class="ai-agent__wrapper" [class.ai-agent__wrapper_open]="isOpen()">
+  <div class="ai-agent__content">
+    <tndm-ai-avatar />
+    <tndm-ai-chat />
+    <tndm-ai-input />
+  </div>
+  @if (isOpen()) {
+  <div class="cross cross_position_top-left"></div>
+  <div class="cross cross_position_top-right"></div>
+  <div class="cross cross_position_middle-right"></div>
+  <div class="cross cross_position_middle-left"></div>
+  <div class="cross cross_position_bottom-right"></div>
+  <div class="cross cross_position_bottom-left"></div>
+  }
+</div>

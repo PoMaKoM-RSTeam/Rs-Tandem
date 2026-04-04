@@ -1,0 +1,83 @@
+@use '../../../../styles/variables' as vars;
+@use '../../../../styles/mixins' as mix;
+
+@mixin cross-side($direction: right) {
+  width: 15px;
+  height: 30px;
+
+  @if $direction == right {
+    &::before,
+    &::after {
+      left: calc(50% + 7.5px);
+    }
+  } @else if $direction == left {
+    &::before,
+    &::after {
+      left: calc(50% - 7.5px);
+    }
+  }
+}
+
+.ai-agent {
+  &__content {
+    position: relative;
+    display: grid;
+    grid-template-rows: 30% 50% 20%;
+    height: calc(100vh - 59px);
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__wrapper {
+    height: calc(100vh - 59px);
+    background-color: vars.$bg-main;
+    width: 0;
+    transition:
+      width ease-in 0.5s,
+      border-color ease-in 0.5s;
+    border: none;
+
+    &_open {
+      border: 1px solid vars.$color-grey;
+      width: calc(calc(100vw - 77px) / 4);
+    }
+  }
+}
+
+.cross {
+  @include mix.cross-base();
+
+  &_position_top-left {
+    top: -1px;
+    left: 1px;
+  }
+
+  &_position_top-right {
+    top: -1px;
+    right: -29px;
+  }
+
+  &_position_middle-right {
+    top: 30%;
+    right: -7.5px;
+    @include cross-side(right);
+  }
+
+  &_position_bottom-right {
+    top: 80%;
+    right: -7.5px;
+    @include cross-side(right);
+  }
+
+  &_position_middle-left {
+    top: 30%;
+    left: 6.5px;
+    @include cross-side(left);
+  }
+
+  &_position_bottom-left {
+    top: 80%;
+    left: 6.5px;
+    @include cross-side(left);
+  }
+}
