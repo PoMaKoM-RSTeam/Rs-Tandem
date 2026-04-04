@@ -5,7 +5,7 @@ export const APP_ROUTES = {
   aiExam: 'ai-exam',
   typeInvestigator: 'type-investigator',
   reverseCodeReview: 'reverse-code-review',
-  eventLoop: 'event-loop',
   pageNotFound: 'page-not-found',
   home: 'home',
+  dashboard: 'dashboard',
 } as const;
