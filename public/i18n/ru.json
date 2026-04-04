@@ -62,7 +62,6 @@
     "failedRequest": "Не удалось отправить запрос"
   },
   "asyncSorter": {
-    "heading": "Async-сортировщик",
     "runLoop": "Запустить цикл",
     "codeBlocks": "Блоки кода",
     "finalCallStack": "Итоговый Call Stack",

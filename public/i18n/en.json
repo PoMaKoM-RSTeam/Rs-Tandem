@@ -62,7 +62,6 @@
     "failedRequest": "Failed to send request"
   },
   "asyncSorter": {
-    "heading": "Async sorter",
     "runLoop": "Run loop",
     "codeBlocks": "Code Blocks",
     "finalCallStack": "Final Call Stack",
