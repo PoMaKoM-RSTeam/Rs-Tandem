@@ -15,7 +15,7 @@ export class TndmAiInput {
 
   protected readonly input = signal('');
 
-  protected readonly placeholder = 'Ask your question...';
+  protected readonly placeholder = '// Ask your question...';
 
   protected readonly isSendDisabled = computed(() => this.chatService.assistantTyping() || !this.input().trim());
 
