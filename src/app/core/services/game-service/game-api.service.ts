@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from '../../supabase/supabase-service';
-import { DatabaseRecordRow, GlobalRecord } from './game-service.types';
+import { DatabaseRecordRow, GamesProgressData, GlobalRecord } from './game-service.types';
 
 @Injectable({ providedIn: 'root' })
 export class GameApiService {
@@ -65,6 +65,21 @@ export class GameApiService {
     }
 
     return (data as unknown as DatabaseRecordRow[]).map(row => this.mapToGlobalRecord(row));
+  }
+
+  async getGamesProgress(): Promise<GamesProgressData[]> {
+    const { data, error } = await this.supabaseClient.from('games_with_progress').select(
+      `title,
+        total_levels,
+        completed_levels_count,
+        total_game_xp,
+        game_rank_position`
+    );
+    if (error) {
+      console.error('Error fetch games', error.message);
+      return [];
+    }
+    return data as GamesProgressData[];
   }
 
   private mapToGlobalRecord(row: DatabaseRecordRow): GlobalRecord {

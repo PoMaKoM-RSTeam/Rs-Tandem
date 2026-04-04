@@ -1,0 +1,22 @@
+<div class="circle-container" [style.height.px]="size()" [style.width.px]="size()">
+  <svg class="circle" viewBox="0 0 100 100" [style.--circumference]="circumference()">
+    <circle
+      class="circle__background"
+      cx="50"
+      cy="50"
+      fill="none"
+      [attr.r]="radius()"
+      [attr.stroke-width]="strokeWidth()" />
+    <circle
+      class="circle__progress"
+      cx="50"
+      cy="50"
+      fill="none"
+      [attr.r]="radius()"
+      [attr.stroke-dasharray]="circumference()"
+      [attr.stroke-width]="strokeWidth()"
+      [style.stroke-dashoffset]="dashOffset()" />
+  </svg>
+
+  <div class="center-content">{{ label() }}</div>
+</div>

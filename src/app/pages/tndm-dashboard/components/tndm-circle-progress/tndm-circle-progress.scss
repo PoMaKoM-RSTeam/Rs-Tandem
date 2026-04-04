@@ -1,0 +1,64 @@
+@use 'styles/typography' as t;
+@use 'styles/variables' as v;
+
+:host {
+  display: block;
+}
+
+.circle-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  @include t.saibex-heading-md();
+}
+
+.circle {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+.center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transform: translate(-50%, -50%);
+}
+
+.circle__background {
+  stroke: v.$color-grey;
+}
+
+.circle__progress {
+  stroke: v.$text-primary-color;
+  transition: stroke-dashoffset 1s ease-in-out;
+
+  animation: stroke-entry 1s ease-in-out;
+  will-change: stroke-dashoffset;
+  stroke-linecap: butt;
+}
+
+@keyframes stroke-entry {
+  from {
+    stroke-dashoffset: var(--circumference);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

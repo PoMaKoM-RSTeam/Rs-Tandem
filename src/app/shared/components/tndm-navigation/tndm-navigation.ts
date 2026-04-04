@@ -17,5 +17,6 @@ export class TndmNavigation {
     { label: 'sandbox', path: APP_ROUTES.sandbox },
     { label: 'type_investigator', path: APP_ROUTES.typeInvestigator },
     { label: 'code_review', path: APP_ROUTES.reverseCodeReview },
+    { label: 'dashboard', path: APP_ROUTES.dashboard },
   ];
 }
