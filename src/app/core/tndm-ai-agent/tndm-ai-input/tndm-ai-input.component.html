@@ -1,0 +1,14 @@
+<div class="ai-input__wrapper">
+  <div class="ai-input__textarea-wrapper">
+    <textarea
+      class="ai-input__textarea"
+      maxlength="2000"
+      [placeholder]="placeholder"
+      [value]="input()"
+      (input)="onInput($event)"
+      (keydown.enter)="onEnter($event)"></textarea>
+  </div>
+  <div class="ai-input__controls">
+    <tndm-button class="ai-input__button" [btnConfig]="sendButtonConfig()" (clicked)="send()" />
+  </div>
+</div>
