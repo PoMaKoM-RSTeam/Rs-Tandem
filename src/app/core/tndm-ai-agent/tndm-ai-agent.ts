@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { TndmAiAgentButton } from './tndm-ai-agent-button/tndm-ai-agent-button';
-import { TndmAiAgentWrap } from './tndm-ai-agent-wrap/tndm-ai-agent-wrap';
+import { TndmAiAgentButton } from './components/tndm-ai-agent-button/tndm-ai-agent-button';
+import { TndmAiAgentWrap } from './components/tndm-ai-agent-wrap/tndm-ai-agent-wrap';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

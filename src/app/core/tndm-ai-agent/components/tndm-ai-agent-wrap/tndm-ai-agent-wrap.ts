@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TndmAvatar } from '../../../pages/tndm-ai-agent/components/tndm-ai-avatar/tndm-avatar.component';
-import { TndmAiChat } from '../../../pages/tndm-ai-agent/components/tndm-ai-chat/tndm-ai-chat';
+import { TndmAvatar } from '../tndm-ai-avatar/tndm-avatar.component';
+import { TndmAiChat } from '../tndm-ai-chat/tndm-ai-chat';
 import { TndmAiInput } from '../tndm-ai-input/tndm-ai-input.component';
 
 @Component({

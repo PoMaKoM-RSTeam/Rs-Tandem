@@ -1,5 +1,5 @@
-@use '../../../../styles/variables' as vars;
-@use '../../../../styles/mixins' as mix;
+@use '../../../../../styles/variables' as vars;
+@use '../../../../../styles/mixins' as mix;
 
 @mixin cross-side($direction: right) {
   width: 15px;

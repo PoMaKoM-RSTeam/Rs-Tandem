@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
-import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { TndmAiChatService } from '../../../pages/tndm-ai-agent/services/tndm-ai-chat-service';
+import { ButtonConfig, TndmButton } from '../../../../shared/ui/tndm-button/tndm-button';
+import { TndmAiChatService } from '../../services/tndm-ai-chat-service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-ai-input',
-  imports: [TndmButton, TndmButton],
+  imports: [TndmButton],
   templateUrl: './tndm-ai-input.component.html',
   styleUrl: './tndm-ai-input.component.scss',
   standalone: true,
