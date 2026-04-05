@@ -1,0 +1,12 @@
+<div class="ai-chat__wrapper">
+  <div class="ai-chat__messages-wrapper">
+    <div #scrollContainer class="chat__messages scroller">
+      @for(message of messages(); track message.id) {
+      <tndm-ai-chat-message
+        [assistantTyping]="assistantTyping()"
+        [currentAssistantId]="currentAssistantId()"
+        [message]="message" />
+      }
+    </div>
+  </div>
+</div>
