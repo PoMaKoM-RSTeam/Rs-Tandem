@@ -1,0 +1,10 @@
+<div
+  class="ai-chat__message"
+  [class.ai-chat__message_assistant]="isAssistant()"
+  [class.ai-chat__message_user]="isUser()">
+  <div class="ai-chat__message-box">
+    {{ message().text }} @if(showCursor()) {
+    <span class="ai-chat__cursor"></span>
+    }
+  </div>
+</div>

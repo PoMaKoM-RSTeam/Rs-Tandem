@@ -1,0 +1,55 @@
+@use '../../../../../styles/variables' as vars;
+@use '../../../../../styles/typography' as typ;
+
+.ai-chat__message {
+  display: flex;
+}
+
+.ai-chat__message_user {
+  justify-content: flex-end;
+}
+
+.ai-chat__message_assistant {
+  justify-content: flex-start;
+}
+
+.ai-chat__message-box {
+  max-width: 80%;
+  padding: vars.$space-xs vars.$space-md;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.ai-chat__message_user .ai-chat__message-box {
+  background: vars.$color-black;
+  @include typ.text-ui(vars.$color-accent, 16px);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.ai-chat__message_assistant .ai-chat__message-box {
+  background: vars.$color-accent;
+  @include typ.text-ui(vars.$color-black, 16px);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+}
+
+.ai-chat__cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 1px;
+  background: currentColor;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
