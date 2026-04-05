@@ -14,7 +14,7 @@ Set of interactive games:
 - Type Investigator
 - Code Review
 
-Personal Dashboard with statistics is available to the registered users.
+Personal Dashboard with statistics reflects progress of the registered users.
 
 This content is available after registration and login, in Russian and English.
 
