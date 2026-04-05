@@ -1,4 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form class="form__wrapper" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form__header">
+    <div class="form__title">SIGN UP</div>
+    <div class="form__sub-title">
+      <h5 class="title">already have an account?</h5>
+      <a class="form__link" [routerLink]="toLoginPath">sign in</a>
+    </div>
+  </div>
   <div class="form__body">
     <tndm-input
       label="Login"
@@ -23,13 +30,14 @@
       [id]="'password'"
       [placeholder]="'Enter password'"
       [type]="'password'" />
+    <tndm-button [btnConfig]="signUpBtnConfig()" />
   </div>
   <div class="form__footer">
-    <tndm-button [btnConfig]="signUpBtnConfig()" />
-    <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
-    <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
-    <h5 class="form__subtitle">You have an account?</h5>
-    <tndm-button [btnConfig]="toLoginBtnConfig()" (click)="navigateToLogin()" />
+    <div class="form__sign-with">
+      <div class="custom-divider">or sign up with</div>
+      <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
+      <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
+    </div>
     <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
   </div>
 </form>

@@ -5,11 +5,12 @@ import { TndmInput } from '../../../shared/ui/tndm-input/tndm-input';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
 import { AUTH_ROUTES } from '@auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-update-password-form',
-  imports: [TndmButton, TndmInput, ReactiveFormsModule],
+  imports: [TndmButton, TndmInput, ReactiveFormsModule, RouterLink],
   templateUrl: './tndm-update-password-form.html',
   styleUrl: './tndm-update-password-form.scss',
 })
