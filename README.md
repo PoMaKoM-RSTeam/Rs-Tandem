@@ -14,22 +14,22 @@ Set of interactive games:
 - Type Investigator
 - Code Review
 
+Personal Dashboard with statistics is available to the registered users.
+
 This content is available after registration and login, in Russian and English.
 
 ## We Are Proud Of
 
-- We have implemented the first app with Angular. This first step was difficult but rewarding.
+- We have implemented the first app with Angular. This first step was difficult but rewarding 🚀
 - We've built some shared UI-components (buttons, inputs, etc.) without using UI libraries. Custom design has been created from scratch and is documented in Figma.
-- All our game widgets use Supabase. DB connection is implemented by trainees, without mentor's code. BaaS Auth is supported.
-- AI Exam uses Gemini via Supabase Edge Function proxy. Again without mentor's code!
-- We have touched RxJS... ☠️ There's a lot of to learn more, but no turning back now.
-- Code Golf is based on Web Worker.
-- CDK Drag-n-drop is used in Async Sorter and Type Investigator.
-- Code Sandbox imports Monaco Editor.
-- UI of AI Exam integrates ngx-markdown.
-- We have familiarized with highlight-js and launched it to Code Review game.
-- Transloco with EN + RU is used in Language Switcher. Translations are loaded from both JSON and Supabase.
-- Unit tests are written with Vitest.
+- Almost all our games use Supabase. The Dashboard data is also taken from Supabase. DB connection is implemented by trainees, without mentor's code. BaaS Auth is supported.
+- AI Exam uses Gemini via Supabase Edge Function proxy. Again without mentor's code! Now, we know how to build a prompt, what AI models exist, what are their pros and cons.
+- We have touched RxJS... ☠️ There's a lot of to learn, but no turning back anymore.
+- We've improved our understanding of Web Workers -- Code Golf game is based on it.
+- CDK Drag-n-drop became a perfect fit in Async Sorter and Type Investigator, so now we can use it in our projects.
+- Monaco Editor, ngx-markdown, highlight-js are in our professional toolkit now as well.
+- We've used Transloco with EN + RU to localize the app. Translations are loaded from both JSON and Supabase.
+- Our code is covered with unit tests. They are written with Vitest.
 
 ## Table of Contents
 
