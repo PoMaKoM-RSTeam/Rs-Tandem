@@ -46,6 +46,7 @@
 
     &__title {
       @include typ.saibex-heading-xl;
+      text-transform: uppercase;
     }
 
     &__sub-title {
