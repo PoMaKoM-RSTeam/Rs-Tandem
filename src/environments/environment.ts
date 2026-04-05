@@ -3,4 +3,5 @@ export const environment = {
   supabaseUrl: 'https://mwamjycekiubodkkifjl.supabase.co',
   supabaseKey: 'sb_publishable_h4AF8f67ZD-cySPz_ypDpQ_rRjICbEr',
   redirectUrl: 'http://localhost:4200',
+  aiAgentBackendUrl: 'http://localhost:5000/chat',
 };
