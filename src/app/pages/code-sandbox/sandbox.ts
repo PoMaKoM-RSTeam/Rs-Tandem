@@ -1,68 +1,65 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
-import { DEFAULT_SANDBOX_CODE } from './sandbox.constants';
-import { TranslocoPipe } from '@jsverse/transloco';
-
-type Tab = 'HTML' | 'CSS' | 'JS';
+import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-button';
+import { SandboxService } from './services/sandbox.service';
+import { SandboxFetcherService } from './services/sandbox-fetcher.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
-  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TranslocoPipe],
+  providers: [SandboxService, SandboxFetcherService],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],
 })
 export class TndmSandbox {
-  private sanitizer = inject(DomSanitizer);
+  private readonly service = inject(SandboxService);
 
-  readonly tabs: Tab[] = ['HTML', 'CSS', 'JS'];
-  readonly selectedTab = signal<number>(0);
+  protected readonly isFullscreen = this.service.isFullscreen.asReadonly();
+  protected readonly selectedTab = this.service.selectedTab.asReadonly();
+  protected readonly tabs = this.service.tabs;
+  protected readonly activeCode = this.service.activeCode;
+  protected readonly activeEditorOptions = this.service.activeEditorOptions;
+  protected readonly previewContent = this.service.previewContent;
 
-  readonly htmlCode = signal(DEFAULT_SANDBOX_CODE.html);
-  readonly cssCode = signal(DEFAULT_SANDBOX_CODE.css);
-  readonly jsCode = signal(DEFAULT_SANDBOX_CODE.javascript);
-
-  readonly tabConfig = {
-    HTML: { code: this.htmlCode, lang: 'html' },
-    CSS: { code: this.cssCode, lang: 'css' },
-    JS: { code: this.jsCode, lang: 'javascript' },
-  } as const;
-
-  readonly editorOptions = {
-    theme: 'vs',
-    automaticLayout: true,
-    scrollBeyondLastLine: false,
-    minimap: { enabled: false },
-  };
-
-  readonly editorConfigs = computed(() => ({
-    HTML: { ...this.editorOptions, language: this.tabConfig.HTML.lang },
-    CSS: { ...this.editorOptions, language: this.tabConfig.CSS.lang },
-    JS: { ...this.editorOptions, language: this.tabConfig.JS.lang },
+  protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
+    variant: 'icon',
+    icon: this.service.isFullscreen() ? 'fullscreenExit' : 'fullscreen',
+    size: 'lg',
   }));
 
-  readonly previewContent = computed<SafeHtml>(() => {
-    const rawHtml = `
-      <html>
-        <head>
-          <style>${this.cssCode()}</style>
-        </head>
-        <body>
-          ${this.htmlCode()}
-          <script>
-            try {
-              ${this.jsCode()}
-            } catch (e) {
-              document.body.innerHTML += '<pre style="color:red;">'+e+'</pre>';
-            }
-          </script>
-        </body>
-      </html>
-    `;
-    return this.sanitizer.bypassSecurityTrustHtml(rawHtml);
-  });
+  protected readonly downloadBtnConfig: ButtonConfig = {
+    variant: 'icon',
+    icon: 'download',
+    size: 'lg',
+  };
+
+  protected readonly saveBtnConfig: ButtonConfig = {
+    variant: 'icon',
+    icon: 'save',
+    size: 'lg',
+  };
+
+  protected onTabChange(index: number): void {
+    this.service.selectedTab.set(index);
+  }
+
+  protected updateCode(value: string): void {
+    this.service.updateActiveCode(value);
+  }
+
+  protected save(): void {
+    this.service.save();
+  }
+
+  protected download(): void {
+    this.service.download();
+  }
+
+  protected toggleFullscreen(): void {
+    this.service.toggleFullscreen();
+  }
 }
