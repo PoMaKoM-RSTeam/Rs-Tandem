@@ -87,7 +87,28 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageInclude": ["src/**/*.ts"],
+            "coverageExclude": [
+              "src/**/*.spec.ts",
+              "src/main.ts",
+              "src/environments/**",
+              "src/**/*.d.ts",
+              "src/**/*.enum.ts",
+              "src/**/*.model.ts",
+              "src/**/*.types.ts",
+              "src/**/*.type.ts",
+              "src/**/*.constant.ts",
+              "src/**/*.constants.ts",
+              "src/**/*.interface.ts",
+              "src/**/enums/**",
+              "src/**/models/**",
+              "src/**/types/**",
+              "src/**/interfaces/**",
+              "src/**/constants/**"
+            ]
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
