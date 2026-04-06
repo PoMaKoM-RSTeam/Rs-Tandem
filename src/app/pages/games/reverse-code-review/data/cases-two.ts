@@ -34,13 +34,15 @@ export class DashboardComponent implements OnInit {
       {
         line: 15,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message:
+          'Subscription without unsubscribe in ngOnDestroy. Use takeUntilDestroyed(), async pipe, or manual cleanup.',
         points: 1,
       },
       {
         line: 19,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message:
+          'interval() never completes. Without unsubscribe, this runs indefinitely even after component is destroyed.',
         points: 1,
       },
     ],
@@ -83,13 +85,15 @@ export class OrderPageComponent implements OnInit {
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: '',
+        message:
+          'Nested subscribes form a "callback pyramid". Use switchMap/concatMap to flatten the observable chain.',
         points: 1,
       },
       {
         line: 20,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message:
+          'Nested subscriptions without cleanup. Each inner subscribe creates a leak that is never unsubscribed.',
         points: 1,
       },
     ],

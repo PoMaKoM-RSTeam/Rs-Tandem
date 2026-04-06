@@ -42,19 +42,21 @@ export class UserCardComponent {
       {
         line: 8,
         type: ErrorType.Performance,
-        message: '',
+        message:
+          'Method call in template triggers on every change detection cycle. Use a computed property or pipe instead.',
         points: 1,
       },
       {
         line: 9,
         type: ErrorType.Performance,
-        message: '',
+        message: 'formatDate() in template recalculates on every CD cycle. Use DatePipe or pre-compute the value.',
         points: 1,
       },
       {
         line: 10,
         type: ErrorType.Performance,
-        message: '',
+        message:
+          'Method call in template runs on every change detection. Cache the result in a property or use a pipe.',
         points: 1,
       },
     ],
@@ -105,19 +107,20 @@ export class TaskListComponent {
       {
         line: 13,
         type: ErrorType.Performance,
-        message: '',
+        message: 'Missing trackBy function in *ngFor. Without it, Angular re-creates all DOM elements on every change.',
         points: 1,
       },
       {
         line: 15,
         type: ErrorType.Performance,
-        message: '',
+        message:
+          'getColor() method call in template triggers on every change detection cycle.Use ngClass + property instead.',
         points: 1,
       },
       {
         line: 19,
         type: ErrorType.Performance,
-        message: '',
+        message: 'calculateTotal() runs filter on every CD cycle. Use a computed property or pipe to cache the result.',
         points: 1,
       },
     ],
@@ -174,13 +177,14 @@ export class LiveFeedComponent implements OnInit {
       {
         line: 25,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message: 'setInterval without cleanup in ngOnDestroy. The interval keeps running after component is destroyed.',
         points: 1,
       },
       {
         line: 28,
         type: ErrorType.Performance,
-        message: '',
+        message:
+          'Manual detectChanges() inside setInterval is an anti-pattern. Use async pipe with an Observable timer.',
         points: 1,
       },
     ],

@@ -38,13 +38,15 @@ export class HighlightComponent implements OnInit {
       {
         line: 14,
         type: ErrorType.BestPractice,
-        message: 'Hello!',
+        message:
+          "Direct DOM access via document.getElementById bypasses Angular's abstraction. Use @ViewChild and Renderer2.",
         points: 1,
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: 'World!',
+        message:
+          "Direct DOM manipulation with querySelector. Use Angular's @ViewChild, Renderer2, or host bindings instead.",
         points: 1,
       },
     ],
@@ -85,19 +87,19 @@ export class DataService {
       {
         line: 9,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'Using "any" for both parameter and return type removes all type safety. Define proper interfaces.',
         points: 1,
       },
       {
         line: 13,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'Function signature uses "any" everywhere. Create typed interfaces for input and output.',
         points: 1,
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'Array of "any" defeats TypeScript\'s purpose. Define an interface with the expected shape.',
         points: 1,
       },
     ],
@@ -143,19 +145,21 @@ export class StateService {
       {
         line: 16,
         type: ErrorType.BestPractice,
-        message: '',
+        message:
+          "Direct mutation of shared state array with push(). Other won't detect the change. Use immutable updates.",
         points: 1,
       },
       {
         line: 24,
         type: ErrorType.Performance,
-        message: '',
+        message:
+          'console.log in a getter runs on every access, lower performance. Remove debug logging from production code.',
         points: 1,
       },
       {
         line: 29,
         type: ErrorType.BestPractice,
-        message: '',
+        message: "Array.splice mutates the array in place. Components using OnPush won't detect this change.",
         points: 1,
       },
     ],
