@@ -1,6 +1,8 @@
 <section class="content-section">
   <div class="content__info">
     <p>{{'home.description' | transloco}}</p>
-    <tndm-button [btnConfig]="{ label: ('home.joinButton' | transloco) }" (clicked)="onSignUpClick()" />
+    @if(!authService.isAuthenticated){
+      <tndm-button [btnConfig]="{ label: ('home.joinButton' | transloco) }" (clicked)="onSignUpClick()" />
+    }
   </div>
 </section>
