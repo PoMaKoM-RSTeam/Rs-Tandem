@@ -1,12 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TndmAuthStateStoreService } from '@auth';
-import { ToastService } from '../../../core/services/toast/toast-service';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
-import { LoadingOverlayService } from '../../../core/services/loading-overlay/loading-overlay-service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
 import { finalize, take } from 'rxjs';
 import type * as Monaco from 'monaco-editor';
+import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
+import { ToastService } from '../../../core/toast/toast-service';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
