@@ -101,13 +101,17 @@
       ![скрин-автодеплой-2](./images/скрин-автодеплой-2.png)  
      ![скрин-автодеплой](./images/скрин-автодеплой.png)
     </details>    
-    
+  - Design Patterns: Явное и обоснованное применение паттернов в коде (+10):  
+    - Dependency Injection: [inject(GeminiService), inject(AiExamDatabaseService), inject(LanguagePreferenceService)](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L74-L78)
+    - Observer: Signals ([isLoading](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L87), [attemptsLeft](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L94), [examLanguage](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L102))
+    - Service Layer: [GeminiService](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/tree/main/src/app/pages/games/ai-exam/services/gemini), [AiExamDatabaseService](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/services/database.service.ts), [Async Sorter fetcher service](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/async-sorter/services/async-sorter-fetcher.service.ts) 
+    - Result Object pattern: [AskAiResult](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L23), [GenerateQuestionResult](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/blob/main/src/app/pages/games/ai-exam/ai-exam.ts#L37) со свойством `status`
   - API Layer: Выделение слоя работы с API (изоляция от UI компонентов) (+10):  
     - [компонент Async Sorter](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/tree/main/src/app/pages/games/async-sorter/services)  
     - [компонент AI Exam](https://github.com/PoMaKoM-RSTeam/Rs-Tandem/tree/main/src/app/pages/games/ai-exam/services)
   - Angular: Использование фреймворка Angular (+10)
 
-### Итоговая оценка - 210 баллов.
+### Итоговая оценка - 220 баллов.
 
 # Описание работы в рамках проекта
 
