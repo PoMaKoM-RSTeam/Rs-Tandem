@@ -1,6 +1,6 @@
 # Self-Assessment
 
-**Ссылка на PR:** https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/80
+**Ссылка на PR:** https://github.com/PoMaKoM-RSTeam/Rs-Tandem/pull/81
 
 ## 1. Реализованные фичи (Итого: 160 баллов)
 - **[My Components] Complex Component (+25 баллов)**
