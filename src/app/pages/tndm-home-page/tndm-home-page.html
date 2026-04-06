@@ -2,7 +2,7 @@
   <div class="content__info">
     <p>{{'home.description' | transloco}}</p>
     @if(!authService.isAuthenticated){
-      <tndm-button [btnConfig]="{ label: ('home.joinButton' | transloco) }" (clicked)="onSignUpClick()" />
+    <tndm-button [btnConfig]="{ label: ('home.joinButton' | transloco) }" (clicked)="onSignUpClick()" />
     }
   </div>
 </section>
