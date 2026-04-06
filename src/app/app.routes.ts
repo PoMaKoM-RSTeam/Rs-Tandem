@@ -29,6 +29,7 @@ export const routes: Routes = [
         path: APP_ROUTES.dashboard,
         loadComponent: () => import('./pages/tndm-dashboard/tndm-dashboard').then(m => m.Dashboard),
         title: 'dashboard',
+        canActivate: [tndmAuthGuard],
       },
       {
         path: APP_ROUTES.asyncSorter,

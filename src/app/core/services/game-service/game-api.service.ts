@@ -1,10 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from '../../supabase/supabase-service';
 import { DatabaseRecordRow, GamesProgressData, GlobalRecord } from './game-service.types';
+import { ToastService } from '../../toast/toast-service';
 
 @Injectable({ providedIn: 'root' })
 export class GameApiService {
   private readonly supabaseClient = inject(SupabaseService).client;
+  private readonly toastService = inject(ToastService);
 
   async updateResult(gameId: string, levelNumber: number, score: number, xp: number): Promise<void> {
     const { error } = await this.supabaseClient.rpc('submit_game_result', {
@@ -27,7 +29,7 @@ export class GameApiService {
       .maybeSingle();
 
     if (error) {
-      console.error('Failed to load level record:', error.message);
+      this.toastService.danger('Failed to load best results', error.message);
       return null;
     }
     return data?.best_score ?? null;
@@ -44,7 +46,7 @@ export class GameApiService {
 
     if (error || !data) {
       if (error) {
-        console.error('Leaderboard error:', error.message);
+        this.toastService.danger('Failed to load leaderboard', error.message);
       }
       return null;
     }
@@ -61,6 +63,7 @@ export class GameApiService {
       .limit(limit);
 
     if (error || !data) {
+      this.toastService.danger('Failed to load games leaderboard', error.message);
       return [];
     }
 
@@ -76,7 +79,7 @@ export class GameApiService {
         game_rank_position`
     );
     if (error) {
-      console.error('Error fetch games', error.message);
+      this.toastService.danger('Error fetch games', error.message);
       return [];
     }
     return data as GamesProgressData[];

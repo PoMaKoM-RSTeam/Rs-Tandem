@@ -1,10 +1,12 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SupabaseService } from '../../supabase/supabase-service';
 import { DatabaseUserFullProfileRow, UserActivityHub, UserProfile } from './user-api-service.types';
+import { ToastService } from '../../toast/toast-service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly supabaseClient = inject(SupabaseService).client;
+  private readonly toastService = inject(ToastService);
 
   private readonly profileSignal = signal<UserProfile | null>(null);
 
@@ -14,7 +16,7 @@ export class UserService {
     const { data, error } = await this.supabaseClient.rpc('sync_user_session');
 
     if (error) {
-      console.error('Session Sync Error:', error.message);
+      this.toastService.danger('Session Sync Error', error.message);
       return;
     }
 
@@ -35,6 +37,7 @@ export class UserService {
       .eq('user_id', user.userId);
 
     if (error) {
+      this.toastService.danger('Failed to update name', error.message);
       throw new Error(error.message);
     }
 
@@ -46,6 +49,7 @@ export class UserService {
 
     if (error) {
       console.error('RPC Error:', error);
+      this.toastService.danger('Failed to get activity statistics', error.message);
       return null;
     }
 

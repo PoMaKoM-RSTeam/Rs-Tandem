@@ -10,8 +10,11 @@ import { UserActivityHub } from '../../../../core/services/user-service/user-api
 })
 export class TndmStreakCalendar {
   readonly streakData = input<UserActivityHub | null>();
+  readonly daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-  daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  private readonly CALENDAR_COLS = 15;
+  private readonly CALENDAR_ROWS = 7;
+  private readonly totalCells = this.CALENDAR_COLS * this.CALENDAR_ROWS;
 
   readonly calendarDays = computed(() => {
     const days = [];
@@ -20,11 +23,10 @@ export class TndmStreakCalendar {
     const currentDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
     const daysUntilEndOfWeek = 6 - currentDayIdx;
 
-    const totalCells = 105;
     const startDate = new Date(now);
     startDate.setDate(now.getDate() + daysUntilEndOfWeek);
 
-    for (let i = totalCells - 1; i >= 0; i--) {
+    for (let i = this.totalCells - 1; i >= 0; i--) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() - i);
 

@@ -1,5 +1,5 @@
 <section class="dashboard">
-  <tndm-main-block
+  <tndm-dashboard-widget
     [current]="userProgress().current"
     [label]="userProgress().max"
     [max]="userProgress().max"
@@ -7,6 +7,6 @@
     [title]="userName()" />
   <tndm-streak-calendar [streakData]="streakData()" />
   @for (game of gamesProgress(); track game.title) {
-  <tndm-main-block [current]="game.current" [max]="game.max" [stats]="game.stats" [title]="game.title" />
+  <tndm-dashboard-widget [current]="game.current" [max]="game.max" [stats]="game.stats" [title]="game.title" />
   }
 </section>

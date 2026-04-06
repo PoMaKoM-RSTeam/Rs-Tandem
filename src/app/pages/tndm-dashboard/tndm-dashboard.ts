@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
-import { TndmMainBlock } from './components/tndm-main-block/tndm-main-block';
+import { TndmDashboardWidget } from './components/tndm-dashboard-widget/tndm-dashboard-widget';
 import { TndmStreakCalendar } from './components/tndm-streak-calendar/tndm-streak-calendar';
 import { DashboardService } from './tndm-dashboard.service';
 
 @Component({
   selector: 'tndm-dashboard',
-  imports: [TndmMainBlock, TndmStreakCalendar],
+  imports: [TndmDashboardWidget, TndmStreakCalendar],
   templateUrl: './tndm-dashboard.html',
   styleUrl: './tndm-dashboard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

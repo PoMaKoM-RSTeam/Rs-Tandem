@@ -10,13 +10,13 @@ export type DashboardStatItem = {
 };
 
 @Component({
-  selector: 'tndm-main-block',
+  selector: 'tndm-dashboard-widget',
   imports: [TndmCircleProgress, CommonModule],
-  templateUrl: './tndm-main-block.html',
-  styleUrl: './tndm-main-block.scss',
+  templateUrl: './tndm-dashboard-widget.html',
+  styleUrl: './tndm-dashboard-widget.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmMainBlock {
+export class TndmDashboardWidget {
   readonly title = input<string | null>(null);
   readonly size = input<string | null>('s');
   readonly stats = input<DashboardStatItem[]>([]);
