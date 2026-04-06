@@ -40,7 +40,6 @@
     "lodash": "^4.17.23",
     "ngx-markdown": "^21.1.0",
     "ngx-monaco-editor-v2": "^21.1.4",
-    "ollama": "^0.6.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -57,10 +56,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
-    "jsdom": "^27.1.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
-    "prettier-eslint": "^16.4.2",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.50.1",
     "vitest": "^4.0.8"
