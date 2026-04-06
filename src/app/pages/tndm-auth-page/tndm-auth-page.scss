@@ -1,4 +1,3 @@
-@use './styles/typography' as mx;
 @use './styles/variables' as vars;
 
 .auth-page {
@@ -6,21 +5,24 @@
     width: 100%;
     height: 100%;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     background-color: vars.$bg-main;
   }
 
-  &__title {
-    padding-top: vars.$space-xl;
-    @include mx.text-title();
+  &__content {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  &__sub-title {
-    text-align: center;
-    padding: vars.$space-xl 0;
-    @include mx.text-subtitle();
+@media (width < 769px) {
+  .auth-page {
+    &__content {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    &__logo-cnt {
+      display: none;
+    }
   }
 }

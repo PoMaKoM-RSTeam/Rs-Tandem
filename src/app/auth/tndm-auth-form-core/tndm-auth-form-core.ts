@@ -9,9 +9,15 @@ import { TndmAuthService } from '@auth/tndm-auth-service';
 import { ToastService } from '../../core/toast/toast-service';
 import { AUTH_ROUTES } from '@auth';
 import { AUTH_ERROR_MESSAGES } from '../constants/auth-error-messages';
+import { APP_ROUTES } from '../../shared/constants/app-routes';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {
+  protected readonly toRegisterPath: string = AUTH_ROUTES.REGISTER;
+  protected readonly toLoginPath: string = AUTH_ROUTES.LOGIN;
+  protected readonly toForgotPasswordPath: string = AUTH_ROUTES.FORGOT_PASSWORD;
+  protected readonly toHomePath: string = `/${APP_ROUTES.home}`;
+
   protected readonly fb: FormBuilder = inject(FormBuilder);
 
   protected readonly router: Router = inject(Router);
@@ -86,16 +92,8 @@ export abstract class TndmAuthFormCore implements OnInit {
     this.buildForm();
   }
 
-  protected async navigateToLogin(): Promise<void> {
-    await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
-  }
-
-  protected async navigateToRegister(): Promise<void> {
-    await this.router.navigateByUrl(AUTH_ROUTES.REGISTER);
-  }
-
   protected async navigateToMain(): Promise<void> {
-    await this.router.navigateByUrl('/'); // TODO: change path when route will be implemented
+    await this.router.navigateByUrl(APP_ROUTES.home);
   }
 
   protected async signWithOAuth(provider: AuthProvider): Promise<void> {
