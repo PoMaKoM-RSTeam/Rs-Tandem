@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { SupabaseService } from '../supabase/supabase-service';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { from } from 'rxjs';
 
 const TRANSLATIONS_TABLE = 'rules';
 
@@ -26,23 +27,16 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   }
 
   private loadFromSupabase(lang: string): Observable<Translation> {
-    return new Observable<Translation>(subscriber => {
-      this.supabase
-        .from(TRANSLATIONS_TABLE)
-        .select('key, value')
-        .eq('lang', lang)
-        .then(({ data, error }) => {
-          if (error || !data) {
-            subscriber.next({});
-          } else {
-            const translations: Translation = {};
-            for (const row of data) {
-              translations[row.key] = row.value;
-            }
-            subscriber.next(translations);
-          }
-          subscriber.complete();
-        });
-    }).pipe(catchError(() => of({})));
+    return from(this.supabase.from(TRANSLATIONS_TABLE).select('key, value').eq('lang', lang)).pipe(
+      map(({ data, error }) => {
+        if (error || !data) return {};
+        const translations: Translation = {};
+        for (const row of data) {
+          translations[row.key] = row.value;
+        }
+        return translations;
+      }),
+      catchError(() => of({}))
+    );
   }
 }
