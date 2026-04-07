@@ -25,12 +25,6 @@ export class TndmUpdatePasswordForm extends TndmAuthFormCore {
     type: 'submit',
   }));
 
-  protected readonly toMainBtnConfig: Signal<ButtonConfig> = computed(() => ({
-    variant: 'secondary',
-    label: 'Main',
-    isDisabled: this.isLoading(),
-  }));
-
   constructor() {
     super();
   }
@@ -42,7 +36,10 @@ export class TndmUpdatePasswordForm extends TndmAuthFormCore {
     await this.authService.updatePassword(this.passwordControl.value);
 
     await this.authService.logout();
-    this.toastService.info('Пароль обновлён', 'Войдите с новым паролем');
+    this.toastService.info(
+      this.transloco.translate('auth.updated'),
+      this.transloco.translate('auth.loginWithNewPassword')
+    );
     await this.router.navigateByUrl(AUTH_ROUTES.LOGIN);
   }
 }
