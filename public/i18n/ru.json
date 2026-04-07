@@ -32,6 +32,7 @@
   "auth": {
     "signIn": "войти",
     "firstTimeHere": "первый раз здесь?",
+    "registration": "Регистрация",
     "signUp": "зарегистрироваться",
     "alreadyHaveAccount": "уже есть аккаунт?",
     "login": "Логин",
