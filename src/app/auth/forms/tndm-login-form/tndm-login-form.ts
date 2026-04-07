@@ -23,7 +23,7 @@ export class TndmLoginForm extends TndmAuthFormCore {
     isDisabled: !this.canSubmit(),
   }));
 
-  protected readonly signWithGoogleLabel = translateSignal('auth.signInGoogle');
+  protected readonly signWithGoogleLabel = translateSignal('auth.signGoogle');
 
   protected readonly signWithGoogleBtnConfig: Signal<ButtonConfig> = computed(() => ({
     icon: 'google',
@@ -32,7 +32,7 @@ export class TndmLoginForm extends TndmAuthFormCore {
     isDisabled: this.isLoading(),
   }));
 
-  protected readonly signWithGithubLabel = translateSignal('auth.signInGithub');
+  protected readonly signWithGithubLabel = translateSignal('auth.signGithub');
 
   protected readonly signWithGithubBtnConfig: Signal<ButtonConfig> = computed(() => ({
     icon: 'github',
