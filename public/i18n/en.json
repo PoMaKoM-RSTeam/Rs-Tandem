@@ -74,7 +74,18 @@
     "empty": "All blocks placed",
     "available": "Available blocks"
   },
+  "common": {
+    "somethingWentWrong": "Something went wrong"
+  },
+  "toast": {
+    "success": "success",
+    "warning": "warning",
+    "info": "info",
+    "danger": "danger"
+  },
   "auth": {
+    "updated": "Password updated",
+    "loginWithNewPassword": "Log in with the new password",
     "signIn": "sign in",
     "firstTimeHere": "first time here?",
     "registration": "registration",
@@ -105,6 +116,20 @@
     "userAlreadyExists": "A user with this email already exists",
     "emailNotConfirmed": "Please confirm your email before signing in",
     "weakPassword": "Password is too weak"
+  },
+  "validation": {
+    "required": "{{name}} is required",
+    "email": "Please enter a valid email address",
+    "minlength": "{{name}} must be at least {{requiredLength}} characters",
+    "maxlength": "{{name}} must be maximum {{requiredLength}} characters",
+    "loginInvalid": "{{name}} must contain: {{requirements}}",
+    "passwordWeak": "{{name}} must contain: {{requirements}}",
+    "lettersDigitsHyphenUnderscoreOnly": "letters, digits, hyphen or underscore only",
+    "cannotStartWithDigit": "cannot start with digit",
+    "uppercaseLetter": "uppercase letter",
+    "lowercaseLetter": "lowercase letter",
+    "digit": "digit",
+    "specialCharacter": "special character"
   },
   "home": {
     "description": "Master the tech interview through interactive challenges. Debug the Event Loop, solve TS Investigator mysteries, and win at Code Golf.",

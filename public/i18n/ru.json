@@ -74,7 +74,18 @@
     "empty": "Все блоки уже размещены",
     "available": "Доступные блоки"
   },
+  "common": {
+    "somethingWentWrong": "Что-то пошло не так"
+  },
+  "toast": {
+    "success": "успешно",
+    "warning": "внимание",
+    "info": "информация",
+    "danger": "ошибка"
+  },
   "auth": {
+    "updated": "Пароль обновлён",
+    "loginWithNewPassword": "Войдите с новым паролем",
     "signIn": "войти",
     "firstTimeHere": "первый раз здесь?",
     "registration": "Регистрация",
@@ -105,6 +116,20 @@
     "userAlreadyExists": "Пользователь с таким email уже существует",
     "emailNotConfirmed": "Подтвердите email перед входом",
     "weakPassword": "Слишком простой пароль"
+  },
+  "validation": {
+    "required": "{{name}} поле обязательно",
+    "email": "Введите корректный email",
+    "minlength": "{{name}} должно быть не короче {{requiredLength}} символов",
+    "maxlength": "{{name}} должно быть не длиннее {{requiredLength}} символов",
+    "loginInvalid": "{{name}} должен содержать: {{requirements}}",
+    "passwordWeak": "{{name}} должен содержать: {{requirements}}",
+    "lettersDigitsHyphenUnderscoreOnly": "только буквы, цифры, дефис или подчёркивание",
+    "cannotStartWithDigit": "не может начинаться с цифры",
+    "uppercaseLetter": "заглавная буква",
+    "lowercaseLetter": "строчная буква",
+    "digit": "цифра",
+    "specialCharacter": "специальный символ"
   },
   "home": {
     "description": "Подготовься к техническому интервью, выполняя интерактивные задания. Отлаживай Event Loop, разгадывай тайны TS Investigator и побеждай в Code Golf.",
