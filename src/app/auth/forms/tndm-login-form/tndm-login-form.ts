@@ -5,31 +5,39 @@ import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-bu
 import { RouterLink } from '@angular/router';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
+import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-login-form',
-  imports: [ReactiveFormsModule, TndmInput, TndmButton, RouterLink],
+  imports: [ReactiveFormsModule, TndmInput, TndmButton, RouterLink, TranslocoPipe],
   templateUrl: './tndm-login-form.html',
   styleUrl: './tndm-login-form.scss',
 })
 export class TndmLoginForm extends TndmAuthFormCore {
+  protected readonly signInLabel = translateSignal('auth.signIn');
+
   protected readonly signInBtnConfig: Signal<ButtonConfig> = computed(() => ({
-    label: 'Sign-In',
+    label: this.signInLabel(),
     type: 'submit',
     isDisabled: !this.canSubmit(),
   }));
 
+  protected readonly signWithGoogleLabel = translateSignal('auth.signGoogle');
+
   protected readonly signWithGoogleBtnConfig: Signal<ButtonConfig> = computed(() => ({
     icon: 'google',
     variant: 'black',
-    label: 'Sign-In with Google',
+    label: this.signWithGoogleLabel(),
     isDisabled: this.isLoading(),
   }));
+
+  protected readonly signWithGithubLabel = translateSignal('auth.signGithub');
+
   protected readonly signWithGithubBtnConfig: Signal<ButtonConfig> = computed(() => ({
     icon: 'github',
     variant: 'black',
-    label: 'Sign-In with Github',
+    label: this.signWithGithubLabel(),
     isDisabled: this.isLoading(),
   }));
 
