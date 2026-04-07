@@ -1,37 +1,37 @@
 <form class="form__wrapper" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form__header">
-    <div class="form__title">SIGN IN</div>
+    <div class="form__title">{{ 'auth.signIn' | transloco }}</div>
     <div class="form__sub-title">
-      <h5 class="title">first time here?</h5>
-      <a class="form__link" [routerLink]="toRegisterPath">sign up</a>
+      <h5 class="title">{{ 'auth.firstTimeHere' | transloco }}</h5>
+      <a class="form__link" [routerLink]="toRegisterPath">{{ 'auth.signUp' | transloco }}</a>
     </div>
   </div>
   <div class="form__body">
     <tndm-input
-      label="Email"
+      label="{{'auth.email' | transloco}}"
       name="email"
+      placeholder="{{'auth.enterEmail' | transloco  }}"
       [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="emailControl"
       [id]="'email'"
-      [placeholder]="'Enter email'"
       [type]="'email'" />
     <tndm-input
-      label="Password"
+      label="{{'auth.password' | transloco}}"
       name="password"
+      placeholder="{{'auth.enterPassword' | transloco}}"
       [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="passwordControl"
       [id]="'password'"
-      [placeholder]="'Enter password'"
       [type]="'password'" />
     <tndm-button [btnConfig]="signInBtnConfig()" />
   </div>
 
   <div class="form__footer">
     <div class="form__sign-with">
-      <div class="custom-divider">or sign in with</div>
+      <div class="custom-divider">{{ 'auth.orSignUpWith' | transloco }}</div>
       <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
       <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
     </div>
-    <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
+    <a class="form__link" [routerLink]="toForgotPasswordPath">{{ 'auth.forgotPassword' | transloco }}</a>
   </div>
 </form>
