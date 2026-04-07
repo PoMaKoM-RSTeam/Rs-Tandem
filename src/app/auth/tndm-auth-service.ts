@@ -4,6 +4,7 @@ import { TndmAuthApiService } from '@auth/tndm-auth-api-service';
 import { AuthError, User } from '@supabase/supabase-js';
 import { handleSupabaseAuthError } from '@auth/helpers/supabase-error-messages';
 import { AuthProvider } from '@auth/types/types';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { AuthProvider } from '@auth/types/types';
 export class TndmAuthService {
   private readonly authState: TndmAuthStateStoreService = inject(TndmAuthStateStoreService);
   private readonly authApi: TndmAuthApiService = inject(TndmAuthApiService);
+  private readonly transloco: TranslocoService = inject(TranslocoService);
 
   get isAuthenticated(): boolean {
     return this.authState.isAuthenticated();
@@ -57,14 +59,16 @@ export class TndmAuthService {
       return await fn();
     } catch (error) {
       if (error instanceof AuthError) {
-        throw new Error(handleSupabaseAuthError(error));
+        const translocoSupabaseErrorKey = handleSupabaseAuthError(error);
+        const message = this.transloco.translate(translocoSupabaseErrorKey);
+        throw new Error(message);
       }
 
       if (error instanceof Error) {
         throw error;
       }
 
-      throw new Error('Something went wrong');
+      throw new Error(this.transloco.translate('common.somethingWentWrong'));
     }
   }
 }
