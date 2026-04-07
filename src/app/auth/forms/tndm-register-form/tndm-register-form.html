@@ -1,43 +1,43 @@
 <form class="form__wrapper" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form__header">
-    <div class="form__title">SIGN UP</div>
+    <div class="form__title">{{ 'auth.registration' | transloco }}</div>
     <div class="form__sub-title">
-      <h5 class="title">already have an account?</h5>
-      <a class="form__link" [routerLink]="toLoginPath">sign in</a>
+      <h5 class="title">{{ 'auth.alreadyHaveAccount' | transloco}}</h5>
+      <a class="form__link" [routerLink]="toLoginPath">{{'auth.signIn' | transloco}}</a>
     </div>
   </div>
   <div class="form__body">
     <tndm-input
-      label="Login"
+      label="{{'auth.login' | transloco}}"
       name="login"
+      placeholder="{{'auth.enterLogin' | transloco}}"
       [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="loginControl"
       [id]="'login'"
-      [placeholder]="'Enter your login'"
       [type]="'text'" />
     <tndm-input
-      label="Email"
+      label="{{'auth.email' | transloco}}"
       name="email"
+      placeholder="{{'auth.enterEmail' | transloco}}"
       [formControl]="emailControl"
       [id]="'email'"
-      [placeholder]="'Enter email'"
       [type]="'email'" />
     <tndm-input
-      label="Password"
+      label="{{'auth.password' | transloco}}"
       name="password"
+      placeholder="{{'auth.enterPassword' | transloco}}"
       [errorMessages]="AUTH_ERROR_MESSAGES"
       [formControl]="passwordControl"
       [id]="'password'"
-      [placeholder]="'Enter password'"
       [type]="'password'" />
     <tndm-button [btnConfig]="signUpBtnConfig()" />
   </div>
   <div class="form__footer">
     <div class="form__sign-with">
-      <div class="custom-divider">or sign up with</div>
+      <div class="custom-divider">{{ 'auth.orSignUpWith' | transloco }}</div>
       <tndm-button [btnConfig]="signWithGoogleBtnConfig()" (click)="signWithOAuth('google')" />
       <tndm-button [btnConfig]="signWithGithubBtnConfig()" (click)="signWithOAuth('github')" />
     </div>
-    <a class="form__link" [routerLink]="toForgotPasswordPath">Forgot Password?</a>
+    <a class="form__link" [routerLink]="toForgotPasswordPath">{{ 'auth.forgotPassword' | transloco }}</a>
   </div>
 </form>
