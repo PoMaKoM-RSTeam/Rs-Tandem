@@ -3,12 +3,7 @@ import { SupabaseService } from '../../../core/supabase/supabase-service';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { from, map, Observable } from 'rxjs';
 import { ToastService } from '../../../core/toast/toast-service';
-
-type SandboxResponse = {
-  html: string;
-  css: string;
-  js: string;
-};
+import { SandboxResponse } from '../types/sandbox-response';
 
 @Injectable()
 export class SandboxFetcherService {

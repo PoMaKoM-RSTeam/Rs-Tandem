@@ -3,10 +3,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TndmAuthStateStoreService } from '@auth';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
-import { finalize, take } from 'rxjs';
+import { EMPTY, finalize, Observable, take, tap } from 'rxjs';
 import type * as Monaco from 'monaco-editor';
 import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
 import { ToastService } from '../../../core/toast/toast-service';
+import { SandboxResponse } from '../types/sandbox-response';
 
 type Tab = 'HTML' | 'CSS' | 'JS';
 
@@ -82,56 +83,34 @@ export class SandboxService {
     this.tabMap[this.activeTabType()].code.set(value);
   }
 
-  save(): void {
+  save(): Observable<void> {
     const id = this.checkAuth('Error saving result');
-    if (!id) return;
+    if (!id) return EMPTY;
 
     this.loadingService.show();
 
-    this.fetcher
+    return this.fetcher
       .saveData(id, this.htmlCode(), this.cssCode(), this.jsCode())
-      .pipe(
-        take(1),
-        finalize(() => this.loadingService.hide())
-      )
-
-      .subscribe({
-        next: () => {
-          this.toastService.success('Success', 'You code saved');
-        },
-        error: error => {
-          this.toastService.danger('Error saving result', error.message || 'Try again');
-        },
-      });
+      .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  download(): void {
+  download(): Observable<SandboxResponse | undefined> {
     const id = this.checkAuth('Error fetching data');
-    if (!id) return;
+    if (!id) return EMPTY;
 
     this.loadingService.show();
 
-    this.fetcher
-      .getData(id)
-      .pipe(
-        take(1),
-        finalize(() => this.loadingService.hide())
-      )
-      .subscribe({
-        next: data => {
-          if (data) {
-            this.htmlCode.set(data.html);
-            this.cssCode.set(data.css);
-            this.jsCode.set(data.js);
-            this.toastService.success('Success', 'Data loaded successfully!');
-          } else {
-            this.toastService.warning('Attention', 'No saved data found.');
-          }
-        },
-        error: err => {
-          this.toastService.danger('Error fetching data', err.message || 'Try again');
-        },
-      });
+    return this.fetcher.getData(id).pipe(
+      take(1),
+      tap(data => {
+        if (data) {
+          this.htmlCode.set(data.html);
+          this.cssCode.set(data.css);
+          this.jsCode.set(data.js);
+        }
+      }),
+      finalize(() => this.loadingService.hide())
+    );
   }
 
   private checkAuth(actionTitle: string): string | null {
