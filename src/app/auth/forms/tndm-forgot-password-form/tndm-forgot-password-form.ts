@@ -5,17 +5,19 @@ import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-bu
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
 import { RouterLink } from '@angular/router';
+import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-forgot-password-form',
-  imports: [ReactiveFormsModule, TndmInput, TndmButton, RouterLink],
+  imports: [ReactiveFormsModule, TndmInput, TndmButton, RouterLink, TranslocoPipe],
   templateUrl: './tndm-forgot-password-form.html',
   styleUrl: './tndm-forgot-password-form.scss',
 })
 export class TndmForgotPasswordForm extends TndmAuthFormCore {
+  protected readonly resetPasswordLabel = translateSignal('auth.resetPassword');
   protected readonly resetPasswordBtnConfig: Signal<ButtonConfig> = computed<ButtonConfig>(() => ({
-    label: 'Reset Password',
+    label: this.resetPasswordLabel(),
     isDisabled: !this.canSubmit(),
     type: 'submit',
   }));
