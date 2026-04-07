@@ -124,7 +124,7 @@
     "maxlength": "{{name}} должно быть не длиннее {{requiredLength}} символов",
     "loginInvalid": "{{name}} должен содержать: {{requirements}}",
     "passwordWeak": "{{name}} должен содержать: {{requirements}}",
-    "lettersDigitsHyphenUnderscoreOnly": "только буквы, цифры, дефис или подчёркивание",
+    "lettersDigitsHyphenUnderscoreOnly": "может содержать только буквы, цифры, дефис или подчёркивание",
     "cannotStartWithDigit": "не может начинаться с цифры",
     "uppercaseLetter": "заглавная буква",
     "lowercaseLetter": "строчная буква",
