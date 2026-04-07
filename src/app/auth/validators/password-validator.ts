@@ -10,16 +10,16 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
 
   const failed: string[] = [];
   if (!hasUpper) {
-    failed.push('uppercase letter');
+    failed.push('validation.uppercaseLetter');
   }
   if (!hasLower) {
-    failed.push('lowercase letter');
+    failed.push('validation.lowercaseLetter');
   }
   if (!hasDigit) {
-    failed.push('digit');
+    failed.push('validation.digit');
   }
   if (!hasSpecial) {
-    failed.push('special character');
+    failed.push('validation.specialCharacter');
   }
 
   if (failed.length > 0) {
