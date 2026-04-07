@@ -50,6 +50,26 @@
       "description": "Construct a type by removing properties K from object type T. Combine mapped types with key remapping.",
       "hint": "Use `as` key remapping inside a mapped type to filter keys: [P in keyof T as P extends K ? never : P]"
     },
+    "easyMutable": {
+      "title": "Mutable",
+      "description": "Remove the readonly modifier from all properties of T. The opposite of Readonly.",
+      "hint": "Use -readonly before the mapped key to strip the readonly modifier: -readonly [K in keyof T]"
+    },
+    "easyRecord": {
+      "title": "MyRecord",
+      "description": "Create a type with keys of type K (constrained to string) and values of type V.",
+      "hint": "Constrain K with `extends string`, then map: [P in K]: V"
+    },
+    "mediumAwaited": {
+      "title": "MyAwaited",
+      "description": "Extract the type that a Promise resolves to. Unwrap Promise<T> into T.",
+      "hint": "Use conditional type with infer: T extends Promise<infer U> ? U : T"
+    },
+    "mediumParameters": {
+      "title": "MyParameters",
+      "description": "Extract the parameter types of a function type T as a tuple.",
+      "hint": "Pattern: T extends (...args: infer P) => any ? P : never"
+    },
     "solved": "Puzzle solved!",
     "empty": "All blocks placed",
     "available": "Available blocks"

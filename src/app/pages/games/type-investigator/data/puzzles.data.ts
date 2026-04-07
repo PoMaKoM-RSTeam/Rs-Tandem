@@ -4,5 +4,13 @@ import { DATA_TWO } from './data-two';
 import { DATA_THREE } from './data-three';
 import { DATA_FOUR } from './data-four';
 import { DATA_FIVE } from './data-five';
+import { DATA_SIX } from './data-six';
 
-export const PUZZLES_DATA: Puzzle[] = [...DATA_ONE, ...DATA_TWO, ...DATA_THREE, ...DATA_FOUR, ...DATA_FIVE];
+export const PUZZLES_DATA: Puzzle[] = [
+  ...DATA_ONE,
+  ...DATA_TWO,
+  ...DATA_THREE,
+  ...DATA_FOUR,
+  ...DATA_FIVE,
+  ...DATA_SIX,
+];
