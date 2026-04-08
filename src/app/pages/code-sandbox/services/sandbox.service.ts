@@ -51,20 +51,23 @@ export class SandboxService {
     language: this.tabMap[this.activeTabType()].lang,
   }));
 
+  readonly rawHtmlString = computed(() => {
+    return `
+    <html>
+      <head><style>${this.cssCode()}</style></head>
+      <body>
+        ${this.htmlCode()}
+        <script>
+          try { ${this.jsCode()} }
+          catch (e) { document.body.innerHTML += '<pre style="color:red;">'+e+'</pre>'; }
+        </script>
+      </body>
+    </html>
+  `;
+  });
+
   readonly previewContent = computed<SafeHtml>(() => {
-    const rawHtml = `
-      <html>
-        <head><style>${this.cssCode()}</style></head>
-        <body>
-          ${this.htmlCode()}
-          <script>
-            try { ${this.jsCode()} }
-            catch (e) { document.body.innerHTML += '<pre style="color:red;">'+e+'</pre>'; }
-          </script>
-        </body>
-      </html>
-    `;
-    return this.sanitizer.bypassSecurityTrustHtml(rawHtml);
+    return this.sanitizer.bypassSecurityTrustHtml(this.rawHtmlString());
   });
 
   setEditorInstance(editor: Monaco.editor.IStandaloneCodeEditor): void {
