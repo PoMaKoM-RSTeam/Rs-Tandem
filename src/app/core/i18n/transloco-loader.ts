@@ -14,7 +14,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   private readonly supabase: SupabaseClient = inject(SupabaseService).client;
 
   getTranslation(lang: string): Observable<Translation> {
-    return forkJoin([this.loadFromJson(lang), this.loadFromSupabase(lang)]).pipe(
+    return forkJoin([this.loadFromJson(lang), this.loadFromSupabase(TRANSLATIONS_TABLE, lang)]).pipe(
       map(([jsonTranslations, supabaseTranslations]) => ({
         ...jsonTranslations,
         ...supabaseTranslations,
@@ -26,8 +26,8 @@ export class TranslocoHttpLoader implements TranslocoLoader {
     return this.http.get<Translation>(`/i18n/${lang}.json`);
   }
 
-  private loadFromSupabase(lang: string): Observable<Translation> {
-    return from(this.supabase.from(TRANSLATIONS_TABLE).select('key, value').eq('lang', lang)).pipe(
+  private loadFromSupabase(table: string, lang: string): Observable<Translation> {
+    return from(this.supabase.from(table).select('key, value').eq('lang', lang)).pipe(
       map(({ data, error }) => {
         if (error || !data) return {};
         const translations: Translation = {};
