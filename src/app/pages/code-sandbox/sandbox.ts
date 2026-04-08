@@ -6,7 +6,8 @@ import { ButtonConfig, TndmButton } from '../../shared/ui/tndm-button/tndm-butto
 import { SandboxService } from './services/sandbox.service';
 import { SandboxFetcherService } from './services/sandbox-fetcher.service';
 import { ToastService } from '../../core/toast/toast-service';
-import { take } from 'rxjs';
+import { catchError, EMPTY, take } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,7 +59,14 @@ export class TndmSandbox {
   protected save(): void {
     this.service
       .save()
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+        catchError(error => {
+          this.toastService.danger('Error saving result', error.message || 'Try again');
+          return EMPTY;
+        })
+      )
       .subscribe({
         next: () => {
           this.toastService.success('Success', 'You code saved');
@@ -72,7 +80,14 @@ export class TndmSandbox {
   protected download(): void {
     this.service
       .download()
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        takeUntilDestroyed(this.destroyRef),
+        catchError(err => {
+          this.toastService.danger('Error fetching data', err.message || 'Try again');
+          return EMPTY;
+        })
+      )
       .subscribe({
         next: data => {
           if (data) {
@@ -80,9 +95,6 @@ export class TndmSandbox {
           } else {
             this.toastService.warning('Attention', 'No saved data found.');
           }
-        },
-        error: err => {
-          this.toastService.danger('Error fetching data', err.message || 'Try again');
         },
       });
   }

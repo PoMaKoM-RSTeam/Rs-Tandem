@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TndmAuthStateStoreService } from '@auth';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
-import { EMPTY, finalize, Observable, take, tap } from 'rxjs';
+import { EMPTY, finalize, Observable, tap } from 'rxjs';
 import type * as Monaco from 'monaco-editor';
 import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
 import { ToastService } from '../../../core/toast/toast-service';
@@ -101,7 +101,6 @@ export class SandboxService {
     this.loadingService.show();
 
     return this.fetcher.getData(id).pipe(
-      take(1),
       tap(data => {
         if (data) {
           this.htmlCode.set(data.html);
