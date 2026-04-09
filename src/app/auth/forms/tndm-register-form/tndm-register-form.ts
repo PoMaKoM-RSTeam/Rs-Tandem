@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/c
 import { ReactiveFormsModule } from '@angular/forms';
 import { TndmInput } from '../../../shared/ui/tndm-input/tndm-input';
 import { ButtonConfig, TndmButton } from '../../../shared/ui/tndm-button/tndm-button';
-import { AUTH_ROUTES } from '../../';
 import { RouterLink } from '@angular/router';
 import { TndmAuthFormCore } from '../../tndm-auth-form-core/tndm-auth-form-core';
 import { FormField } from '../../enums/auth-field-types';
@@ -15,8 +14,6 @@ import { FormField } from '../../enums/auth-field-types';
   styleUrl: './tndm-register-form.scss',
 })
 export class TndmRegisterForm extends TndmAuthFormCore {
-  protected readonly toForgotPasswordPath: string = AUTH_ROUTES.FORGOT_PASSWORD;
-
   protected readonly signUpBtnConfig: Signal<ButtonConfig> = computed(() => ({
     label: 'Sign-Up',
     type: 'submit',
@@ -35,11 +32,6 @@ export class TndmRegisterForm extends TndmAuthFormCore {
     variant: 'black',
     label: 'Sign-Up with Github',
     isDisabled: this.isLoading(),
-  }));
-
-  protected readonly toLoginBtnConfig: Signal<ButtonConfig> = computed(() => ({
-    variant: 'secondary',
-    label: 'Sign-in',
   }));
 
   constructor() {

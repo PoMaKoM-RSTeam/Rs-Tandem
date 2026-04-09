@@ -9,6 +9,7 @@ export const routes: Routes = [
     path: AUTH_ROUTES_SEGMENTS.AUTH,
     component: TndmAuthPage,
     children: authRoutes,
+    canActivate: [tndmAuthGuard],
   },
   {
     path: '',
@@ -23,6 +24,12 @@ export const routes: Routes = [
           showLines: true,
           headerType: 'home',
         },
+      },
+      {
+        path: APP_ROUTES.dashboard,
+        loadComponent: () => import('./pages/tndm-dashboard/tndm-dashboard').then(m => m.Dashboard),
+        title: 'dashboard',
+        canActivate: [tndmAuthGuard],
       },
       {
         path: APP_ROUTES.asyncSorter,
