@@ -9,17 +9,16 @@ export class TndmTranslocoSupabaseLoader {
   private readonly transloco = inject(TranslocoService);
   private readonly cache = new Map<string, string>();
 
-  async getTable(gameKey: string): Promise<string> {
+  async getTable(gameKey: string, table = 'rules'): Promise<string> {
     const lang = this.transloco.getActiveLang();
-
-    const cacheKey = `${gameKey}:${lang}`;
+    const cacheKey = `${table}:${gameKey}:${lang}`;
 
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey)!;
     }
 
     const { data, error } = await this.supabase
-      .from('rules')
+      .from(table)
       .select('value')
       .eq('key', gameKey)
       .eq('lang', lang)
