@@ -8,13 +8,14 @@ import { SandboxFetcherService } from './services/sandbox-fetcher.service';
 import { ToastService } from '../../core/toast/toast-service';
 import { catchError, EMPTY, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'tndm-sandbox',
   standalone: true,
   providers: [SandboxService, SandboxFetcherService],
-  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton],
+  imports: [FormsModule, MatTabsModule, MonacoEditorModule, TndmButton, TranslocoPipe],
   templateUrl: './sandbox.html',
   styleUrls: ['./sandbox.scss'],
 })
@@ -29,6 +30,7 @@ export class TndmSandbox {
   protected readonly previewContent = this.service.previewContent;
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly transloco: TranslocoService = inject(TranslocoService);
 
   protected readonly fullscreenBtnConfig = computed<ButtonConfig>(() => ({
     variant: 'icon',
@@ -63,16 +65,19 @@ export class TndmSandbox {
         take(1),
         takeUntilDestroyed(this.destroyRef),
         catchError(error => {
-          this.toastService.danger('Error saving result', error.message || 'Try again');
+          this.toastService.danger(
+            this.transloco.translate('sandbox.errorSave'),
+            error.message || this.transloco.translate('sandbox.tryAgain')
+          );
           return EMPTY;
         })
       )
       .subscribe({
         next: () => {
-          this.toastService.success('Success', 'You code saved');
-        },
-        error: error => {
-          this.toastService.danger('Error saving result', error.message || 'Try again');
+          this.toastService.success(
+            this.transloco.translate('sandbox.success'),
+            this.transloco.translate('sandbox.dataSaved')
+          );
         },
       });
   }
@@ -84,16 +89,25 @@ export class TndmSandbox {
         take(1),
         takeUntilDestroyed(this.destroyRef),
         catchError(err => {
-          this.toastService.danger('Error fetching data', err.message || 'Try again');
+          this.toastService.danger(
+            this.transloco.translate('sandbox.errorfetch'),
+            err.message || this.transloco.translate('sandbox.tryAgain')
+          );
           return EMPTY;
         })
       )
       .subscribe({
         next: data => {
           if (data) {
-            this.toastService.success('Success', 'Data loaded successfully!');
+            this.toastService.success(
+              this.transloco.translate('sandbox.success'),
+              this.transloco.translate('sandbox.dataLoaded')
+            );
           } else {
-            this.toastService.warning('Attention', 'No saved data found.');
+            this.toastService.warning(
+              this.transloco.translate('sandbox.warning'),
+              this.transloco.translate('sandbox.noData')
+            );
           }
         },
       });

@@ -44,7 +44,15 @@
     "mainbtn": "go to the main page"
   },
   "sandbox": {
-    "livePreview": "Live Preview"
+    "livePreview": "Live Preview",
+    "errorfetch": "Error fetching data",
+    "errorSave": "Error saving result",
+    "tryAgain": "Try again later",
+    "noData": "No saved data found.",
+    "dataLoaded": "Data loaded successfully!",
+    "dataSaved": "Data saved successfully!",
+    "success": "Success",
+    "warning": "Warning"
   },
   "aiExam": {
     "description": "Generate a random question and answer it.",
