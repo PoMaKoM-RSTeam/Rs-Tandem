@@ -1,41 +1,127 @@
-@use './styles/typography' as txt;
+@use 'sass:color';
 @use './styles/variables' as v;
+@use './styles/typography' as txt;
 @use './styles/mixins' as mx;
 
+$tab-header-height: 54px;
+$editor-z-index: 1000;
+$color-shadow: rgba(v.$color-black, 0.15);
+
 :host {
-  display: block;
-  box-sizing: border-box;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 170px);
+  margin: 0 auto;
   padding: v.$space-md;
+  box-sizing: border-box;
   background-color: v.$bg-main;
+  @include txt.text-body;
 }
 
 .sandbox-wrapper {
-  display: flex;
-  gap: v.$space-md;
-  height: 100%;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: v.$space-lg;
+  flex: 1;
+  min-height: 0;
+  transition: all v.$transition-base;
+
+  &.is-fullscreen {
+    grid-template-columns: 1fr 0;
+    gap: 0;
+
+    .editor-section {
+      position: fixed;
+      inset: v.$space-md;
+      z-index: $editor-z-index;
+      box-shadow: 0 20px 50px rgba(v.$color-black, 0.4);
+    }
+
+    .preview-section {
+      display: none;
+    }
+  }
 }
 
-.editor-section,
-.preview-section {
-  flex: 1;
+%sandbox-card {
+  background-color: v.$bg-surface;
+  border: 1px solid v.$border-second-color;
+  border-radius: v.$radius-md;
+  box-shadow: 4px 4px 0px v.$border-main-color;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+}
+
+.editor-section {
+  @extend %sandbox-card;
+  @include mx.corner-borders(16px, 3px, v.$color-accent, -1px);
+}
+
+.tabs-header-area {
+  display: flex;
+  align-items: center;
   background-color: v.$bg-surface;
-  border: 1px solid v.$border-main-color;
-  @include mx.corner-borders(12px, 2px, v.$color-accent, -1px);
+  border-bottom: 1px solid v.$border-second-color;
+  height: $tab-header-height;
+  padding-right: v.$space-sm;
+
+  .flex-tabs {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.editor-controls {
+  display: flex;
+  align-items: center;
+  gap: v.$space-xs;
+}
+
+.editor-container {
+  flex: 1;
+  background-color: #1e1e1e;
+  position: relative;
+
+  ngx-monaco-editor {
+    position: absolute;
+    inset: 0;
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
+
+.preview-section {
+  @extend %sandbox-card;
+
+  .preview-header {
+    height: $tab-header-height;
+    display: flex;
+    align-items: center;
+    padding: 0 v.$space-md;
+    background-color: v.$bg-surface;
+    border-bottom: 1px solid v.$border-second-color;
+    @include txt.text-ui(v.$color-black, 0.8rem, v.$font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  iframe {
+    flex: 1;
+    background-color: v.$color-white;
+    border: none;
+  }
 }
 
 :host ::v-deep {
-  .mat-mdc-tab-labels {
-    background-color: v.$color-black;
+  .mat-mdc-tab-header {
+    border-bottom: none !important;
   }
 
   .mdc-tab__text-label {
-    @include txt.text-ui(v.$color-white, v.$font-size-sm, v.$font-weight-normal);
+    @include txt.text-ui(v.$color-grey-accent, v.$font-size-sm, 500);
     text-transform: uppercase;
+    transition: color v.$transition-fast;
   }
 
   .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
@@ -44,50 +130,10 @@
 
   .mat-mdc-tab-group-indicator {
     background-color: v.$color-orange !important;
-  }
-}
-
-.editor-container {
-  height: calc(100vh - 120px);
-  background-color: #1e1e1e;
-}
-
-ngx-monaco-editor {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.preview-header {
-  padding: v.$space-sm v.$space-md;
-  background-color: v.$color-black;
-  border-bottom: 1px solid v.$border-main-color;
-  @include txt.text-ui(v.$color-orange, 12px);
-  letter-spacing: 1px;
-}
-
-iframe {
-  flex: 1;
-  width: 100%;
-  border: none;
-  background-color: v.$color-white;
-}
-
-@media (max-width: v.$bp-desktop) {
-  :host {
-    height: auto;
-    overflow-y: auto;
+    height: 3px !important;
   }
 
-  .sandbox-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .editor-container {
-    height: 450px;
-  }
-
-  .preview-section {
-    height: 500px;
+  .mat-mdc-tab-body-wrapper {
+    display: none;
   }
 }

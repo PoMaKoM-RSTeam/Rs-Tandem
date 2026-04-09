@@ -51,6 +51,7 @@ export class CodeGolfFetcherService {
       })
     );
   }
+
   saveResult(challengeKey: string, userId: string, bytes: number): Observable<number> {
     return this.callRpc<number>(this.RPC_FUNCTIONS.SAVE_CHALLENGE, {
       p_challenge_key: challengeKey,
