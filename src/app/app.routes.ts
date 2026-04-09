@@ -26,6 +26,12 @@ export const routes: Routes = [
         },
       },
       {
+        path: APP_ROUTES.dashboard,
+        loadComponent: () => import('./pages/tndm-dashboard/tndm-dashboard').then(m => m.Dashboard),
+        title: 'dashboard',
+        canActivate: [tndmAuthGuard],
+      },
+      {
         path: APP_ROUTES.asyncSorter,
         loadComponent: () => import('./pages/games/async-sorter/async-sorter').then(m => m.TndmAsyncSorter),
         title: 'async-sorter',
