@@ -1,45 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { SupabaseService } from '../../../core/supabase/supabase-service';
-import { ToastService } from '../../../core/services/toast/toast-service';
+import { ToastService } from '../../../core/toast/toast-service';
 import { firstValueFrom } from 'rxjs';
-
-type SpyRpc = {
-  (): Promise<unknown>;
-  mockResolvedValue: (val: unknown) => void;
-};
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 describe('SandboxFetcherService', (): void => {
   let service: SandboxFetcherService;
-  let supabaseClientMock: { rpc: SpyRpc };
-  let toastServiceMock: Record<string, () => void>;
+
+  let supabaseClientMock: {
+    rpc: Mock;
+  };
+
+  let toastServiceMock: Partial<Record<keyof ToastService, Mock>>;
 
   beforeEach((): void => {
-    const rpcSpy = ((): SpyRpc => {
-      let resolvedValue: unknown;
-
-      const fn = async (): Promise<unknown> => resolvedValue;
-
-      (fn as unknown as SpyRpc).mockResolvedValue = (val: unknown): void => {
-        resolvedValue = val;
-      };
-
-      return fn as unknown as SpyRpc;
-    })();
-
     supabaseClientMock = {
-      rpc: rpcSpy,
+      rpc: vi.fn(),
     };
 
     const supabaseServiceMock = {
-      get client(): { rpc: SpyRpc } {
+      get client(): { rpc: Mock } {
         return supabaseClientMock;
       },
     };
 
     toastServiceMock = {
-      danger: (): void => {},
-      success: (): void => {},
+      danger: vi.fn(),
+      success: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -68,7 +56,12 @@ describe('SandboxFetcherService', (): void => {
 
       await firstValueFrom(service.saveData(mockUserId, mockHtml, mockCss, mockJs));
 
-      expect(supabaseClientMock.rpc).toBeTruthy();
+      expect(supabaseClientMock.rpc).toHaveBeenCalledWith('save_sandbox_data', {
+        p_user_id: mockUserId,
+        p_html: mockHtml,
+        p_css: mockCss,
+        p_js: mockJs,
+      });
     });
 
     it('should throw an error if Supabase returns an error', async (): Promise<void> => {
@@ -88,6 +81,9 @@ describe('SandboxFetcherService', (): void => {
 
       const data = await firstValueFrom(service.getData(mockUserId));
 
+      expect(supabaseClientMock.rpc).toHaveBeenCalledWith('get_sandbox_data', {
+        p_user_id: mockUserId,
+      });
       expect(data).toEqual(mockResponse[0]);
     });
 

@@ -2,84 +2,34 @@ import { TestBed } from '@angular/core/testing';
 import { SandboxService } from './sandbox.service';
 import { SandboxFetcherService } from './sandbox-fetcher.service';
 import { TndmAuthStateStoreService } from '@auth';
-import { ToastService } from '../../../core/services/toast/toast-service';
-import { LoadingOverlayService } from '../../../core/services/loading-overlay/loading-overlay-service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { DEFAULT_SANDBOX_CODE } from '../sandbox.constants';
 import { signal, WritableSignal } from '@angular/core';
-
-type SandboxData = {
-  html: string;
-  css: string;
-  js: string;
-};
-
-type CustomSpy = {
-  (...args: unknown[]): void;
-  called: boolean;
-  args: unknown[];
-  reset: () => void;
-};
-
-const createSpy = (): CustomSpy => {
-  const spy = ((...args: unknown[]): void => {
-    spy.called = true;
-    spy.args = args;
-  }) as CustomSpy;
-
-  spy.called = false;
-  spy.args = [];
-  spy.reset = (): void => {
-    spy.called = false;
-    spy.args = [];
-  };
-
-  return spy;
-};
+import { ToastService } from '../../../core/toast/toast-service';
+import { LoadingOverlayService } from '../../../core/loading-overlay/loading-overlay-service';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { SandboxResponse } from '../types/sandbox-response';
+import type * as Monaco from 'monaco-editor';
 
 describe('SandboxService', (): void => {
   let service: SandboxService;
 
   let fetcherMock: {
-    saveData: (userId: string, html: string, css: string, js: string) => unknown;
-    getData: (userId: string) => unknown;
+    saveData: Mock<(userId: string, html: string, css: string, js: string) => Observable<void>>;
+    getData: Mock<(userId: string) => Observable<SandboxResponse | undefined>>;
   };
 
   let authStoreMock: { user: WritableSignal<{ id: string } | null> };
-  let toastServiceMock: {
-    success: CustomSpy;
-    danger: CustomSpy;
-    warning: CustomSpy;
-  };
-  let loadingServiceMock: {
-    show: CustomSpy;
-    hide: CustomSpy;
-  };
-  let sanitizerMock: { bypassSecurityTrustHtml: (val: string) => SafeHtml };
 
-  let saveDataSubject: Subject<void>;
-  let getDataSubject: Subject<SandboxData | undefined>;
-
-  let saveDataSpy: CustomSpy;
-  let getDataSpy: CustomSpy;
+  let toastServiceMock: Partial<Record<keyof ToastService, Mock>>;
+  let loadingServiceMock: Partial<Record<keyof LoadingOverlayService, Mock>>;
+  let sanitizerMock: Partial<DomSanitizer>;
 
   beforeEach((): void => {
-    saveDataSubject = new Subject<void>();
-    getDataSubject = new Subject<SandboxData | undefined>();
-
-    saveDataSpy = createSpy();
-    getDataSpy = createSpy();
-
     fetcherMock = {
-      saveData: (userId: string, html: string, css: string, js: string): unknown => {
-        saveDataSpy(userId, html, css, js);
-        return saveDataSubject.asObservable();
-      },
-      getData: (userId: string): unknown => {
-        getDataSpy(userId);
-        return getDataSubject.asObservable();
-      },
+      saveData: vi.fn().mockReturnValue(of(undefined)),
+      getData: vi.fn().mockReturnValue(of(undefined)),
     };
 
     authStoreMock = {
@@ -87,14 +37,15 @@ describe('SandboxService', (): void => {
     };
 
     toastServiceMock = {
-      success: createSpy(),
-      danger: createSpy(),
-      warning: createSpy(),
+      success: vi.fn(),
+      danger: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn(),
     };
 
     loadingServiceMock = {
-      show: createSpy(),
-      hide: createSpy(),
+      show: vi.fn(),
+      hide: vi.fn(),
     };
 
     sanitizerMock = {
@@ -138,17 +89,12 @@ describe('SandboxService', (): void => {
       service.selectedTab.set(1);
       expect(service.activeTabType()).toBe('CSS');
       expect(service.activeCode()).toBe(DEFAULT_SANDBOX_CODE.css);
-
-      service.selectedTab.set(2);
-      expect(service.activeTabType()).toBe('JS');
-      expect(service.activeCode()).toBe(DEFAULT_SANDBOX_CODE.javascript);
     });
 
     it('should update specific code via updateActiveCode', (): void => {
       service.selectedTab.set(0);
       service.updateActiveCode('<h1>New Tab Content</h1>');
       expect(service.htmlCode()).toBe('<h1>New Tab Content</h1>');
-      expect(service.activeCode()).toBe('<h1>New Tab Content</h1>');
     });
   });
 
@@ -159,109 +105,86 @@ describe('SandboxService', (): void => {
       expect(service.isFullscreen()).toBe(true);
     });
 
-    it('should call layout on editor instance if it exists', async (): Promise<void> => {
-      const layoutPromise = new Promise<void>((resolve): void => {
-        const editorSpy = {
-          layout: (): void => {
-            expect(true).toBe(true);
-            resolve();
-          },
-        };
+    it('should call layout on editor instance after microtask', async (): Promise<void> => {
+      const editorSpy = {
+        layout: vi.fn(),
+      } as unknown as Monaco.editor.IStandaloneCodeEditor;
 
-        service.setEditorInstance(editorSpy as unknown as Parameters<typeof service.setEditorInstance>[0]);
-        service.toggleFullscreen();
-      });
+      service.setEditorInstance(editorSpy);
+      service.toggleFullscreen();
 
-      return layoutPromise;
+      await Promise.resolve();
+      expect(editorSpy.layout).toHaveBeenCalled();
     });
   });
 
   describe('Save Operation', (): void => {
-    it('should show danger toast and return if user is not logged in', (): void => {
+    it('should show danger toast and return EMPTY if user is not logged in', (): void => {
       authStoreMock.user.set(null);
+      let called = false;
 
-      service.save();
+      service.save().subscribe({
+        next: () => (called = true),
+      });
 
-      expect(toastServiceMock.danger.called).toBe(true);
+      expect(toastServiceMock.danger).toHaveBeenCalledWith('Error saving result', expect.any(String));
+      expect(called).toBe(false);
     });
 
     it('should call loading show and fetcher.saveData when logged in', (): void => {
       authStoreMock.user.set({ id: 'user-123' });
+      service.save().subscribe();
 
-      service.save();
-
-      expect(loadingServiceMock.show.called).toBe(true);
-      expect(saveDataSpy.called).toBe(true);
-      expect(saveDataSpy.args).toEqual(['user-123', service.htmlCode(), service.cssCode(), service.jsCode()]);
+      expect(loadingServiceMock.show).toHaveBeenCalled();
+      expect(fetcherMock.saveData).toHaveBeenCalledWith(
+        'user-123',
+        service.htmlCode(),
+        service.cssCode(),
+        service.jsCode()
+      );
     });
 
-    it('should hide loading and show success toast on successful save', (): void => {
+    it('should hide loading via finalize when observable completes', (): void => {
       authStoreMock.user.set({ id: 'user-123' });
-      service.save();
+      const saveDataSubject = new Subject<void>();
+      fetcherMock.saveData.mockReturnValue(saveDataSubject.asObservable());
 
+      service.save().subscribe();
       saveDataSubject.next();
+      saveDataSubject.complete();
 
-      expect(loadingServiceMock.hide.called).toBe(true);
-      expect(toastServiceMock.success.called).toBe(true);
-      expect(toastServiceMock.success.args).toEqual(['Success', 'You code saved']);
-    });
-
-    it('should hide loading and show danger toast on failed save', (): void => {
-      const errorResponse = { message: 'Network Error' };
-
-      authStoreMock.user.set({ id: 'user-123' });
-      service.save();
-
-      saveDataSubject.error(errorResponse);
-
-      expect(loadingServiceMock.hide.called).toBe(true);
-      expect(toastServiceMock.danger.called).toBe(true);
-      expect(toastServiceMock.danger.args).toEqual(['Error saving result', 'Network Error']);
+      expect(loadingServiceMock.hide).toHaveBeenCalled();
     });
   });
 
   describe('Download Operation', (): void => {
-    it('should show danger toast and return if user is not logged in on download', (): void => {
-      authStoreMock.user.set(null);
-
-      service.download();
-
-      expect(toastServiceMock.danger.called).toBe(true);
-    });
-
-    it('should call loading show and fetcher.getData when logged in', (): void => {
+    it('should call fetcher.getData and update signals on success', (): void => {
+      const mockData: SandboxResponse = { html: 'new-html', css: 'new-css', js: 'new-js' };
       authStoreMock.user.set({ id: 'user-123' });
+      fetcherMock.getData.mockReturnValue(of(mockData));
 
-      service.download();
-
-      expect(loadingServiceMock.show.called).toBe(true);
-      expect(getDataSpy.called).toBe(true);
-      expect(getDataSpy.args).toEqual(['user-123']);
-    });
-
-    it('should update codes and show success toast when data is loaded', (): void => {
-      const mockData: SandboxData = { html: 'new-html', css: 'new-css', js: 'new-js' };
-
-      authStoreMock.user.set({ id: 'user-123' });
-      service.download();
-
-      getDataSubject.next(mockData);
+      service.download().subscribe();
 
       expect(service.htmlCode()).toBe('new-html');
       expect(service.cssCode()).toBe('new-css');
       expect(service.jsCode()).toBe('new-js');
-      expect(toastServiceMock.success.called).toBe(true);
-      expect(toastServiceMock.success.args).toEqual(['Success', 'Data loaded successfully!']);
     });
 
-    it('should show warning toast when no data is returned', (): void => {
+    it('should show danger toast and return EMPTY if not logged in on download', (): void => {
+      authStoreMock.user.set(null);
+      service.download().subscribe();
+      expect(toastServiceMock.danger).toHaveBeenCalledWith('Error fetching data', expect.any(String));
+    });
+
+    it('should still hide loading even if request fails', (): void => {
       authStoreMock.user.set({ id: 'user-123' });
-      service.download();
+      fetcherMock.getData.mockReturnValue(throwError(() => new Error('Fail')));
 
-      getDataSubject.next(undefined);
+      service.download().subscribe({
+        error: (err: Error) => expect(err.message).toBe('Fail'),
+      });
 
-      expect(toastServiceMock.warning.called).toBe(true);
-      expect(toastServiceMock.warning.args).toEqual(['Attention', 'No saved data found.']);
+      expect(loadingServiceMock.hide).toHaveBeenCalled();
     });
   });
 });

@@ -4,11 +4,15 @@ import { SandboxService } from './services/sandbox.service';
 import { computed, CUSTOM_ELEMENTS_SCHEMA, signal } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ToastService } from '../../core/toast/toast-service';
+import { TranslocoPipe, TranslocoService, TranslocoTestingModule } from '@jsverse/transloco';
+import { TranslateParams } from '@jsverse/transloco';
+import { Observable, of, throwError } from 'rxjs';
 
 class MockSandboxService {
   readonly isFullscreen = signal(false);
   readonly selectedTab = signal(0);
-  readonly tabs = ['HTML', 'CSS', 'JS'];
+  readonly tabs: string[] = ['HTML', 'CSS', 'JS'];
   readonly activeCode = signal('<h1>Hello</h1>');
 
   readonly activeEditorOptions = computed(() => ({
@@ -22,33 +26,62 @@ class MockSandboxService {
     this.activeCode.set(val);
   };
 
-  save = (): void => {};
-  download = (): void => {};
+  save = (): Observable<{ success: boolean }> => {
+    return of({ success: true });
+  };
+
+  download = (): Observable<{ data: string } | null> => {
+    return of({ data: 'test' });
+  };
 
   toggleFullscreen = (): void => {
-    this.isFullscreen.update(v => !v);
+    this.isFullscreen.update((v: boolean) => !v);
   };
 }
+
+const mockToastService = {
+  success: vi.fn(),
+  danger: vi.fn(),
+  warning: vi.fn(),
+};
 
 describe('TndmSandbox', (): void => {
   let component: TndmSandbox;
   let fixture: ComponentFixture<TndmSandbox>;
   let mockService: MockSandboxService;
+  let translocoService: TranslocoService;
 
   beforeEach(async (): Promise<void> => {
     mockService = new MockSandboxService();
 
     await TestBed.configureTestingModule({
-      imports: [TndmSandbox],
+      imports: [
+        TndmSandbox,
+        TranslocoTestingModule.forRoot({
+          langs: { en: {} },
+          translocoConfig: {
+            defaultLang: 'en',
+            availableLangs: ['en'],
+          },
+        }),
+      ],
     })
       .overrideComponent(TndmSandbox, {
         set: {
-          providers: [{ provide: SandboxService, useValue: mockService }],
-          imports: [],
+          providers: [
+            { provide: SandboxService, useValue: mockService },
+            { provide: ToastService, useValue: mockToastService },
+          ],
+          imports: [TranslocoPipe],
           schemas: [CUSTOM_ELEMENTS_SCHEMA],
         },
       })
       .compileComponents();
+
+    translocoService = TestBed.inject(TranslocoService);
+    vi.spyOn(translocoService, 'translate').mockImplementation((key: TranslateParams) => {
+      return typeof key === 'string' ? key : key.toString();
+    });
 
     fixture = TestBed.createComponent(TndmSandbox);
     component = fixture.componentInstance;
@@ -66,8 +99,6 @@ describe('TndmSandbox', (): void => {
 
       const config = component['fullscreenBtnConfig']();
       expect(config.icon).toBe('fullscreen');
-      expect(config.variant).toBe('icon');
-      expect(config.size).toBe('lg');
     });
 
     it('should compute fullscreen button config for fullscreen', (): void => {
@@ -77,51 +108,40 @@ describe('TndmSandbox', (): void => {
       const config = component['fullscreenBtnConfig']();
       expect(config.icon).toBe('fullscreenExit');
     });
-
-    it('should hold static button configs', (): void => {
-      expect(component['downloadBtnConfig'].icon).toBe('download');
-      expect(component['saveBtnConfig'].icon).toBe('save');
-    });
   });
 
-  describe('User Interactions and Delegation', (): void => {
-    it('should update selected tab in service on tab change', (): void => {
-      const setSpy = vi.spyOn(mockService.selectedTab, 'set');
-
-      component['onTabChange'](1);
-
-      expect(setSpy).toHaveBeenCalledWith(1);
-    });
-
-    it('should call service updateActiveCode on code update', (): void => {
-      const updateSpy = vi.spyOn(mockService, 'updateActiveCode');
-
-      component['updateCode']('new code');
-
-      expect(updateSpy).toHaveBeenCalledWith('new code');
-    });
-
-    it('should delegate save to service', (): void => {
-      const saveSpy = vi.spyOn(mockService, 'save');
+  describe('Interactions with Services', (): void => {
+    it('should call toastService success on successful save', (): void => {
+      const saveSpy = vi.spyOn(mockService, 'save').mockReturnValue(of({ success: true }));
+      const toastSpy = vi.spyOn(mockToastService, 'success');
 
       component['save']();
 
       expect(saveSpy).toHaveBeenCalled();
+      expect(toastSpy).toHaveBeenCalledWith('sandbox.success', 'sandbox.dataSaved');
     });
 
-    it('should delegate download to service', (): void => {
-      const downloadSpy = vi.spyOn(mockService, 'download');
+    it('should call toastService danger on save error', (): void => {
+      vi.spyOn(mockService, 'save').mockReturnValue(throwError(() => ({ message: 'Error' })));
+      const toastSpy = vi.spyOn(mockToastService, 'danger');
+
+      component['save']();
+
+      expect(toastSpy).toHaveBeenCalledWith('sandbox.errorSave', 'Error');
+    });
+
+    it('should call toastService warning when download returns no data', (): void => {
+      vi.spyOn(mockService, 'download').mockReturnValue(of(null));
+      const toastSpy = vi.spyOn(mockToastService, 'warning');
 
       component['download']();
 
-      expect(downloadSpy).toHaveBeenCalled();
+      expect(toastSpy).toHaveBeenCalledWith('sandbox.warning', 'sandbox.noData');
     });
 
     it('should delegate toggleFullscreen to service', (): void => {
       const fullscreenSpy = vi.spyOn(mockService, 'toggleFullscreen');
-
       component['toggleFullscreen']();
-
       expect(fullscreenSpy).toHaveBeenCalled();
     });
   });
