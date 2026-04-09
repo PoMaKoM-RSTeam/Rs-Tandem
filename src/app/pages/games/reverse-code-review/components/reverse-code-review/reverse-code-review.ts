@@ -8,6 +8,8 @@ import { ReviewCase } from '../../models/review-case.model';
 import { REVIEW_CASES_DATA } from '../../data/review-cases.data';
 import { TndmCompletionModal } from '../review-modal/review-modal';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { TndmTranslocoSupabaseLoader } from '../../../../../core/i18n/transloco-supabase-loader.service';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-reverse-code-review',
@@ -19,6 +21,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class TndmReverseCode {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly rulesService = inject(TndmTranslocoSupabaseLoader);
+  private readonly rules = signal('');
+  readonly transloco = inject(TranslocoService);
 
   readonly completedIds = signal<Set<string>>(new Set());
 
