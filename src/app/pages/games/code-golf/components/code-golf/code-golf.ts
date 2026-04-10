@@ -4,8 +4,7 @@ import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeGolfResults } from '../results-modal/results-modal';
 import { CodeGolfService } from '../../services/code-golf.service';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { translateSignal, TranslocoPipe} from '@jsverse/transloco';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 
 @Component({
@@ -18,7 +17,6 @@ import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmCodeGolf {
-  private readonly translocoService = inject(TranslocoService);
   protected readonly service = inject(CodeGolfService);
 
   protected readonly byteCount = this.service.byteCount;
@@ -36,14 +34,15 @@ export class TndmCodeGolf {
     this.service.rawCode.set(value);
   }
 
-  private readonly translatedCheckLabel = toSignal(this.translocoService.selectTranslate('golf.check'));
+  private readonly translatedCheckLabel = translateSignal('golf.check');
+  private readonly translatedNextLabel = translateSignal('golf.next');
 
   protected readonly checkBtnConfig = computed(() => ({
-    label: this.translatedCheckLabel() ?? 'Check Solution',
+    label: this.translatedCheckLabel(),
     isDisabled: this.service.rawCode().trim().length === 0,
   }));
 
-  protected readonly nextBtnConfig = { label: 'Next Challenge' };
+  protected readonly nextBtnConfig = computed(() => ({ label: this.translatedNextLabel() }));
 
   protected checkSolution(): void {
     this.service.checkSolution();

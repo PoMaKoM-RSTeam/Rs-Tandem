@@ -6,7 +6,7 @@
   <p class="challenge-description">{{ challenge.description }}</p>
 </div>
 } @else {
-<p class="challenge-info">No challenges available at the moment.</p>
+<p class="challenge-info">{{ 'golf.noChallenges' | transloco }}</p>
 } @if (showResults() && result(); as resultData) {
 <tndm-code-golf-results [result]="resultData" (closeModal)="closeModal()" />
 }
@@ -15,5 +15,5 @@
 
 <div class="controls">
    <tndm-button [btnConfig]="checkBtnConfig()" (click)="checkSolution()" />
-  <tndm-button [btnConfig]="{ label: ('golf.next' | transloco) }" (click)="nextChallenge()" />
+  <tndm-button [btnConfig]="nextBtnConfig()" (click)="nextChallenge()" />
 </div>
