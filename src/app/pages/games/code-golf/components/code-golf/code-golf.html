@@ -1,26 +1,19 @@
-<h2 class="game-name">Code golf</h2>
+<tndm-code-golf-rank [byteCount]="byteCount()" [previousBest]="previousBest()" [rank]="currentRank()" />
 
-<tndm-code-golf-rank
-  [byteCount]="service.byteCount()"
-  [previousBest]="service.previousBest()"
-  [rank]="service.currentRank()" />
-
-@if (service.challengeResource.isLoading()) {
-<p class="challenge-info">Loading Challenge...</p>
-} @else if (service.currentChallenge(); as challenge) {
+@if (currentChallenge(); as challenge) {
 <div class="challenge-wrapper">
   <h2 class="challenge-title">{{ challenge.title }}</h2>
   <p class="challenge-description">{{ challenge.description }}</p>
 </div>
 } @else {
-<p class="challenge-info">No challenges available at the moment.</p>
-} @if (service.showResults() && service.result(); as result) {
-<tndm-code-golf-results [result]="result" (closeModal)="closeModal()" />
+<p class="challenge-info">{{ 'golf.noChallenges' | transloco }}</p>
+} @if (showResults() && result(); as resultData) {
+<tndm-code-golf-results [result]="resultData" (closeModal)="closeModal()" />
 }
 
-<tndm-code-golf-editor [(value)]="service.rawCode" />
+<tndm-code-golf-editor [(value)]="rawCode" />
 
 <div class="controls">
-  <tndm-button [btnConfig]="checkBtnConfig()" (click)="service.checkSolution()" />
-  <tndm-button [btnConfig]="{ label: ('golf.next' | transloco) }" (click)="service.nextChallenge()" />
+   <tndm-button [btnConfig]="checkBtnConfig()" (click)="checkSolution()" />
+  <tndm-button [btnConfig]="nextBtnConfig()" (click)="nextChallenge()" />
 </div>

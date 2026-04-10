@@ -1,24 +1,25 @@
-import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { CodeGolfFetcherService } from './code-golf-fetcher.service';
 import { TndmAuthStateStoreService } from '@auth';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
-import { catchError, of, switchMap } from 'rxjs';
+import { catchError, finalize, of, switchMap, tap } from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
 import { LanguagePreferenceService } from '../../../../core/i18n/language-preferences.service';
+import { LoadingOverlayService } from '../../../../core/loading-overlay/loading-overlay-service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class CodeGolfService implements OnDestroy {
   private readonly fetcher = inject(CodeGolfFetcherService);
   private readonly authStore = inject(TndmAuthStateStoreService);
   private readonly toastService = inject(ToastService);
   private readonly langService = inject(LanguagePreferenceService);
+  private readonly loadingService = inject(LoadingOverlayService);
 
   private worker: Worker | undefined;
-  private readonly workerTimeout = 5000;
 
   readonly rawCode = signal('');
   readonly showResults = signal(false);
@@ -61,6 +62,7 @@ export class CodeGolfService implements OnDestroy {
       uid: this.userId(),
     }))
   ).pipe(
+    tap(() => this.loadingService.show()),
     switchMap(({ key, uid }) => {
       if (!key || !uid) {
         return of(null);
@@ -72,10 +74,21 @@ export class CodeGolfService implements OnDestroy {
           return of(null);
         })
       );
-    })
+    }),
+    tap(() => this.loadingService.hide())
   );
 
   readonly previousBest = toSignal(this.userResult, { initialValue: null });
+
+  private readonly loadingEffect = effect(() => {
+    const isLoading = this.challengeResource.isLoading() || this.ranksResource.isLoading();
+
+    if (isLoading) {
+      this.loadingService.show();
+    } else {
+      this.loadingService.hide();
+    }
+  });
 
   constructor() {
     this.initWorker();
@@ -111,15 +124,20 @@ export class CodeGolfService implements OnDestroy {
       return;
     }
 
-    this.fetcher.saveResult(challengeKey, userId, bytes).subscribe({
-      next: (savedBytes: number) => {
-        this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved successfully.`);
-      },
-      error: err => {
-        const errorMessage = err?.message || 'Unknown database error';
-        this.toastService.danger('Save failed', errorMessage);
-      },
-    });
+    this.loadingService.show();
+
+    this.fetcher
+      .saveResult(challengeKey, userId, bytes)
+      .pipe(finalize(() => this.loadingService.hide()))
+      .subscribe({
+        next: (savedBytes: number) => {
+          this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved successfully.`);
+        },
+        error: err => {
+          const errorMessage = err?.message || 'Unknown database error';
+          this.toastService.danger('Save failed', errorMessage);
+        },
+      });
   }
 
   private initWorker(): void {

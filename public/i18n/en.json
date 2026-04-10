@@ -146,6 +146,12 @@
   },
   "golf": {
     "next": "Next Challenge",
-    "check": "Check solution"
+    "check": "Check solution",
+    "noChallenges": "No challenges available at the moment.",
+    "writeCode": "// Write your code here...",
+    "bestResult": "Your best result:",
+    "progress": "progress",
+    "regress": "regress",
+    "bytes":"Bytes"
   }
 }
