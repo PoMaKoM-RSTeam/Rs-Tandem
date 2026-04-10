@@ -10,6 +10,7 @@ import { ToastService } from '../../core/toast/toast-service';
 import { AUTH_ROUTES } from '@auth';
 import { AUTH_ERROR_MESSAGES } from '../constants/auth-error-messages';
 import { APP_ROUTES } from '../../shared/constants/app-routes';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Directive()
 export abstract class TndmAuthFormCore implements OnInit {
@@ -25,6 +26,8 @@ export abstract class TndmAuthFormCore implements OnInit {
   protected readonly authService: TndmAuthService = inject(TndmAuthService);
 
   protected readonly toastService: ToastService = inject(ToastService);
+
+  protected readonly transloco: TranslocoService = inject(TranslocoService);
 
   protected readonly form: FormGroup = this.fb.group({});
 
@@ -71,9 +74,12 @@ export abstract class TndmAuthFormCore implements OnInit {
       return await cb();
     } catch (e) {
       if (e instanceof Error) {
-        this.toastService.warning('error', e.message);
+        this.toastService.warning(this.transloco.translate('toast.warning'), e.message);
       } else {
-        this.toastService.warning('error', 'Something went wrong');
+        this.toastService.warning(
+          this.transloco.translate('toast.warning'),
+          this.transloco.translate('common.somethingWentWrong')
+        );
       }
     } finally {
       this.isLoading.set(false);
