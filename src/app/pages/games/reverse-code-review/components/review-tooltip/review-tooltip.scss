@@ -6,10 +6,8 @@
 }
 
 .review-tooltip {
-  position: absolute;
-  right: 12px;
+  display: grid;
   z-index: 10;
-  width: 220px;
   background: v.$color-light-grey;
   border: 1px solid v.$border-main-color;
   border-radius: v.$radius-md;
@@ -18,7 +16,9 @@
   flex-direction: column;
   gap: v.$space-xs;
   box-shadow: 0 4px 16px rgba(v.$color-black, 0.4);
-  margin-top: 25vh;
+  grid-column: 2/2;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
 }
 
 .review-tooltip_header {

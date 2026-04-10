@@ -7,8 +7,6 @@ export type ExpectedError = {
   type: ErrorType;
   message: string;
   points: number;
-  fixPattern: string;
-  fixHint: string;
 };
 
 export type ReviewCase = {

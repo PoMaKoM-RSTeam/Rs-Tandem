@@ -25,6 +25,51 @@
       "description": "Создайте тип, который делает все свойства объекта T одновременно readonly и optional.",
       "hint": "Оба модификатора можно применять вместе: readonly [K in keyof T]?"
     },
+    "easyRequired": {
+      "title": "MyRequired",
+      "description": "Уберите необязательность у всех свойств T. Сделайте каждое поле обязательным.",
+      "hint": "Используйте модификатор -? после скобки маппинга, чтобы убрать optional: [K in keyof T]-?"
+    },
+    "easyExclude": {
+      "title": "MyExclude",
+      "description": "Удалите из объединения T все члены, присваиваемые U.",
+      "hint": "Условный тип: T extends U ? never : T — распределяется по каждому члену объединения."
+    },
+    "mediumExtract": {
+      "title": "MyExtract",
+      "description": "Создайте тип, извлекая из T все члены объединения, присваиваемые U.",
+      "hint": "Противоположность Exclude: T extends U ? T : never"
+    },
+    "mediumPick": {
+      "title": "MyPick",
+      "description": "Создайте тип, выбрав набор свойств K из объектного типа T.",
+      "hint": "Ограничьте K с помощью `extends keyof T`, затем создайте mapped type: [P in K]: T[P]"
+    },
+    "hardOmit": {
+      "title": "MyOmit",
+      "description": "Создайте тип, удалив свойства K из объектного типа T. Используйте переназначение ключей.",
+      "hint": "Используйте `as` для фильтрации ключей: [P in keyof T as P extends K ? never : P]"
+    },
+    "easyMutable": {
+      "title": "Mutable",
+      "description": "Уберите модификатор readonly со всех свойств T. Противоположность Readonly.",
+      "hint": "Используйте -readonly перед ключом маппинга: -readonly [K in keyof T]"
+    },
+    "easyRecord": {
+      "title": "MyRecord",
+      "description": "Создайте тип с ключами типа K (ограничен string) и значениями типа V.",
+      "hint": "Ограничьте K с помощью `extends string`, затем маппинг: [P in K]: V"
+    },
+    "mediumAwaited": {
+      "title": "MyAwaited",
+      "description": "Извлеките тип, в который резолвится Promise. Разверните Promise<T> в T.",
+      "hint": "Используйте условный тип с infer: T extends Promise<infer U> ? U : T"
+    },
+    "mediumParameters": {
+      "title": "MyParameters",
+      "description": "Извлеките типы параметров функции T в виде кортежа.",
+      "hint": "Паттерн: T extends (...args: infer P) => any ? P : never"
+    },
     "solved": "Пазл решён!",
     "empty": "Все блоки уже размещены",
     "available": "Доступные блоки"

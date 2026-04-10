@@ -34,3 +34,10 @@
   border-radius: 3px;
   transition: width 0.4s ease-in-out;
 }
+
+@media (max-width: 360px) {
+  .ti-page {
+    padding: 1rem 0.75rem;
+    gap: 1.25rem;
+  }
+}

@@ -38,18 +38,15 @@ export class CommentComponent {
       {
         line: 7,
         type: ErrorType.Security,
-        message: '',
+        message:
+          '[innerHTML] with unsanitized user content can lead to XSS attacks.Use DomSanitizer or sanitize server-side.',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 16,
         type: ErrorType.Security,
-        message: '',
+        message: 'Hardcoded API key in client-side code. Secrets are visible in browser dev tools and source bundles.',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
@@ -100,18 +97,15 @@ export class SearchComponent {
       {
         line: 10,
         type: ErrorType.Security,
-        message: '',
+        message:
+          'Rendering server response as innerHTML without sanitization. Attacker could inject HTML/JS via the API.',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 23,
         type: ErrorType.Security,
-        message: '',
+        message: 'Building URL with string concatenation from user input. Use HttpParams to prevent injection.',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
