@@ -5,7 +5,10 @@
     <span class="value">{{ best }} {{ 'golf.bytes' | transloco }}</span>
   </div>
 
-  <div class="diff-indicator" [class.is-visible]="diffInfo()" [class.progress]="diffInfo()?.isProgress"
+  <div
+    class="diff-indicator"
+    [class.is-visible]="diffInfo()"
+    [class.progress]="diffInfo()?.isProgress"
     [class.regress]="diffInfo()?.isRegress">
     @if (diffInfo(); as diff) { {{ diff.value }} {{ 'golf.bytes' | transloco }}
     <span class="diff-label">({{ 'golf.' + diff.label | transloco }})</span>

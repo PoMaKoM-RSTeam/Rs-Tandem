@@ -152,6 +152,11 @@
     "bestResult": "Ваш лучший результат:",
     "progress": "прогресс",
     "regress": "регресс",
-    "bytes": "Байт"
+    "bytes": "Байт",
+    "testNumber": "Тест №",
+    "input": "Ввод",
+    "result": "Результат",
+    "expected": "Ожидалось",
+    "passed": "Пройдено"
   }
 }

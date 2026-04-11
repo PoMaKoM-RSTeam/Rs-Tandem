@@ -4,7 +4,7 @@ import { TndmCodeGolfRank } from '../code-golf-rank/code-golf-rank';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { TndmCodeGolfResults } from '../results-modal/results-modal';
 import { CodeGolfService } from '../../services/code-golf.service';
-import { translateSignal, TranslocoPipe} from '@jsverse/transloco';
+import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 import { CodeGolfFetcherService } from '../../services/code-golf-fetcher.service';
 
 @Component({

@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TndmButton } from '../../../../../shared/ui/tndm-button/tndm-button';
 import { WorkerResponse } from '../../types/worker.types';
+import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-code-golf-results',
   standalone: true,
-  imports: [TndmButton],
+  imports: [TndmButton, TranslocoPipe],
   templateUrl: './results-modal.html',
   styleUrl: './results-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,8 +14,10 @@ import { WorkerResponse } from '../../types/worker.types';
 export class TndmCodeGolfResults {
   readonly result = input.required<WorkerResponse>();
   readonly closeModal = output<void>();
+  private readonly successMsg = translateSignal('golf.success');
+  private readonly failedMsg = translateSignal('golf.failed');
 
-  protected readonly title = computed(() => (this.result().allPassed ? 'Success!' : 'Failed'));
+  protected readonly title = computed(() => (this.result().allPassed ? this.successMsg() : this.failedMsg()));
 
   protected readonly errorText = computed(() => {
     const result = this.result();

@@ -152,6 +152,13 @@
     "bestResult": "Your best result:",
     "progress": "progress",
     "regress": "regress",
-    "bytes":"Bytes"
+    "bytes": "Bytes",
+    "testNumber": "Test №",
+    "input": "Input",
+    "result": "Result",
+    "expected": "Expected",
+    "passed": "Passed",
+    "success": "Success!",
+    "failed": "Failed"
   }
 }
