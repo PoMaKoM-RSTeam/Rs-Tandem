@@ -142,6 +142,104 @@
       "performance": "Performance",
       "bestPractice": "Best Practice / Style",
       "security": "Security"
+    },
+    "data": {
+      "c001": {
+        "title": "Leaky Subscription",
+        "category": "Memory Leaks",
+        "msg0": "Subscription without unsubscribe in ngOnDestroy. Use takeUntilDestroyed(), async pipe, or manual cleanup.",
+        "msg1": "interval() never completes. Without unsubscribe, this runs indefinitely even after component is destroyed."
+      },
+      "c002": {
+        "title": "Template Traps",
+        "category": "Performance",
+        "msg0": "Method call in template triggers on every change detection cycle. Use a computed property or pipe instead.",
+        "msg1": "formatDate() in template recalculates on every CD cycle. Use DatePipe or pre-compute the value.",
+        "msg2": "Method call in template runs on every change detection. Cache the result in a property or use a pipe."
+      },
+      "c003": {
+        "title": "Unsafe Bindings",
+        "category": "Security",
+        "msg0": "[innerHTML] with unsanitized user content can lead to XSS attacks.Use DomSanitizer or sanitize server-side.",
+        "msg1": "Hardcoded API key in client-side code. Secrets are visible in browser dev tools and source bundles."
+      },
+      "c004": {
+        "title": "The Subscribe Pyramid",
+        "category": "Best Practice",
+        "msg0": "Nested subscribes form a \"callback pyramid\". Use switchMap/concatMap to flatten the observable chain.",
+        "msg1": "Nested subscriptions without cleanup. Each inner subscribe creates a leak that is never unsubscribed."
+      },
+      "c005": {
+        "title": "DOM Manipulation",
+        "category": "Best Practice",
+        "msg0": "Direct DOM access via document.getElementById bypasses Angular's abstraction. Use @ViewChild and Renderer2.",
+        "msg1": "Direct DOM manipulation with querySelector. Use Angular's @ViewChild, Renderer2, or host bindings instead."
+      },
+      "c006": {
+        "title": "The Any Kingdom",
+        "category": "Best Practice",
+        "msg0": "Using \"any\" for both parameter and return type removes all type safety. Define proper interfaces.",
+        "msg1": "Function signature uses \"any\" everywhere. Create typed interfaces for input and output.",
+        "msg2": "Array of \"any\" defeats TypeScript's purpose. Define an interface with the expected shape."
+      },
+      "c007": {
+        "title": "List Rendering Issues",
+        "category": "Performance",
+        "msg0": "Missing trackBy function in *ngFor. Without it, Angular re-creates all DOM elements on every change.",
+        "msg1": "getColor() method call in template triggers on every change detection cycle.Use ngClass + property instead.",
+        "msg2": "calculateTotal() runs filter on every CD cycle. Use a computed property or pipe to cache the result."
+      },
+      "c008": {
+        "title": "Manual Change Detection",
+        "category": "Performance",
+        "msg0": "setInterval without cleanup in ngOnDestroy. The interval keeps running after component is destroyed.",
+        "msg1": "Manual detectChanges() inside setInterval is an anti-pattern. Use async pipe with an Observable timer."
+      },
+      "c009": {
+        "title": "Unsafe Data Handling",
+        "category": "Security",
+        "msg0": "Rendering server response as innerHTML without sanitization. Attacker could inject HTML/JS via the API.",
+        "msg1": "Building URL with string concatenation from user input. Use HttpParams to prevent injection."
+      },
+      "c010": {
+        "title": "Shared State Mutation",
+        "category": "Best Practice / State",
+        "msg0": "Direct mutation of shared state array with push(). Other won't detect the change. Use immutable updates.",
+        "msg1": "console.log in a getter runs on every access, lower performance. Remove debug logging from production code.",
+        "msg2": "Array.splice mutates the array in place. Components using OnPush won't detect this change."
+      },
+      "c011": {
+        "title": "Router Event Leak",
+        "category": "Memory Leak",
+        "msg0": "Router events subscription without unsubscribe. Use takeUntilDestroyed() or manual cleanup in ngOnDestroy.",
+        "msg1": "Authentication token hardcoded in client-side code. Use an HTTP interceptor or environment config instead."
+      },
+      "c012": {
+        "title": "Async Pipe Misuse",
+        "category": "Performance",
+        "msg0": "getUsers() in template creates a new request on every change of cycle. Store the observable in a property.",
+        "msg1": "sec. getUsers() creates yet another subscription and request. Reuse a single observable with shareReplay.",
+        "msg2": "Using \"any[]\" loses type safety. Define a User interface with the expected properties."
+      },
+      "c013": {
+        "title": "Zone.js Overload",
+        "category": "Performance",
+        "msg0": "Direct DOM access with document.querySelector. Use @ViewChild to get the canvas element reference.",
+        "msg1": "requestAnimationFrame inside NgZone triggers change detection ~60 times/sec.Use NgZone.runOutsideAngular()."
+      },
+      "c014": {
+        "title": "Unsafe Form Handling",
+        "category": "Security",
+        "msg0": "[innerHTML] renders msg without sanitization. Could be exploited for XSS if the server reflects user input.",
+        "msg1": "Email is passed in URL query string. Credentials in URLs are logged by proxies. Use request body instead."
+      },
+      "c015": {
+        "title": "Lifecycle Misuse",
+        "category": "Best Practice",
+        "msg0": "Using \"any\" for component data. Define a typed interface for the user object.",
+        "msg1": "ngOnChanges calls loadUser() without checking which input changed. First call also duplicates ngOnInit.",
+        "msg2": "subscription inside a method called on every input change, prev. requests are not cancelled: use switchMap."
+      }
     }
   },
   "golf": {
