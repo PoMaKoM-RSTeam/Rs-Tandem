@@ -47,4 +47,25 @@ describe('TndmTypeInvestigator', () => {
     const board = fixture.nativeElement.querySelector('tndm-puzzle-board');
     expect(board).toBeNull();
   });
+
+  it('should start with no active puzzle', () => {
+    expect(component.activePuzzle()).toBeNull();
+  });
+
+  it('should start with empty solvedIds', () => {
+    expect(component.solvedIds().size).toBe(0);
+  });
+
+  it('progressPercent should be 0 initially', () => {
+    expect(component.progressPercent()).toBe(0);
+  });
+
+  it('should not show progress bar when no puzzles solved', () => {
+    const progress = fixture.nativeElement.querySelector('.ti-progress');
+    expect(progress).toBeNull();
+  });
+
+  it('onPuzzleSolved should not throw when no active puzzle', () => {
+    expect(() => component.onPuzzleSolved()).not.toThrow();
+  });
 });
