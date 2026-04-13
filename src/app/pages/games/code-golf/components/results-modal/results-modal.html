@@ -1,16 +1,16 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <h3>{{ title() }}</h3>
+    <h3>{{ (result().allPassed ? 'golf.success' : 'golf.failed') | transloco }}</h3>
 
     <div class="results-summary">
       @if (result().results) {
       <ul>
         <li class="table-header">
-          <span>Test №</span>
-          <span>input</span>
-          <span>result</span>
-          <span>expected</span>
-          <span>passed</span>
+          <span>{{ 'golf.testNumber' | transloco }}</span>
+          <span>{{ 'golf.input' | transloco }}</span>
+          <span>{{ 'golf.result' | transloco }}</span>
+          <span>{{ 'golf.expected' | transloco }}</span>
+          <span>{{ 'golf.passed' | transloco }}</span>
         </li>
 
         @for (res of result().results; track $index) {

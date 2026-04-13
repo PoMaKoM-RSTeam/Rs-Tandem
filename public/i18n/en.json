@@ -146,6 +146,28 @@
   },
   "golf": {
     "next": "Next Challenge",
-    "check": "Check solution"
+    "check": "Check solution",
+    "noChallenges": "No challenges available at the moment.",
+    "writeCode": "// Write your code here...",
+    "bestResult": "Your best result:",
+    "progress": "progress",
+    "regress": "regress",
+    "bytes": "Bytes",
+    "testNumber": "Test №",
+    "input": "Input",
+    "result": "Result",
+    "expected": "Expected",
+    "passed": "Passed",
+    "success": "Success!",
+    "failed": "Failed",
+    "commonError": "Oops, something went wrong!",
+    "refreshPage": "Please refresh the page or try again later.",
+    "keepTrying": "Keep trying!",
+    "currentBest": "Your current best is {{best}} bytes.",
+    "newRecord": "New Record!",
+    "saveSuccess": "Result of {{bytes}} bytes saved successfully.",
+    "emptyCode": "Empty Code",
+    "emptyCodeMsg": "Please write some code first!",
+    "noChallenge": "Please wait for the challenge to load."
   }
 }
