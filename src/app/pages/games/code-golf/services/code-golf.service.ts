@@ -4,12 +4,13 @@ import { TndmAuthStateStoreService } from '@auth';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
-import { catchError, combineLatest, delay, distinctUntilChanged, finalize, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, delay, distinctUntilChanged, finalize, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
 import { LanguagePreferenceService } from '../../../../core/i18n/language-preferences.service';
 import { LoadingOverlayService } from '../../../../core/loading-overlay/loading-overlay-service';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Injectable()
 export class CodeGolfService implements OnDestroy {
@@ -18,6 +19,7 @@ export class CodeGolfService implements OnDestroy {
   private readonly toastService = inject(ToastService);
   private readonly langService = inject(LanguagePreferenceService);
   private readonly loadingService = inject(LoadingOverlayService);
+  protected readonly transloco: TranslocoService = inject(TranslocoService);
 
   readonly rawCode = signal('');
   readonly showResults = signal(false);
@@ -45,14 +47,20 @@ export class CodeGolfService implements OnDestroy {
         switchMap(({ lang, key }) => {
           if (!lang) return of(undefined);
           const langCode = lang as 'ru' | 'en';
-          if (!key) {
-            return this.fetcher.getRandomChallenge(langCode).pipe(
-              tap(challenge => {
-                if (challenge) this.currentChallengeKey.set(challenge.challenge_key);
-              })
-            );
-          }
-          return this.fetcher.getChallengeById(langCode, key);
+
+          const request$ = !key
+            ? this.fetcher.getRandomChallenge(langCode).pipe(
+                tap(challenge => {
+                  if (challenge) this.currentChallengeKey.set(challenge.challenge_key);
+                })
+              )
+            : this.fetcher.getChallengeById(langCode, key);
+
+          return request$.pipe(
+            catchError(err => {
+              return throwError(() => err);
+            })
+          );
         })
       ),
   });
@@ -67,7 +75,24 @@ export class CodeGolfService implements OnDestroy {
   );
 
   readonly ranksResource = rxResource({
-    stream: () => this.fetcher.getGolfRanks(),
+    stream: () =>
+      this.fetcher.getGolfRanks().pipe(
+        catchError(err => {
+          return throwError(() => err);
+        })
+      ),
+  });
+
+  private readonly errorEffect = effect(() => {
+    const ranksError = this.ranksResource.error();
+    const challengeError = this.challengeResource.error();
+
+    if (ranksError || challengeError) {
+      this.toastService.danger(
+        this.transloco.translate('golf.commonError'),
+        this.transloco.translate('golf.refreshPage')
+      );
+    }
   });
 
   readonly previousBestResource = rxResource({
@@ -137,7 +162,10 @@ export class CodeGolfService implements OnDestroy {
   saveResult(challengeKey: string, userId: string, bytes: number): void {
     const best = this.previousBest();
     if (best !== null && bytes >= best) {
-      this.toastService.info('Keep trying!', `Your current best is ${best} bytes.`);
+      this.toastService.info(
+        this.transloco.translate('golf.keepTrying'),
+        this.transloco.translate('golf.currentBest', { best: best })
+      );
       return;
     }
 
@@ -147,11 +175,17 @@ export class CodeGolfService implements OnDestroy {
       .pipe(finalize(() => this.isSaving.set(false)))
       .subscribe({
         next: savedBytes => {
-          this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved.`);
+          this.toastService.success(
+            this.transloco.translate('golf.newRecord'),
+            this.transloco.translate('golf.saveSuccess', { bytes: savedBytes })
+          );
           this.previousBestResource.reload();
         },
-        error: err => {
-          this.toastService.danger('Save failed', err?.message || 'Error');
+        error: () => {
+          this.toastService.danger(
+            this.transloco.translate('golf.commonError'),
+            this.transloco.translate('golf.refreshPage')
+          );
         },
       });
   }
@@ -191,11 +225,17 @@ export class CodeGolfService implements OnDestroy {
 
   private validateSolutionInput(code: string, challenge: Challenge | undefined): boolean {
     if (!code?.trim()) {
-      this.toastService.warning('Empty Code', 'Please write some code first!');
+      this.toastService.warning(
+        this.transloco.translate('golf.emptyCode'),
+        this.transloco.translate('golf.emptyCodeMsg')
+      );
       return false;
     }
     if (!challenge) {
-      this.toastService.danger('No Challenge', 'Please wait for the challenge to load.');
+      this.toastService.danger(
+        this.transloco.translate('golf.commonError'),
+        this.transloco.translate('golf.noChallenge')
+      );
       return false;
     }
     return true;

@@ -159,6 +159,15 @@
     "expected": "Expected",
     "passed": "Passed",
     "success": "Success!",
-    "failed": "Failed"
+    "failed": "Failed",
+    "commonError": "Oops, something went wrong!",
+    "refreshPage": "Please refresh the page or try again later.",
+    "keepTrying": "Keep trying!",
+    "currentBest": "Your current best is {{best}} bytes.",
+    "newRecord": "New Record!",
+    "saveSuccess": "Result of {{bytes}} bytes saved successfully.",
+    "emptyCode": "Empty Code",
+    "emptyCodeMsg": "Please write some code first!",
+    "noChallenge": "Please wait for the challenge to load."
   }
 }
