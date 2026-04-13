@@ -4,7 +4,7 @@ import { TndmAuthStateStoreService } from '@auth';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
-import { catchError, finalize, of, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, delay, distinctUntilChanged, finalize, of, switchMap, tap } from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
@@ -19,76 +19,100 @@ export class CodeGolfService implements OnDestroy {
   private readonly langService = inject(LanguagePreferenceService);
   private readonly loadingService = inject(LoadingOverlayService);
 
-  private worker: Worker | undefined;
-
   readonly rawCode = signal('');
   readonly showResults = signal(false);
   readonly result = signal<WorkerResponse | null>(null);
+  private readonly currentChallengeKey = signal<string | null>(null);
+  private readonly isSaving = signal(false);
+
+  readonly byteCount = computed((): number => {
+    const code = this.rawCode();
+    return code ? this.calculateByteCount(code) : 0;
+  });
+
+  readonly userId = computed(() => this.authStore.user()?.id);
+
+  private readonly lang$ = toObservable(this.langService.activeLang);
+
+  private readonly challengeParams$ = combineLatest({
+    lang: this.lang$,
+    key: toObservable(this.currentChallengeKey),
+  });
+
+  readonly challengeResource = rxResource({
+    stream: () =>
+      this.challengeParams$.pipe(
+        switchMap(({ lang, key }) => {
+          if (!lang) return of(undefined);
+          const langCode = lang as 'ru' | 'en';
+          if (!key) {
+            return this.fetcher.getRandomChallenge(langCode).pipe(
+              tap(challenge => {
+                if (challenge) this.currentChallengeKey.set(challenge.challenge_key);
+              })
+            );
+          }
+          return this.fetcher.getChallengeById(langCode, key);
+        })
+      ),
+  });
+
+  readonly currentChallenge = computed(() => this.challengeResource.value());
+
+  private readonly userParams$ = toObservable(
+    computed(() => ({
+      key: this.currentChallenge()?.challenge_key,
+      uid: this.userId(),
+    }))
+  );
 
   readonly ranksResource = rxResource({
     stream: () => this.fetcher.getGolfRanks(),
   });
 
-  readonly challengeResource = rxResource({
-    stream: () => this.fetcher.getRandomChallenge(this.langService.activeLang()),
+  readonly previousBestResource = rxResource({
+    stream: () =>
+      this.userParams$.pipe(
+        switchMap(({ key, uid }) => {
+          if (!key || !uid) return of(null);
+          return this.fetcher.getUserChallengeResult(key, uid).pipe(catchError(() => of(null)));
+        })
+      ),
   });
 
-  readonly currentChallenge = computed(() => this.challengeResource.value());
-  readonly userId = computed(() => this.authStore.user()?.id);
-
-  readonly byteCount = computed(() => {
-    const code = this.rawCode();
-    if (!code) {
-      return 0;
-    }
-
-    return this.calculateByteCount(code);
-  });
+  readonly previousBest = computed(() => this.previousBestResource.value() ?? null);
 
   readonly currentRank = computed((): GolfRank | undefined => {
     const bytes = this.byteCount();
     const allRanks = this.ranksResource.value();
-
-    if (!allRanks?.length) {
-      return undefined;
-    }
-
-    return this.findRankForBytes(bytes, allRanks);
+    return allRanks?.length ? this.findRankForBytes(bytes, allRanks) : undefined;
   });
 
-  private readonly userResult = toObservable(
-    computed(() => ({
-      key: this.currentChallenge()?.challenge_key,
-      uid: this.userId(),
-    }))
-  ).pipe(
-    tap(() => this.loadingService.show()),
-    switchMap(({ key, uid }) => {
-      if (!key || !uid) {
-        return of(null);
-      }
-
-      return this.fetcher.getUserChallengeResult(key, uid).pipe(
-        catchError(error => {
-          this.toastService.danger('Save failed', error);
-          return of(null);
-        })
-      );
-    }),
-    tap(() => this.loadingService.hide())
+  readonly isGlobalLoading = computed(
+    () =>
+      this.challengeResource.isLoading() ||
+      this.ranksResource.isLoading() ||
+      this.previousBestResource.isLoading() ||
+      this.isSaving()
   );
 
-  readonly previousBest = toSignal(this.userResult, { initialValue: null });
+  private readonly debouncedLoading = toSignal(
+    toObservable(this.isGlobalLoading).pipe(
+      switchMap(isLoading => (isLoading ? of(true).pipe(delay(150)) : of(false))),
+      distinctUntilChanged()
+    ),
+    { initialValue: false }
+  );
 
-  private readonly loadingEffect = effect(() => {
-    const isLoading = this.challengeResource.isLoading() || this.ranksResource.isLoading();
-
-    if (isLoading) {
+  private readonly syncLoadingEffect = effect(() => {
+    if (this.debouncedLoading()) {
       this.loadingService.show();
     } else {
       this.loadingService.hide();
     }
   });
+
+  private worker: Worker | undefined;
 
   constructor() {
     this.initWorker();
@@ -97,13 +121,8 @@ export class CodeGolfService implements OnDestroy {
   checkSolution(): void {
     const code = this.rawCode();
     const challenge = this.currentChallenge();
-
-    if (!this.validateSolutionInput(code, challenge)) {
-      return;
-    }
-
-    if (code && challenge && this.worker) {
-      this.worker.postMessage({ code, testCases: challenge.test_cases });
+    if (this.validateSolutionInput(code, challenge) && this.worker) {
+      this.worker.postMessage({ code, testCases: challenge?.test_cases });
       this.showResults.set(true);
     }
   }
@@ -112,30 +131,27 @@ export class CodeGolfService implements OnDestroy {
     this.rawCode.set('');
     this.showResults.set(false);
     this.result.set(null);
-    this.challengeResource.reload();
+    this.currentChallengeKey.set(null);
   }
 
   saveResult(challengeKey: string, userId: string, bytes: number): void {
-    const previousBest = this.previousBest();
-    const isNewRecord = previousBest === null || bytes < previousBest;
-
-    if (!isNewRecord) {
-      this.toastService.info('Keep trying!', `Your current best is ${previousBest} bytes.`);
+    const best = this.previousBest();
+    if (best !== null && bytes >= best) {
+      this.toastService.info('Keep trying!', `Your current best is ${best} bytes.`);
       return;
     }
 
-    this.loadingService.show();
-
+    this.isSaving.set(true);
     this.fetcher
       .saveResult(challengeKey, userId, bytes)
-      .pipe(finalize(() => this.loadingService.hide()))
+      .pipe(finalize(() => this.isSaving.set(false)))
       .subscribe({
-        next: (savedBytes: number) => {
-          this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved successfully.`);
+        next: savedBytes => {
+          this.toastService.success('New Record!', `Result of ${savedBytes} bytes saved.`);
+          this.previousBestResource.reload();
         },
         error: err => {
-          const errorMessage = err?.message || 'Unknown database error';
-          this.toastService.danger('Save failed', errorMessage);
+          this.toastService.danger('Save failed', err?.message || 'Error');
         },
       });
   }
@@ -143,17 +159,14 @@ export class CodeGolfService implements OnDestroy {
   private initWorker(): void {
     if (typeof Worker !== 'undefined') {
       this.worker = new Worker(new URL('./code-golf.worker', import.meta.url));
-
       this.worker.onmessage = ({ data }: MessageEvent<WorkerResponse>): void => {
         this.result.set(data);
-
         const challenge = this.currentChallenge();
         const userId = this.userId();
         if (data.allPassed && challenge && userId) {
           this.saveResult(challenge.challenge_key, userId, this.byteCount());
         }
       };
-
       this.worker.onerror = (event: ErrorEvent): void => {
         event.preventDefault();
         this.result.set({ allPassed: false, error: `${event.message}` });
@@ -181,7 +194,6 @@ export class CodeGolfService implements OnDestroy {
       this.toastService.warning('Empty Code', 'Please write some code first!');
       return false;
     }
-
     if (!challenge) {
       this.toastService.danger('No Challenge', 'Please wait for the challenge to load.');
       return false;

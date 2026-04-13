@@ -15,9 +15,6 @@ export class TndmCodeGolfResults {
   readonly result = input.required<WorkerResponse>();
   readonly closeModal = output<void>();
   private readonly successMsg = translateSignal('golf.success');
-  private readonly failedMsg = translateSignal('golf.failed');
-
-  protected readonly title = computed(() => (this.result().allPassed ? this.successMsg() : this.failedMsg()));
 
   protected readonly errorText = computed(() => {
     const result = this.result();

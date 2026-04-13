@@ -11,6 +11,7 @@ export class CodeGolfFetcherService {
   private readonly SUPABASE_KEY = 'sb_publishable_KXv3jOLT3TQj-ZqMbjPwLg_o8unxvBW';
   private readonly RPC_FUNCTIONS = {
     GET_RANDOM_CHALLENGE: 'get_random_challenge',
+    GET_CHALLENGE_BY_ID: 'get_challenge_by_id',
     GET_USER_CHALLENGE_RESULT: 'get_user_golf_result',
     SAVE_CHALLENGE: 'save_golf_result',
     GET_RANKS: 'get_golf_ranks',
@@ -19,6 +20,7 @@ export class CodeGolfFetcherService {
   private readonly toastService = inject(ToastService);
 
   private readonly supabase: SupabaseClient = createClient(this.SUPABASE_URL, this.SUPABASE_KEY);
+
   getRandomChallenge(lang: 'ru' | 'en' = 'en'): Observable<Challenge | undefined> {
     return this.callRpc<Challenge[]>(this.RPC_FUNCTIONS.GET_RANDOM_CHALLENGE, { lang_code: lang }).pipe(
       map(data => data?.[0]),
@@ -28,6 +30,17 @@ export class CodeGolfFetcherService {
       })
     );
   }
+
+  getChallengeById(lang: 'ru' | 'en', challengeKey: string): Observable<Challenge | undefined> {
+    return this.callRpc<Challenge[]>(this.RPC_FUNCTIONS.GET_CHALLENGE_BY_ID, {
+      lang_code: lang,
+      p_challenge_key: challengeKey,
+    }).pipe(
+      map((data: Challenge[]): Challenge | undefined => (data?.length > 0 ? data[0] : undefined)),
+      catchError((): Observable<undefined> => of(undefined))
+    );
+  }
+
   getUserChallengeResult(challengeKey: string, userId: string): Observable<number | null> {
     if (!challengeKey || !userId) {
       return of(null);
