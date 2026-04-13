@@ -28,7 +28,7 @@ export class CodeGolfFetcherService {
     return this.callRpc<Challenge[]>(this.RPC_FUNCTIONS.GET_CHALLENGE_BY_ID, {
       lang_code: lang,
       p_challenge_key: challengeKey,
-    }).pipe(map((data: Challenge[]): Challenge | undefined => (data?.length > 0 ? data[0] : undefined)));
+    }).pipe(map((data: Challenge[]): Challenge | undefined => data?.[0]));
   }
 
   getUserChallengeResult(challengeKey: string, userId: string): Observable<number | null> {

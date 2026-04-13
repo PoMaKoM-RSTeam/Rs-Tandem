@@ -4,7 +4,19 @@ import { TndmAuthStateStoreService } from '@auth';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { REGEX_RULES } from '../types/regex-pattern';
 import { GolfRank } from '../types/golf-rank';
-import { catchError, combineLatest, delay, distinctUntilChanged, finalize, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { ToastService } from '../../../../core/toast/toast-service';
 import { WorkerResponse } from '../types/worker.types';
 import { Challenge } from '../types/challenge';
@@ -72,6 +84,10 @@ export class CodeGolfService implements OnDestroy {
       key: this.currentChallenge()?.challenge_key,
       uid: this.userId(),
     }))
+  ).pipe(
+    filter(({ key, uid }) => Boolean(key && uid)),
+    debounceTime(100),
+    distinctUntilChanged((prev, curr) => prev.key === curr.key && prev.uid === curr.uid)
   );
 
   readonly ranksResource = rxResource({
@@ -161,6 +177,7 @@ export class CodeGolfService implements OnDestroy {
 
   saveResult(challengeKey: string, userId: string, bytes: number): void {
     const best = this.previousBest();
+
     if (best !== null && bytes >= best) {
       this.toastService.info(
         this.transloco.translate('golf.keepTrying'),
