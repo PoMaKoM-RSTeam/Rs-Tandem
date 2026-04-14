@@ -69,7 +69,7 @@ export const DATA_FIVE: Puzzle[] = [
     slots: {
       s1: {
         id: 's1',
-        acceptedBlockIds: ['one, five'],
+        acceptedBlockIds: ['one', 'five'],
         currentBlockId: null,
         locked: false,
         validationState: 'idle',
