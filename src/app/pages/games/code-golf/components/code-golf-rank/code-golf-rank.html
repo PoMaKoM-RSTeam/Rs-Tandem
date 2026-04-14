@@ -1,8 +1,8 @@
 <div class="best-result">
   @if (previousBest(); as best) {
   <div class="record-badge">
-    <span class="label">Your best result:</span>
-    <span class="value">{{ best }} Bytes</span>
+    <span class="label">{{ 'golf.bestResult' | transloco }}</span>
+    <span class="value">{{ best }} {{ 'golf.bytes' | transloco }}</span>
   </div>
 
   <div
@@ -10,8 +10,8 @@
     [class.is-visible]="diffInfo()"
     [class.progress]="diffInfo()?.isProgress"
     [class.regress]="diffInfo()?.isRegress">
-    @if (diffInfo(); as diff) { {{ diff.value }} Bytes
-    <span class="diff-label">({{ diff.label }})</span>
+    @if (diffInfo(); as diff) { {{ diff.value }} {{ 'golf.bytes' | transloco }}
+    <span class="diff-label">({{ 'golf.' + diff.label | transloco }})</span>
     }
   </div>
   }
@@ -23,7 +23,7 @@
     <span class="icon">{{ currentRank.icon }}</span>
     <div class="details">
       <div class="rank" [style.color]="currentRank.color">{{ currentRank.label }}</div>
-      <div class="bytes-amount">{{ byteCount() }} Bytes</div>
+      <div class="bytes-amount">{{ byteCount() }} {{ 'golf.bytes' | transloco }}</div>
     </div>
   </div>
 

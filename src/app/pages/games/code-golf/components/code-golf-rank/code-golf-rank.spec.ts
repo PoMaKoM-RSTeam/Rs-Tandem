@@ -2,6 +2,7 @@ import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TndmCodeGolfRank } from './code-golf-rank';
 import { GolfRank } from '../../types/golf-rank';
+import { TranslocoTestingModule } from '@jsverse/transloco';
 
 describe('TndmCodeGolfRank', () => {
   let component: TndmCodeGolfRank;
@@ -18,14 +19,22 @@ describe('TndmCodeGolfRank', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TndmCodeGolfRank],
+      imports: [
+        TndmCodeGolfRank,
+        TranslocoTestingModule.forRoot({
+          langs: {},
+          translocoConfig: {
+            availableLangs: ['en'],
+            defaultLang: 'en',
+          },
+        }),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TndmCodeGolfRank);
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
 
-    // Установка обязательных input через ComponentRef для Signals
     componentRef.setInput('rank', mockRank);
     componentRef.setInput('previousBest', null);
     componentRef.setInput('byteCount', 0);
@@ -88,7 +97,7 @@ describe('TndmCodeGolfRank', () => {
       fixture.detectChanges();
       badge = fixture.nativeElement.querySelector('.record-badge');
       expect(badge).toBeTruthy();
-      expect(badge.textContent).toContain('50 Bytes');
+      expect(badge.textContent).toContain('50');
     });
 
     it('should apply correct color and icon from rank', () => {

@@ -79,4 +79,8 @@
 
   @include mx.text-body(v.$color-error);
   font-weight: v.$font-weight-bold;
+
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
