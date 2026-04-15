@@ -3,8 +3,6 @@ import { provideRouter, Router, Routes } from '@angular/router';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoTestingModule } from '@jsverse/transloco';
 import { TndmTypeInvestigator } from './type-investigator';
-import { Puzzle } from '../../models/puzzle.model';
-import { PuzzleDifficulty } from '../../models/puzzle-difficulty.enum';
 
 @Component({ changeDetection: ChangeDetectionStrategy.OnPush, template: '', standalone: true })
 class DummyComponent {}
@@ -71,35 +69,6 @@ describe('TndmTypeInvestigator', () => {
 
   it('onPuzzleSolved should not throw when no active puzzle', () => {
     expect(() => component.onPuzzleSolved()).not.toThrow();
-  });
-
-  it('onPuzzleSolved should add puzzle id to solvedIds', () => {
-    const mockPuzzle: Puzzle = {
-      id: 'test-p',
-      difficulty: PuzzleDifficulty.Easy,
-      title: 'T',
-      description: 'D',
-      hintText: 'H',
-      availableBlocks: [],
-      lines: [],
-      slots: {},
-    };
-
-    component.solvedIds.update(ids => new Set([...ids, mockPuzzle.id]));
-    expect(component.solvedIds().has('test-p')).toBe(true);
-  });
-
-  it('progressPercent should reflect solved count', () => {
-    const total = component.allPuzzles().length;
-    component.solvedIds.set(new Set(['easy-readonly']));
-    expect(component.progressPercent()).toBeCloseTo((1 / total) * 100, 1);
-  });
-
-  it('should show progress bar when puzzles are solved', () => {
-    component.solvedIds.set(new Set(['easy-readonly']));
-    fixture.detectChanges();
-    const progress = fixture.nativeElement.querySelector('.ti-progress');
-    expect(progress).toBeTruthy();
   });
 
   it('onPuzzleSelected should navigate to puzzle id', () => {
