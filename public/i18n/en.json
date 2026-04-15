@@ -245,5 +245,14 @@
   "golf": {
     "next": "Next Challenge",
     "check": "Check solution"
+  },
+  "ti-rcr-fetchers": {
+    "error": "Error",
+    "progress": "Failed to load progress. Please try again later.",
+    "auth": "Auth error",
+    "authText": "Reset the page, perharps you was log-outed.",
+    "saved": "Saved",
+    "savedText": "Your progress was successfully saved!",
+    "fail": "Fail"
   }
 }
