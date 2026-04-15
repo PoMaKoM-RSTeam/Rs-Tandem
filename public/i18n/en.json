@@ -223,5 +223,14 @@
     "emptyCode": "Empty Code",
     "emptyCodeMsg": "Please write some code first!",
     "noChallenge": "Please wait for the challenge to load."
+  },
+  "ti-rcr-fetchers": {
+    "error": "Error",
+    "progress": "Failed to load progress. Please try again later.",
+    "auth": "Auth error",
+    "authText": "Reset the page, perharps you was log-outed.",
+    "saved": "Saved",
+    "savedText": "Your progress was successfully saved!",
+    "fail": "Fail"
   }
 }
