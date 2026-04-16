@@ -1,16 +1,5 @@
 <div class="page">
-  <header class="header">
-    @if(!authService.isAuthenticated){
-    <tndm-lang-switcher />
-    <div class="header__auth-btns">
-      <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
-      <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
-    </div>
-    } @else {
-    <tndm-lang-switcher />
-    <tndm-navigation />
-    <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" /> }
-  </header>
+  <tndm-header />
 
   <div class="vertical-lines">
     <div class="line"></div>
