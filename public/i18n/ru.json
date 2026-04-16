@@ -84,6 +84,7 @@
     "danger": "ошибка"
   },
   "auth": {
+    "logout": "Выйти",
     "updated": "Пароль обновлён",
     "loginWithNewPassword": "Войдите с новым паролем",
     "signIn": "войти",

@@ -84,6 +84,7 @@
     "danger": "danger"
   },
   "auth": {
+    "logout": "Logout",
     "updated": "Password updated",
     "loginWithNewPassword": "Log in with the new password",
     "signIn": "sign in",
