@@ -1,5 +1,6 @@
 @use 'styles/typography' as t;
 @use 'styles/variables' as v;
+@use 'styles/adaptive' as a;
 
 :host {
   display: block;
@@ -12,32 +13,15 @@
   height: 100%;
   padding: 0 40px;
   @include t.text-body();
-}
 
-.header {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  height: var(--header-height);
-  height: 53px;
-  margin: 0 1px;
-  border-bottom: 1px solid v.$color-grey;
-  padding: 29px;
-  background-color: v.$bg-main;
-
-  &__auth-btns {
-    display: flex;
-    gap: 25px;
-    width: fit-content;
-    margin-left: auto;
+  @include a.mobile() {
+    padding: 0;
   }
 }
 
 .content {
   position: relative;
-  z-index: 5;
+  z-index: 2;
 }
 
 .content__top {
@@ -46,6 +30,10 @@
   justify-content: center;
   border-bottom: 1px solid v.$color-grey;
   padding: 1vw 0;
+
+  @include a.mobile() {
+    padding: 2vw 0;
+  }
 }
 
 .content__title {
@@ -54,8 +42,13 @@
   padding-left: 20px;
   color: v.$text-primary-color;
   font-family: v.$font-family-heading;
-  font-size: 80px;
+
   text-transform: uppercase;
+  @include a.adaptiv-font(60, 30);
+
+  @include a.tablet() {
+    @include a.adaptiv-font(38, 20);
+  }
 
   &-home {
     width: 100%;
@@ -83,14 +76,21 @@
   position: absolute;
   top: 0;
   left: 0;
+  top: 53px;
+  bottom: 0;
+  box-sizing: border-box;
+  min-height: calc(100vh - 53px);
   z-index: 0;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
   width: 100vw;
-  height: 100vh;
   padding: 0 40px;
   pointer-events: none;
+
+  @include a.mobile() {
+    display: none;
+  }
 }
 
 .line {
@@ -101,12 +101,15 @@
 
 .cross {
   position: absolute;
-  z-index: 2;
   width: 30px;
   height: 30px;
   background-color: v.$bg-main;
   transform: translate(-50%, -50%);
   pointer-events: none;
+
+  @include a.mobile() {
+    display: none;
+  }
 
   &::before,
   &::after {

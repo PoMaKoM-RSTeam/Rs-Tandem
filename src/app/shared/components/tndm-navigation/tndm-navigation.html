@@ -1,9 +1,0 @@
-<nav class="navigation">
-  <ul class="nav">
-    @for (item of navItems; track item.path) {
-    <li class="nav__item">
-      <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="item.path"> {{ item.label }} </a>
-    </li>
-    }
-  </ul>
-</nav>
