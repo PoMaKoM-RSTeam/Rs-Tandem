@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, Signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { APP_ROUTES } from '../../constants/app-routes';
 import { TndmAuthService } from '@auth';
 import { NavigationService } from '../../../core/navigation/navigation.service';
 import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
-import { TndmButton } from '../../ui/tndm-button/tndm-button';
-import { NgTemplateOutlet } from '@angular/common';
+import { ButtonConfig, TndmButton } from '../../ui/tndm-button/tndm-button';
+import { translateSignal } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-header',
-  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, NgTemplateOutlet],
+  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton],
   templateUrl: './tndm-header.html',
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,15 +19,20 @@ export class TndmNavigation {
   readonly authService: TndmAuthService = inject(TndmAuthService);
   readonly navService: NavigationService = inject(NavigationService);
 
-  readonly signInBtnConfig = { label: 'sign in' } as const;
-  readonly signUpBtnConfig = {
-    label: 'sign up',
+  private readonly signInLabel: Signal<string> = translateSignal('auth.signIn');
+  readonly signInBtnConfig: Signal<ButtonConfig> = computed(() => ({ label: this.signInLabel() }));
+
+  private readonly signUpLabel: Signal<string> = translateSignal('auth.registration');
+  readonly signUpBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    label: this.signUpLabel(),
     variant: 'secondary',
-  } as const;
-  readonly logoutBtnConfig = {
-    label: 'logout',
+  }));
+
+  private readonly logoutLabel: Signal<string> = translateSignal('auth.logout');
+  readonly logoutBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    label: this.logoutLabel(),
     variant: 'secondary',
-  } as const;
+  }));
 
   readonly navItems = [
     { label: 'code_golf', path: APP_ROUTES.codeGolf },

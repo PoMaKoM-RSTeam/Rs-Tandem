@@ -8,7 +8,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { ToastService } from '../toast/toast-service';
 import { LoadingOverlayService } from '../loading-overlay/loading-overlay-service';
 
-const STORAGE_KEY = 'tndm_lang';
+export const STORAGE_KEY = 'tndm_lang';
 const TABLE = 'user_preferences';
 
 export type SupportedLang = 'en' | 'ru';
@@ -36,15 +36,10 @@ export class LanguagePreferenceService {
   );
 
   constructor() {
-    const saved = this.getFromStorage();
-    if (saved) {
-      this.transloco.setActiveLang(saved);
-    }
-
     effect(() => {
       const user = this.authStore.user();
       if (user) {
-        this.loadLangPreference(user.id);
+        void this.loadLangPreference(user.id);
       }
     });
   }
@@ -55,16 +50,7 @@ export class LanguagePreferenceService {
 
     const userId = this.authStore.user()?.id;
     if (userId) {
-      this.saveLangPreference(userId, lang);
-    }
-  }
-
-  private getFromStorage(): SupportedLang | null {
-    try {
-      const value = localStorage.getItem(STORAGE_KEY);
-      return isSupportedLang(value) ? value : this.defaultLang;
-    } catch {
-      return this.defaultLang;
+      void this.saveLangPreference(userId, lang);
     }
   }
 
@@ -80,11 +66,13 @@ export class LanguagePreferenceService {
     if (this.loadedForUserId === userId) {
       return;
     }
-    this.loadedForUserId = userId;
+
     this.loadingOverlay.show();
     try {
       const { data, error } = await this.supabase.from(TABLE).select('lang').eq('user_id', userId).maybeSingle();
       if (error || !data) return;
+
+      this.loadedForUserId = userId;
       const lang = data.lang;
       if (isSupportedLang(lang)) {
         this.transloco.setActiveLang(lang);
