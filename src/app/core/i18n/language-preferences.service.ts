@@ -80,10 +80,6 @@ export class LanguagePreferenceService {
       if (isSupportedLang(lang)) {
         this.transloco.setActiveLang(lang);
         this.saveToStorage(lang);
-        this.toastService.warning(
-          this.transloco.translate('language-preferences-toaster.error'),
-          this.transloco.translate('language-preferences-toaster.languageErrorLocalStorage')
-        );
       }
     } catch {
       this.loadedForUserId = null;
