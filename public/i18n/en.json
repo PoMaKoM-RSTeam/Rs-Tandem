@@ -238,5 +238,12 @@
     "languageErrorSaveServer": "Failed to save language preference to server",
     "languageErrorLoadServer": "Failed to load language preference from server",
     "languageErrorLocalStorage": "Failed to save language preference locally"
+  },
+  "ti-board": {
+    "btnBack": "back",
+    "btnReset": "reset",
+    "btnCheck": "check",
+    "btnHintS": "show hint",
+    "btnHintH": "hide hint"
   }
 }

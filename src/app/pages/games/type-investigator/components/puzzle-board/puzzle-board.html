@@ -1,5 +1,5 @@
 <div class="puzzle-board_topbar">
-  <button class="puzzle-board_back" type="button" (click)="back.emit()">← Back</button>
+  <button class="puzzle-board_back" type="button" (click)="back.emit()">← {{'ti-board.btnBack' | transloco}}</button>
   <span class="puzzle-board_difficulty puzzle-board_difficulty--{{ puzzle().difficulty }}"
     >{{ puzzle().difficulty }}</span
   >
@@ -76,15 +76,19 @@
   </div>
 
   <div class="puzzle-board_buttons">
-    <tndm-button [btnConfig]="{ variant: 'secondary', label: 'Reset' }" (clicked)="resetPuzzle()" />
-    <tndm-button [btnConfig]="{ label: 'Check', isDisabled: !allSlotsFilled() }" (clicked)="checkSolution()" />
+    <tndm-button
+      [btnConfig]="{ variant: 'secondary', label: 'ti-board.btnReset' | transloco }"
+      (clicked)="resetPuzzle()" />
+    <tndm-button
+      [btnConfig]="{ label: 'ti-board.btnCheck' | transloco, isDisabled: !allSlotsFilled() }"
+      (clicked)="checkSolution()" />
   </div>
 
   @if (showHint()) {
   <aside class="puzzle-board_hint">{{ puzzle().hintText | transloco }}</aside>
   }
   <button class="puzzle-board_hint-toggle" type="button" (click)="toggleHint()">
-    {{ showHint() ? 'Hide hint' : 'Show hint' }}
+    {{ (showHint() ? 'ti-board.btnHintH' : 'ti-board.btnHintS') | transloco }}
   </button>
 
   @if (isSolved()) {
