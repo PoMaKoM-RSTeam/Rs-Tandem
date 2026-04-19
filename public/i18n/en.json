@@ -232,5 +232,11 @@
     "saved": "Saved",
     "savedText": "Your progress was successfully saved!",
     "fail": "Fail"
+  },
+  "language-preferences-toaster": {
+    "error": "Language",
+    "languageErrorSaveServer": "Failed to save language preference to server",
+    "languageErrorLoadServer": "Failed to load language preference from server",
+    "languageErrorLocalStorage": "Failed to save language preference locally"
   }
 }

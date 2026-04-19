@@ -58,7 +58,10 @@ export class LanguagePreferenceService {
     try {
       localStorage.setItem(STORAGE_KEY, lang);
     } catch {
-      this.toastService.warning('Language', 'Failed to save language preference locally');
+      this.toastService.warning(
+        this.transloco.translate('language-preferences-toaster.error'),
+        this.transloco.translate('language-preferences-toaster.languageErrorLocalStorage')
+      );
     }
   }
 
@@ -77,10 +80,17 @@ export class LanguagePreferenceService {
       if (isSupportedLang(lang)) {
         this.transloco.setActiveLang(lang);
         this.saveToStorage(lang);
+        this.toastService.warning(
+          this.transloco.translate('language-preferences-toaster.error'),
+          this.transloco.translate('language-preferences-toaster.languageErrorLocalStorage')
+        );
       }
     } catch {
       this.loadedForUserId = null;
-      this.toastService.warning('Language', 'Failed to load language preference from server');
+      this.toastService.warning(
+        this.transloco.translate('language-preferences-toaster.error'),
+        this.transloco.translate('language-preferences-toaster.languageErrorLoadServer')
+      );
     } finally {
       this.loadingOverlay.hide();
     }
@@ -90,7 +100,10 @@ export class LanguagePreferenceService {
     try {
       await this.supabase.from(TABLE).upsert({ user_id: userId, lang }, { onConflict: 'user_id' });
     } catch {
-      this.toastService.warning('Language', 'Failed to save language preference to server');
+      this.toastService.warning(
+        this.transloco.translate('language-preferences-toaster.error'),
+        this.transloco.translate('language-preferences-toaster.languageErrorSaveServer')
+      );
     }
   }
 

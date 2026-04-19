@@ -232,5 +232,11 @@
     "saved": "Сохранено",
     "savedText": "Прогресс сохранён!",
     "fail": "увы"
+  },
+  "language-preferences-toaster": {
+    "error": "Языковые настройки",
+    "languageErrorSaveServer": "Не удалось сохранить языковые настройки на сервере",
+    "languageErrorLoadServer": "Не удалось загрузить языковые настройки с сервера",
+    "languageErrorLocalStorage": "Не удалось сохранить языковые настройки в браузере"
   }
 }
