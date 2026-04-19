@@ -6,7 +6,9 @@
   gap: 1rem;
   width: 80%;
   max-width: 1200px;
+  justify-self: center;
 }
+
 .puzzle-select_card {
   background: $color-grey;
   border-radius: 0.5rem;
@@ -80,6 +82,16 @@
   font-size: 0.78rem;
   color: $text-primary-color;
   line-height: 1.5;
+}
+
+@media (max-width: 1200px) {
+  .puzzle-select_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 2fr));
+    gap: 1rem;
+    width: 80%;
+    max-width: 1200px;
+  }
 }
 
 @media (max-width: 720px) {
