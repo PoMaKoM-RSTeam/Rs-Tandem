@@ -11,6 +11,7 @@
     border-radius: v.$radius-md;
     overflow: hidden;
     width: 100%;
+    max-width: 100%;
   }
 
   .viewer_header {
@@ -195,5 +196,152 @@
 
   .viewer_text .hljs-symbol {
     color: #79c0ff;
+  }
+
+  @media (max-width: 1500px) {
+    .viewer_header {
+      padding: v.$space-xs v.$space-sm;
+    }
+
+    .viewer_filename {
+      font-size: 0.88rem;
+    }
+
+    .viewer_category {
+      font-size: 0.7rem;
+      padding: 1px v.$space-xs;
+    }
+
+    .viewer_editor {
+      font-size: 0.85rem;
+      line-height: 18px;
+    }
+
+    .viewer_line-num {
+      font-size: 0.65rem;
+      padding: 0 v.$space-xs;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .viewer_line {
+      padding: 0 v.$space-xs;
+      height: 20px;
+    }
+
+    .viewer_footer {
+      padding: v.$space-xs v.$space-sm;
+      font-size: 0.75rem;
+    }
+
+    .viewer_explanation {
+      font-size: 0.65rem;
+      padding: v.$space-xs v.$space-sm;
+    }
+
+    .viewer_text {
+      font-size: 0.78rem;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .viewer_header {
+      padding: v.$space-xs v.$space-sm;
+    }
+
+    .viewer_filename {
+      font-size: 0.78rem;
+    }
+
+    .viewer_category {
+      font-size: 0.6rem;
+      padding: 1px v.$space-xs;
+    }
+
+    .viewer_editor {
+      font-size: 0.75rem;
+      line-height: 20px;
+    }
+
+    .viewer_line-num {
+      font-size: 0.65rem;
+      padding: 0 v.$space-xs;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .viewer_line {
+      padding: 0 v.$space-xs;
+      height: 20px;
+    }
+
+    .viewer_footer {
+      padding: v.$space-xs v.$space-sm;
+      font-size: 0.75rem;
+    }
+
+    .viewer_explanation {
+      font-size: 0.65rem;
+      padding: v.$space-xs v.$space-sm;
+    }
+
+    .viewer_text {
+      font-size: 0.72rem;
+    }
+  }
+
+  @media (min-width: 650px) and (max-width: 900px) {
+    .viewer {
+      border: 1px solid v.$color-gray;
+      border-radius: v.$radius-md;
+      overflow: hidden;
+      width: 550px;
+      box-sizing: border-box;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .viewer_header {
+      padding: 2px v.$space-xs;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+
+    .viewer_filename {
+      font-size: 0.7rem;
+    }
+
+    .viewer_editor {
+      font-size: 0.65rem;
+      line-height: 18px;
+    }
+
+    .viewer_line-num {
+      font-size: 0.58rem;
+      padding: 0 3px;
+      height: 18px;
+      line-height: 18px;
+    }
+
+    .viewer_line {
+      padding: 0 3px;
+      height: 18px;
+    }
+
+    .viewer_footer {
+      padding: 2px v.$space-xs;
+      font-size: 0.65rem;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+
+    .viewer_text {
+      font-size: 0.62rem;
+    }
+
+    .viewer_explanation {
+      font-size: 0.6rem;
+      padding: 2px v.$space-xs;
+    }
   }
 }

@@ -78,3 +78,44 @@
     border-color: v.$color-orange;
   }
 }
+
+@media (max-width: 1500px) {
+  .review-tooltip {
+    padding: v.$space-xs;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+
+  .review-tooltip_option {
+    padding: v.$space-xs;
+    font-size: 0.6rem;
+  }
+
+  .review-tooltip_label {
+    font-size: 0.62rem;
+  }
+
+  .review-tooltip_error {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .review-tooltip {
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .review-tooltip_option {
+    padding: 2px v.$space-xs;
+    font-size: 0.68rem;
+  }
+
+  .review-tooltip_label {
+    font-size: 0.65rem;
+  }
+
+  .review-tooltip_error {
+    font-size: 0.65rem;
+  }
+}

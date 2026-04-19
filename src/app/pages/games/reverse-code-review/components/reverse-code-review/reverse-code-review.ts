@@ -33,6 +33,8 @@ export class TndmReverseCode {
 
   readonly allCases = signal<ReviewCase[]>(REVIEW_CASES_DATA);
 
+  readonly sidebarOpen = signal(true);
+
   private readonly caseId = toSignal(this.route.paramMap.pipe(map(p => p.get('caseId'))));
 
   readonly activeCase = computed(() => {
@@ -56,6 +58,11 @@ export class TndmReverseCode {
   onCaseSelected(reviewCase: ReviewCase): void {
     const hasCase = !!this.caseId();
     this.router.navigate(hasCase ? ['..', reviewCase.id] : [reviewCase.id], { relativeTo: this.route });
+    this.sidebarOpen.set(false);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update(v => !v);
   }
 
   onCaseSolved(score: number): void {

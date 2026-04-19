@@ -343,5 +343,9 @@
     "btnCheck": "check",
     "btnHintS": "show hint",
     "btnHintH": "hide hint"
+  },
+  "reverse-burger": {
+    "cases": "← cases",
+    "code": "☰ code"
   }
 }

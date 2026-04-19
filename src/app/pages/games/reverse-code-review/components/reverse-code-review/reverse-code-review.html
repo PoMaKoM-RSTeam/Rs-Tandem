@@ -1,12 +1,16 @@
-<div class="page">
+<div class="page_wrapper">
+  <button class="page_toggle" type="button" (click)="toggleSidebar()">
+    {{ (sidebarOpen() ? 'reverse-burger.code' : 'reverse-burger.cases')| transloco}}
+  </button>
   <div class="page_layout">
     <tndm-case-sidebar
       [activeCaseId]="activeCase()?.id ?? null"
       [cases]="allCases()"
       [completedIds]="completedIds()"
+      [class.page_panel--hidden]="!sidebarOpen()"
       (caseSelected)="onCaseSelected($event)" />
 
-    <main class="page_main">
+    <main class="page_main" [class.page_panel--hidden]="sidebarOpen()">
       @if (activeCase(); as selectedCase) {
       <tndm-code-viewer [reviewCase]="selectedCase" (solved)="onCaseSolved($event)" />
       } @else {
