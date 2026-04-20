@@ -1,0 +1,88 @@
+<div
+  class="user-profile-overlay"
+  #overlay
+  role="button"
+  tabindex="0"
+  [class.open]="service.isOpen()"
+  (click)="service.close()"
+  (keydown.enter)="service.close()">
+  <section
+    class="user-profile"
+    [formGroup]="profileForm"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown)="$event.stopPropagation()">
+    <header class="user-profile__header">
+      <h2 class="user-profile__title">{{ !service.isEditMode() ? 'PROFILE' : 'EDIT PROFILE'}}</h2>
+      @if (!service.isEditMode()){
+      <tndm-button [btnConfig]="{icon: 'edit', variant: 'icon'}" (clicked)="service.toggleEditMode()" />
+      }
+    </header>
+
+    <main class="user-profile__main">
+      <div class="avatar-wrapper">
+        <tndm-avatar [size]="120" />
+        <p class="user-profile__name">{{user()?.displayName}}</p>
+      </div>
+    </main>
+
+    @if (service.isEditMode()){
+    <form class="user-profile__form" (submit)="handleSubmit()">
+      <tndm-input
+        id="username"
+        name="username"
+        label="username"
+        formControlName="username"
+        [trimmed]="true"
+        placeholder="Enter your name" />
+
+      <div class="textarea">
+        <label class="textarea__label" for="bio-textarea">about me</label>
+        <div class="textarea__container">
+          <textarea
+            id="bio-textarea"
+            class="textarea__field"
+            formControlName="bio"
+            placeholder="Tell us about yourself..."
+            rows="4">
+          </textarea>
+        </div>
+      </div>
+
+      <tndm-input id="email" name="email" label="Email" formControlName="email" placeholder="Enter email" />
+
+      <tndm-input
+        id="password"
+        name="password"
+        label="Password"
+        formControlName="password"
+        [errorMessages]="AUTH_ERROR_MESSAGES"
+        placeholder="********"
+        type="password"
+        autocomplete="new-password" />
+
+      <div class="user-profile__buttons">
+        <tndm-button [btnConfig]="{ label: 'Cancel', variant: 'secondary' }" (clicked)="reset()" />
+        <tndm-button
+          [btnConfig]="{
+              label: 'Save All',
+              variant: 'primary',
+              isDisabled: profileForm.invalid || !profileForm.dirty,
+              type: 'submit'
+            }" />
+      </div>
+    </form>
+    } @else {
+    <article class="user-profile__info-display">
+      <div class="user-profile__info-group">
+        <p class="label">email</p>
+        <p class="value">{{user()?.email}}</p>
+      </div>
+      <div class="user-profile__info-group">
+        <p class="label">about me</p>
+        <p class="value">{{user()?.bio || 'No bio yet...'}}</p>
+      </div>
+    </article>
+    }
+  </section>
+</div>

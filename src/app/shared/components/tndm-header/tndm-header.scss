@@ -90,6 +90,8 @@
   }
 
   &__item {
+    display: flex;
+    align-items: center;
     @include m.corner-borders($color: v.$color-accent);
     text-align: center;
     &::after,
@@ -159,4 +161,9 @@
       transform: translateX(-300%);
     }
   }
+}
+
+.avatar-btn {
+  border: none;
+  background: none;
 }

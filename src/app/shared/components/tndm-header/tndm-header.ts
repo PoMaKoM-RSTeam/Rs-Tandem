@@ -6,10 +6,12 @@ import { NavigationService } from '../../../core/navigation/navigation.service';
 import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
 import { TndmButton } from '../../ui/tndm-button/tndm-button';
 import { NgTemplateOutlet } from '@angular/common';
+import { TndmUserProfileService } from '../../../pages/tndm-user-profile/tndm-user-profile.service';
+import { TndmAvatar } from '../avatar/tndm-avatar';
 
 @Component({
   selector: 'tndm-header',
-  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, NgTemplateOutlet],
+  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
   templateUrl: './tndm-header.html',
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +20,7 @@ export class TndmNavigation {
   private readonly elementRef = inject(ElementRef);
   readonly authService: TndmAuthService = inject(TndmAuthService);
   readonly navService: NavigationService = inject(NavigationService);
+  readonly userProfileService: TndmUserProfileService = inject(TndmUserProfileService);
 
   readonly signInBtnConfig = { label: 'sign in' } as const;
   readonly signUpBtnConfig = {
