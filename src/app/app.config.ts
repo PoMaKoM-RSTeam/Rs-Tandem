@@ -1,4 +1,9 @@
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -9,6 +14,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { TitleStrategy } from '@angular/router';
 import { TndmTitleStrategy } from './core/title-strategy/tndm-title-strategy';
 import { translocoConfig } from './core/i18n/transloco.config';
+import { initI18n } from './core/i18n/initI18n';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +30,6 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: TitleStrategy, useExisting: TndmTitleStrategy },
     ...translocoConfig,
+    provideAppInitializer(initI18n),
   ],
 };

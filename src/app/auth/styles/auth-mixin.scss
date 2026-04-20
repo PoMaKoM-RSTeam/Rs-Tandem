@@ -50,13 +50,10 @@
     }
 
     &__sub-title {
-      display: flex;
-      align-items: center;
-      gap: vars.$space-sm;
-
       .title {
+        display: inline;
         @include typ.text-ui;
-        font-weight: bold;
+        margin-right: vars.$radius-sm;
       }
     }
 

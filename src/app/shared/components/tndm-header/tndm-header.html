@@ -20,23 +20,23 @@
       <li class="nav__auth-mobile">
         @if(!authService.isAuthenticated){
         <div class="header__auth-btns">
-          <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
-          <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
+          <tndm-button [btnConfig]="signUpBtnConfig()" (clicked)="onSignUpClick()" />
+          <tndm-button [btnConfig]="signInBtnConfig()" (clicked)="onSignInClick()" />
         </div>
         } @else {
-        <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" />
-        }
+        <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" />
+        () }
       </li>
     </ul>
 
     <div class="header__auth-desktop">
       @if(!authService.isAuthenticated){
       <div class="header__auth-btns">
-        <tndm-button [btnConfig]="signUpBtnConfig" (clicked)="onSignUpClick()" />
-        <tndm-button [btnConfig]="signInBtnConfig" (clicked)="onSignInClick()" />
+        <tndm-button [btnConfig]="signUpBtnConfig()" (clicked)="onSignUpClick()" />
+        <tndm-button [btnConfig]="signInBtnConfig()" (clicked)="onSignInClick()" />
       </div>
       } @else {
-      <tndm-button [btnConfig]="logoutBtnConfig" (clicked)="onLogoutClick()" /> }
+      <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" /> }
     </div>
   </nav>
 

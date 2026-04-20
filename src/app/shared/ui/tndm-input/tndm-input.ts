@@ -5,6 +5,7 @@ import { ICONS } from '../../constants/icons.constant';
 import { SvgIconComponent } from 'angular-svg-icon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ValidationMessages } from '../../types/validation.types';
+import { TranslocoService } from '@jsverse/transloco';
 
 export const typeInput = {
   email: 'email',
@@ -27,6 +28,9 @@ export type InputType = keyof typeof typeInput;
 export class TndmInput<T = unknown> implements ControlValueAccessor {
   private readonly controlDir = inject(NgControl, { self: true, optional: true });
   private readonly destroyRef = inject(DestroyRef);
+
+  private readonly transloco = inject(TranslocoService);
+
   readonly control = new FormControl('');
 
   readonly id = input.required<string>();
@@ -87,23 +91,53 @@ export class TndmInput<T = unknown> implements ControlValueAccessor {
 
   textError(): string | null {
     const control = this.controlDir?.control;
-    if (!control || !control.errors) {
+
+    if (!control?.errors) {
       return null;
     }
 
-    const errorKeys = Object.keys(control.errors);
-    const errorName = errorKeys[0];
+    const errorName = Object.keys(control.errors)[0];
     const errorContext = control.errors[errorName];
 
     const custom = this.errorMessages();
-    const defaults = DEFAULT_ERROR_MESSAGES;
 
-    const handler = custom[errorName] || defaults[errorName];
+    const handler = custom[errorName] || DEFAULT_ERROR_MESSAGES[errorName];
 
-    if (handler) {
-      return typeof handler === 'function' ? handler(this.name(), errorContext).toLowerCase() : handler.toLowerCase();
+    const name = this.transloco.translate(`auth.${this.name()}`);
+
+    const params = {
+      name,
+      ...this.buildTranslationParams(errorContext),
+    };
+
+    if (typeof handler === 'function') {
+      return handler(name, errorContext);
     }
 
-    return `error: ${errorName}`;
+    const key = typeof handler === 'string' ? handler : `validation.${errorName}`;
+
+    return this.transloco.translate(key, params);
+  }
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private buildTranslationParams(errorContext: unknown): Record<string, unknown> {
+    if (!this.isRecord(errorContext)) {
+      return {};
+    }
+
+    const { requirements, ...rest } = errorContext;
+
+    return {
+      ...rest,
+      ...(Array.isArray(requirements) && {
+        requirements: requirements
+          .filter((value): value is string => typeof value === 'string')
+          .map(key => this.transloco.translate(key))
+          .join(', '),
+      }),
+    };
   }
 }

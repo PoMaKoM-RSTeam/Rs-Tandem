@@ -8,6 +8,7 @@ import { Puzzle } from '../../models/puzzle.model';
 import { PUZZLES_DATA } from '../../data/puzzles.data';
 import { TndmTranslocoSupabaseLoader } from '../../../../../core/i18n/transloco-supabase-loader.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { TypeInvestigatorService } from '../../services/type-investigator.service';
 
 @Component({
   selector: 'tndm-type-investigator',
@@ -25,10 +26,11 @@ export class TndmTypeInvestigator {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly progressService = inject(TypeInvestigatorService);
   private solveTimerId: ReturnType<typeof setTimeout> | null = null;
 
   readonly allPuzzles = signal<Puzzle[]>(PUZZLES_DATA);
-  readonly solvedIds = signal<Set<string>>(new Set());
+  readonly solvedIds = this.progressService.completedIds;
 
   private readonly puzzleId = toSignal(this.route.paramMap.pipe(map(p => p.get('puzzleId'))));
   readonly activePuzzle = computed(() => {
@@ -55,7 +57,7 @@ export class TndmTypeInvestigator {
     if (!puzzle) {
       return;
     }
-    this.solvedIds.update(ids => new Set([...ids, puzzle.id]));
+    this.progressService.savePuzzleCompletion(puzzle.id, puzzle.difficulty);
     this.clearSolveTimer();
     const puzzleId = puzzle.id;
     this.solveTimerId = setTimeout(() => {

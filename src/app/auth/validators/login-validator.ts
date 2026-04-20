@@ -6,11 +6,11 @@ export function loginValidator(control: AbstractControl): ValidationErrors | nul
   const failed: string[] = [];
 
   if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
-    failed.push('letters, digits, hyphen or underscore only');
+    failed.push('validation.lettersDigitsHyphenUnderscoreOnly');
   }
 
   if (/^\d/.test(value)) {
-    failed.push('cannot start with digit');
+    failed.push('validation.cannotStartWithDigit');
   }
 
   if (failed.length > 0) {

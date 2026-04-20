@@ -6,7 +6,7 @@ const eslintConfigPrettier = require('eslint-config-prettier');
 
 module.exports = tseslint.config(
   {
-    ignores: ['.angular/**', '.nx/**', 'coverage/**', 'dist/**'],
+    ignores: ['.angular/**', '.nx/**', 'coverage/**', 'dist/**', '**/supabase-edge-function.example.ts'],
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,

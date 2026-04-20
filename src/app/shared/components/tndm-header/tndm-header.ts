@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, Signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { APP_ROUTES } from '../../constants/app-routes';
 import { TndmAuthService } from '@auth';
@@ -12,6 +12,12 @@ import { TndmAvatar } from '../avatar/tndm-avatar';
 @Component({
   selector: 'tndm-header',
   imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
+import { ButtonConfig, TndmButton } from '../../ui/tndm-button/tndm-button';
+import { translateSignal } from '@jsverse/transloco';
+
+@Component({
+  selector: 'tndm-header',
+  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton],
   templateUrl: './tndm-header.html',
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,15 +28,20 @@ export class TndmNavigation {
   readonly navService: NavigationService = inject(NavigationService);
   readonly userProfileService: TndmUserProfileService = inject(TndmUserProfileService);
 
-  readonly signInBtnConfig = { label: 'sign in' } as const;
-  readonly signUpBtnConfig = {
-    label: 'sign up',
+  private readonly signInLabel: Signal<string> = translateSignal('auth.signIn');
+  readonly signInBtnConfig: Signal<ButtonConfig> = computed(() => ({ label: this.signInLabel() }));
+
+  private readonly signUpLabel: Signal<string> = translateSignal('auth.registration');
+  readonly signUpBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    label: this.signUpLabel(),
     variant: 'secondary',
-  } as const;
-  readonly logoutBtnConfig = {
-    label: 'logout',
+  }));
+
+  private readonly logoutLabel: Signal<string> = translateSignal('auth.logout');
+  readonly logoutBtnConfig: Signal<ButtonConfig> = computed(() => ({
+    label: this.logoutLabel(),
     variant: 'secondary',
-  } as const;
+  }));
 
   readonly navItems = [
     { label: 'code_golf', path: APP_ROUTES.codeGolf },

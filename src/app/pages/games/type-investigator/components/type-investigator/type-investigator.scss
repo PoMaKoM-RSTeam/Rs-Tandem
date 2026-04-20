@@ -30,14 +30,25 @@
 
 .ti-progress__fill {
   height: 100%;
-  background: linear-gradient(-90deg, $color-orange, $color-black);
+  background: linear-gradient(-90deg, $color-white, $color-black);
   border-radius: 3px;
   transition: width 0.4s ease-in-out;
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .ti-page {
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.5rem;
     gap: 1.25rem;
+  }
+
+  .ti-progress {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .ti-page {
+    padding: 0.75rem 0.25rem;
+    gap: 1rem;
   }
 }

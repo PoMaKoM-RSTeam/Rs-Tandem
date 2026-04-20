@@ -15,7 +15,7 @@
   }
 }
 
-@media (width < 769px) {
+@media (width < 900px) {
   .auth-page {
     &__content {
       grid-template-columns: repeat(1, 1fr);

@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_FIVE: ReviewCase[] = [
   {
     id: '011',
-    category: 'Memory Leak',
+    category: 'reverseCodeReview.data.c011.category',
     difficulty: 'Middle',
-    title: 'Router Event Leak',
+    title: 'reverseCodeReview.data.c011.title',
     code: `import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
@@ -43,15 +43,13 @@ export class AnalyticsComponent implements OnInit {
       {
         line: 16,
         type: ErrorType.MemoryLeak,
-        message:
-          'Router events subscription without unsubscribe. Use takeUntilDestroyed() or manual cleanup in ngOnDestroy.',
+        message: 'reverseCodeReview.data.c011.msg0',
         points: 1,
       },
       {
         line: 27,
         type: ErrorType.Security,
-        message:
-          'Authentication token hardcoded in client-side code. Use an HTTP interceptor or environment config instead.',
+        message: 'reverseCodeReview.data.c011.msg1',
         points: 1,
       },
     ],
@@ -59,9 +57,9 @@ export class AnalyticsComponent implements OnInit {
 
   {
     id: '012',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c012.category',
     difficulty: 'Junior',
-    title: 'Async Pipe Misuse',
+    title: 'reverseCodeReview.data.c012.title',
     code: `import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -86,21 +84,19 @@ export class UserListComponent {
       {
         line: 8,
         type: ErrorType.Performance,
-        message:
-          'getUsers() in template creates a new request on every change of cycle. Store the observable in a property.',
+        message: 'reverseCodeReview.data.c012.msg0',
         points: 1,
       },
       {
         line: 10,
         type: ErrorType.Performance,
-        message:
-          'sec. getUsers() creates yet another subscription and request. Reuse a single observable with shareReplay.',
+        message: 'reverseCodeReview.data.c012.msg1',
         points: 1,
       },
       {
         line: 17,
         type: ErrorType.BestPractice,
-        message: 'Using "any[]" loses type safety. Define a User interface with the expected properties.',
+        message: 'reverseCodeReview.data.c012.msg2',
         points: 1,
       },
     ],
