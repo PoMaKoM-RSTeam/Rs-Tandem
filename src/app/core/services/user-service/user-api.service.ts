@@ -15,6 +15,13 @@ export class UserService {
   readonly context = this._context.asReadonly();
 
   async loadUserSession(): Promise<void> {
+    const {
+      data: { session },
+    } = await this.supabaseClient.auth.getSession();
+
+    if (!session) {
+      return;
+    }
     const [statsRes, context] = await Promise.all([this.supabaseClient.rpc('sync_user_session'), this.getUser()]);
 
     if (statsRes.data) {
