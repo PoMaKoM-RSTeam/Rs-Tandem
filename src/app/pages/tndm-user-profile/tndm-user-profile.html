@@ -1,6 +1,6 @@
 <div
-  class="user-profile-overlay"
   #overlay
+  class="user-profile-overlay"
   role="button"
   tabindex="0"
   [class.open]="service.isOpen()"
@@ -8,12 +8,14 @@
   (keydown.enter)="service.close()">
   <section
     class="user-profile"
-    [formGroup]="profileForm"
     tabindex="-1"
+    [formGroup]="profileForm"
     (click)="$event.stopPropagation()"
     (keydown)="$event.stopPropagation()">
     <header class="user-profile__header">
-      <h2 class="user-profile__title">{{ !service.isEditMode() ? 'PROFILE' : 'EDIT PROFILE'}}</h2>
+      <h2 class="user-profile__title">
+        {{ (service.isEditMode() ? 'profile.title_edit' : 'profile.title_view') | transloco}}
+      </h2>
       @if (!service.isEditMode()){
       <tndm-button [btnConfig]="{icon: 'edit', variant: 'icon'}" (clicked)="service.toggleEditMode()" />
       }
@@ -29,43 +31,50 @@
     @if (service.isEditMode()){
     <form class="user-profile__form" (submit)="handleSubmit()">
       <tndm-input
+        formControlName="username"
         id="username"
         name="username"
-        label="username"
-        formControlName="username"
-        [trimmed]="true"
-        placeholder="Enter your name" />
+        placeholder="Enter your name"
+        [label]="'profile.label_username' | transloco"
+        [trimmed]="true" />
 
       <div class="textarea">
-        <label class="textarea__label" for="bio-textarea">about me</label>
+        <label class="textarea__label" for="bio-textarea">{{'profile.label_about' | transloco}}</label>
         <div class="textarea__container">
           <textarea
-            id="bio-textarea"
             class="textarea__field"
             formControlName="bio"
-            placeholder="Tell us about yourself..."
-            rows="4">
+            id="bio-textarea"
+            rows="4"
+            [placeholder]="'profile.placeholder_bio' | transloco">
           </textarea>
         </div>
       </div>
 
-      <tndm-input id="email" name="email" label="Email" formControlName="email" placeholder="Enter email" />
+      <tndm-input
+        formControlName="email"
+        id="email"
+        name="email"
+        placeholder="Enter email"
+        [label]="'profile.label_email' | transloco" />
 
       <tndm-input
+        autocomplete="new-password"
+        formControlName="password"
         id="password"
         name="password"
-        label="Password"
-        formControlName="password"
-        [errorMessages]="AUTH_ERROR_MESSAGES"
         placeholder="********"
         type="password"
-        autocomplete="new-password" />
+        [errorMessages]="AUTH_ERROR_MESSAGES"
+        [label]="'profile.label_password' | transloco" />
 
       <div class="user-profile__buttons">
-        <tndm-button [btnConfig]="{ label: 'Cancel', variant: 'secondary' }" (clicked)="reset()" />
+        <tndm-button
+          [btnConfig]="{ label: ('profile.btn_cancel' | transloco), variant: 'secondary' }"
+          (clicked)="reset()" />
         <tndm-button
           [btnConfig]="{
-              label: 'Save All',
+              label: ('profile.btn_save' | transloco),
               variant: 'primary',
               isDisabled: profileForm.invalid || !profileForm.dirty,
               type: 'submit'
@@ -75,12 +84,12 @@
     } @else {
     <article class="user-profile__info-display">
       <div class="user-profile__info-group">
-        <p class="label">email</p>
+        <p class="label">{{'profile.label_username' | transloco}}</p>
         <p class="value">{{user()?.email}}</p>
       </div>
       <div class="user-profile__info-group">
-        <p class="label">about me</p>
-        <p class="value">{{user()?.bio || 'No bio yet...'}}</p>
+        <p class="label">{{'profile.label_about' | transloco}}</p>
+        <p class="value">{{user()?.bio || ('profile.no_bio' | transloco)}}</p>
       </div>
     </article>
     }

@@ -25,7 +25,7 @@ import { NgTemplateOutlet } from '@angular/common';
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TndmNavigation {
+export class TndmHeader {
   private readonly elementRef = inject(ElementRef);
   readonly authService: TndmAuthService = inject(TndmAuthService);
   readonly navService: NavigationService = inject(NavigationService);

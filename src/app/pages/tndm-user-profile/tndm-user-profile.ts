@@ -12,10 +12,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { passwordValidator } from '@auth/validators/password-validator';
 import { AUTH_ERROR_MESSAGES } from '@auth/constants/auth-error-messages';
 import { ProfileUpdates } from './tndm-user-profiles.types';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-user-profile',
-  imports: [TndmInput, TndmButton, TndmAvatar, ReactiveFormsModule, AngularSvgIconModule],
+  imports: [TndmInput, TndmButton, TndmAvatar, ReactiveFormsModule, AngularSvgIconModule, TranslocoPipe],
   templateUrl: './tndm-user-profile.html',
   styleUrl: './tndm-user-profile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +24,7 @@ import { ProfileUpdates } from './tndm-user-profiles.types';
 export class TndmUserProfile {
   protected readonly service = inject(TndmUserProfileService);
   private readonly userService = inject(UserService);
+  protected readonly transloco: TranslocoService = inject(TranslocoService);
 
   readonly user = this.userService.context;
   readonly ICONS = ICONS;

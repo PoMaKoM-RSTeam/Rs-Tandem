@@ -5,7 +5,7 @@ import { DatabaseUserFullProfileRow, User, UserActivityHub, UserProfile } from '
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private readonly supabase = inject(SupabaseService).client;
+  private readonly supabaseClient = inject(SupabaseService).client;
   private readonly toast = inject(ToastService);
 
   private readonly _profile = signal<UserProfile | null>(null);
@@ -15,7 +15,7 @@ export class UserService {
   readonly context = this._context.asReadonly();
 
   async loadUserSession(): Promise<void> {
-    const [statsRes, context] = await Promise.all([this.supabase.rpc('sync_user_session'), this.getUser()]);
+    const [statsRes, context] = await Promise.all([this.supabaseClient.rpc('sync_user_session'), this.getUser()]);
 
     if (statsRes.data) {
       this._profile.set(this.mapToUserProfile(statsRes.data));
@@ -33,13 +33,13 @@ export class UserService {
   async getUser(): Promise<User | null> {
     const {
       data: { user },
-    } = await this.supabase.auth.getUser();
+    } = await this.supabaseClient.auth.getUser();
     if (!user) {
       this.toast.danger('Failure', 'failed to get user info');
       return null;
     }
 
-    const { data: profile } = await this.supabase
+    const { data: profile } = await this.supabaseClient
       .from('user_profile')
       .select('display_name, avatar_url, bio')
       .eq('id', user.id)
@@ -69,7 +69,7 @@ export class UserService {
     if (updates.bio !== undefined) dbPayload['bio'] = updates.bio;
 
     if (Object.keys(dbPayload).length > 0) {
-      const { error: dbError } = await this.supabase.from('user_profile').update(dbPayload).eq('id', user.id);
+      const { error: dbError } = await this.supabaseClient.from('user_profile').update(dbPayload).eq('id', user.id);
 
       if (dbError) throw dbError;
 
@@ -82,7 +82,7 @@ export class UserService {
     if (updates.password) authPayload.password = updates.password;
 
     if (Object.keys(authPayload).length > 0) {
-      const { error: authError } = await this.supabase.auth.updateUser(authPayload);
+      const { error: authError } = await this.supabaseClient.auth.updateUser(authPayload);
 
       if (authError) throw authError;
 
@@ -99,14 +99,14 @@ export class UserService {
   }
 
   async updateEmail(email: string): Promise<void> {
-    return this.supabase.auth.updateUser({ email }).then(({ error }) => {
+    return this.supabaseClient.auth.updateUser({ email }).then(({ error }) => {
       if (error) throw error;
       this.toast.info('Verification sent', 'Check your inbox');
     });
   }
 
   async getActivityHub(): Promise<UserActivityHub | null> {
-    const { data, error } = await this.supabase.rpc('get_user_activity_hub');
+    const { data, error } = await this.supabaseClient.rpc('get_user_activity_hub');
 
     if (error) {
       this.toast.danger('Error fetching activity hub:', error.message);

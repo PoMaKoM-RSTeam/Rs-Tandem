@@ -18,6 +18,10 @@ export class TndmAvatar {
   readonly alt = input<string | null | undefined>();
 
   readonly finalSrc = computed(() => {
+    // TODO: Implement Supabase Storage integration.
+    // 1. Create 'avatars' bucket in Supabase.
+    // 2. Implement file upload in TndmUserProfileService.
+    // 3. Update profile logic to store and retrieve public URL.
     // const source = this.src() ?? this.userService.context()?.avatarUrl;
     return this.DEFAULT_AVATAR;
   });
