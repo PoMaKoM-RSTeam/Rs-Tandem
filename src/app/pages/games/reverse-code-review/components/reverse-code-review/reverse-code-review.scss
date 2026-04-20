@@ -1,12 +1,29 @@
 @use '/styles/variables' as v;
 @use '/styles/typography' as mx;
 
-.page {
+.page_wrapper {
   padding: v.$space-xl v.$space-md;
   display: flex;
   flex-direction: column;
   gap: v.$space-lg;
-  align-items: center;
+}
+
+.page_toggle {
+  display: none;
+  align-self: flex-start;
+  background: v.$color-gray;
+  color: v.$color-white;
+  border: 1px solid v.$border-second-color;
+  border-radius: v.$radius-md;
+  padding: v.$space-xs v.$space-md;
+  font-family: inherit;
+  font-size: v.$font-size-sm;
+  cursor: pointer;
+  transition: border-color v.$transition-fast;
+
+  &:hover {
+    border-color: v.$color-accent;
+  }
 }
 
 .page_layout {
@@ -33,4 +50,38 @@
   color: v.$text-primary-color;
   font-size: v.$font-size-sm;
   @include mx.text-subtitle(v.$text-accent-color);
+}
+
+@media (max-width: 900px) {
+  .page_toggle {
+    display: block;
+  }
+
+  .page_layout {
+    flex-direction: column;
+    gap: v.$space-sm;
+  }
+
+  .page_panel--hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .page {
+    padding: v.$space-md v.$space-sm;
+    gap: v.$space-md;
+  }
+}
+
+@media (max-width: 320px) {
+  .page {
+    padding: v.$space-sm v.$space-xs;
+    gap: v.$space-sm;
+  }
+
+  .page_toggle {
+    font-size: 0.75rem;
+    padding: 2px v.$space-sm;
+  }
 }

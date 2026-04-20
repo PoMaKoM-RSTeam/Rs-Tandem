@@ -85,22 +85,7 @@ interface Task {
     </ul>
     <p>Total: {{ calculateTotal() }}</p>
   \`,
-})
-export class TaskListComponent {
-  tasks: Task[] = [];
-
-  getColor(task: Task): string {
-    return task.done ? 'green' : 'black';
-  }
-
-  calculateTotal(): number {
-    return this.tasks.filter(t => t.done).length;
-  }
-
-  remove(task: Task): void {
-    this.tasks = this.tasks.filter(t => t.id !== task.id);
-  }
-}`,
+})`,
     expectedErrors: [
       {
         line: 13,
@@ -128,14 +113,7 @@ export class TaskListComponent {
     category: 'reverseCodeReview.data.c008.category',
     difficulty: 'Middle',
     title: 'reverseCodeReview.data.c008.title',
-    code: `import {
-  Component,
-  ChangeDetectorRef,
-  OnInit,
-  NgZone,
-} from '@angular/core';
-import { DataService } from './data.service';
-
+    code: `<..>
 @Component({
   selector: 'app-live-feed',
   template: \`
@@ -143,13 +121,7 @@ import { DataService } from './data.service';
   \`,
 })
 export class LiveFeedComponent implements OnInit {
-  items: { text: string }[] = [];
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private zone: NgZone,
-    private dataService: DataService,
-  ) {}
+<..>
 
   ngOnInit(): void {
     setInterval(() => {
@@ -164,21 +136,16 @@ export class LiveFeedComponent implements OnInit {
     this.items.push({ text });
     this.cdr.detectChanges();
   }
-
-  reset(): void {
-    this.items = [];
-    this.cdr.detectChanges();
-  }
 }`,
     expectedErrors: [
       {
-        line: 25,
+        line: 12,
         type: ErrorType.MemoryLeak,
         message: 'reverseCodeReview.data.c008.msg0',
         points: 1,
       },
       {
-        line: 28,
+        line: 15,
         type: ErrorType.Performance,
         message: 'reverseCodeReview.data.c008.msg1',
         points: 1,
