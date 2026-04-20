@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_FOUR: ReviewCase[] = [
   {
     id: '005',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c005.category',
     difficulty: 'Junior',
-    title: 'DOM Manipulation',
+    title: 'reverseCodeReview.data.c005.title',
     code: `import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -38,15 +38,13 @@ export class HighlightComponent implements OnInit {
       {
         line: 14,
         type: ErrorType.BestPractice,
-        message:
-          "Direct DOM access via document.getElementById bypasses Angular's abstraction. Use @ViewChild and Renderer2.",
+        message: 'reverseCodeReview.data.c005.msg0',
         points: 1,
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message:
-          "Direct DOM manipulation with querySelector. Use Angular's @ViewChild, Renderer2, or host bindings instead.",
+        message: 'reverseCodeReview.data.c005.msg1',
         points: 1,
       },
     ],
@@ -54,9 +52,9 @@ export class HighlightComponent implements OnInit {
 
   {
     id: '006',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c006.category',
     difficulty: 'Junior',
-    title: 'The Any Kingdom',
+    title: 'reverseCodeReview.data.c006.title',
     code: `import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -87,19 +85,19 @@ export class DataService {
       {
         line: 9,
         type: ErrorType.BestPractice,
-        message: 'Using "any" for both parameter and return type removes all type safety. Define proper interfaces.',
+        message: 'reverseCodeReview.data.c006.msg0',
         points: 1,
       },
       {
         line: 13,
         type: ErrorType.BestPractice,
-        message: 'Function signature uses "any" everywhere. Create typed interfaces for input and output.',
+        message: 'reverseCodeReview.data.c006.msg1',
         points: 1,
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: 'Array of "any" defeats TypeScript\'s purpose. Define an interface with the expected shape.',
+        message: 'reverseCodeReview.data.c006.msg2',
         points: 1,
       },
     ],
@@ -107,9 +105,9 @@ export class DataService {
 
   {
     id: '010',
-    category: 'Best Practice / State',
+    category: 'reverseCodeReview.data.c010.category',
     difficulty: 'Middle',
-    title: 'Shared State Mutation',
+    title: 'reverseCodeReview.data.c010.title',
     code: `import { Injectable } from '@angular/core';
 
 export interface AppState {
@@ -145,21 +143,19 @@ export class StateService {
       {
         line: 16,
         type: ErrorType.BestPractice,
-        message:
-          "Direct mutation of shared state array with push(). Other won't detect the change. Use immutable updates.",
+        message: 'reverseCodeReview.data.c010.msg0',
         points: 1,
       },
       {
         line: 24,
         type: ErrorType.Performance,
-        message:
-          'console.log in a getter runs on every access, lower performance. Remove debug logging from production code.',
+        message: 'reverseCodeReview.data.c010.msg1',
         points: 1,
       },
       {
         line: 29,
         type: ErrorType.BestPractice,
-        message: "Array.splice mutates the array in place. Components using OnPush won't detect this change.",
+        message: 'reverseCodeReview.data.c010.msg2',
         points: 1,
       },
     ],

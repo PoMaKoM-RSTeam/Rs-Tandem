@@ -1,7 +1,7 @@
 <article class="viewer">
   <header class="viewer_header">
-    <span class="viewer_filename">{{ reviewCase().title }}</span>
-    <span class="viewer_category">{{ reviewCase().category }}</span>
+    <span class="viewer_filename">{{ reviewCase().title | transloco}}</span>
+    <span class="viewer_category">{{ reviewCase().category | transloco}}</span>
   </header>
 
   <div class="viewer_editor">
@@ -17,7 +17,7 @@
     </div>
 
     @if (line.isFound && line.foundError) {
-    <div class="viewer_explanation">{{ line.foundError.message }}</div>
+    <div class="viewer_explanation">{{ line.foundError.message | transloco }}</div>
     } @if (tooltipLine() === line.lineNumber) {
     <tndm-review-tooltip [wrongType]="wrongType()" (closed)="closeTooltip()" (typeSelected)="onTypeSelected($event)" />
     } }

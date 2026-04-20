@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_SIX: ReviewCase[] = [
   {
     id: '013',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c013.category',
     difficulty: 'Middle',
-    title: 'Zone.js Overload',
+    title: 'reverseCodeReview.data.c013.title',
     code: `import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
@@ -42,14 +42,13 @@ export class CanvasDrawComponent implements OnInit, OnDestroy {
       {
         line: 12,
         type: ErrorType.BestPractice,
-        message: 'Direct DOM access with document.querySelector. Use @ViewChild to get the canvas element reference.',
+        message: 'reverseCodeReview.data.c013.msg0',
         points: 1,
       },
       {
         line: 23,
         type: ErrorType.Performance,
-        message:
-          'requestAnimationFrame inside NgZone triggers change detection ~60 times/sec.Use NgZone.runOutsideAngular().',
+        message: 'reverseCodeReview.data.c013.msg1',
         points: 1,
       },
     ],
@@ -57,9 +56,9 @@ export class CanvasDrawComponent implements OnInit, OnDestroy {
 
   {
     id: '014',
-    category: 'Security',
+    category: 'reverseCodeReview.data.c014.category',
     difficulty: 'Middle',
-    title: 'Unsafe Form Handling',
+    title: 'reverseCodeReview.data.c014.title',
     code: `import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -99,15 +98,13 @@ export class LoginComponent {
       {
         line: 14,
         type: ErrorType.Security,
-        message:
-          '[innerHTML] renders msg without sanitization. Could be exploited for XSS if the server reflects user input.',
+        message: 'reverseCodeReview.data.c014.msg0',
         points: 1,
       },
       {
         line: 25,
         type: ErrorType.Security,
-        message:
-          'Email is passed in URL query string. Credentials in URLs are logged by proxies. Use request body instead.',
+        message: 'reverseCodeReview.data.c014.msg1',
         points: 1,
       },
     ],
@@ -115,9 +112,9 @@ export class LoginComponent {
 
   {
     id: '015',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c015.category',
     difficulty: 'Junior',
-    title: 'Lifecycle Misuse',
+    title: 'reverseCodeReview.data.c015.title',
     code: `import { Component, OnInit, OnChanges, SimpleChanges,
   Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -154,21 +151,19 @@ export class ProfileComponent implements OnInit, OnChanges {
       {
         line: 14,
         type: ErrorType.BestPractice,
-        message: 'Using "any" for component data. Define a typed interface for the user object.',
+        message: 'reverseCodeReview.data.c015.msg0',
         points: 1,
       },
       {
         line: 23,
         type: ErrorType.Performance,
-        message:
-          'ngOnChanges calls loadUser() without checking which input changed. First call also duplicates ngOnInit.',
+        message: 'reverseCodeReview.data.c015.msg1',
         points: 1,
       },
       {
         line: 29,
         type: ErrorType.MemoryLeak,
-        message:
-          'subscription inside a method called on every input change, prev. requests are not cancelled: use switchMap.',
+        message: 'reverseCodeReview.data.c015.msg2',
         points: 1,
       },
     ],

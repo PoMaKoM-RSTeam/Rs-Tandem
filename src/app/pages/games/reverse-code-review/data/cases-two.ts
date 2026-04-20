@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_TWO: ReviewCase[] = [
   {
     id: '001',
-    category: 'Memory Leaks',
+    category: 'reverseCodeReview.data.c001.category',
     difficulty: 'Junior',
-    title: 'Leaky Subscription',
+    title: 'reverseCodeReview.data.c001.title',
     code: `import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { interval } from 'rxjs';
@@ -34,15 +34,13 @@ export class DashboardComponent implements OnInit {
       {
         line: 15,
         type: ErrorType.MemoryLeak,
-        message:
-          'Subscription without unsubscribe in ngOnDestroy. Use takeUntilDestroyed(), async pipe, or manual cleanup.',
+        message: 'reverseCodeReview.data.c001.msg0',
         points: 1,
       },
       {
         line: 19,
         type: ErrorType.MemoryLeak,
-        message:
-          'interval() never completes. Without unsubscribe, this runs indefinitely even after component is destroyed.',
+        message: 'reverseCodeReview.data.c001.msg1',
         points: 1,
       },
     ],
@@ -50,9 +48,9 @@ export class DashboardComponent implements OnInit {
 
   {
     id: '004',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c004.category',
     difficulty: 'Middle',
-    title: 'The Subscribe Pyramid',
+    title: 'reverseCodeReview.data.c004.title',
     code: `import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { OrderService } from './order.service';
@@ -85,15 +83,13 @@ export class OrderPageComponent implements OnInit {
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message:
-          'Nested subscribes form a "callback pyramid". Use switchMap/concatMap to flatten the observable chain.',
+        message: 'reverseCodeReview.data.c004.msg0',
         points: 1,
       },
       {
         line: 20,
         type: ErrorType.MemoryLeak,
-        message:
-          'Nested subscriptions without cleanup. Each inner subscribe creates a leak that is never unsubscribed.',
+        message: 'reverseCodeReview.data.c004.msg1',
         points: 1,
       },
     ],

@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_ONE: ReviewCase[] = [
   {
     id: '002',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c002.category',
     difficulty: 'Junior',
-    title: 'Template Traps',
+    title: 'reverseCodeReview.data.c002.title',
     code: `import { Component } from '@angular/core';
 import { UserService } from './user.service';
 
@@ -42,21 +42,19 @@ export class UserCardComponent {
       {
         line: 8,
         type: ErrorType.Performance,
-        message:
-          'Method call in template triggers on every change detection cycle. Use a computed property or pipe instead.',
+        message: 'reverseCodeReview.data.c002.msg0',
         points: 1,
       },
       {
         line: 9,
         type: ErrorType.Performance,
-        message: 'formatDate() in template recalculates on every CD cycle. Use DatePipe or pre-compute the value.',
+        message: 'reverseCodeReview.data.c002.msg1',
         points: 1,
       },
       {
         line: 10,
         type: ErrorType.Performance,
-        message:
-          'Method call in template runs on every change detection. Cache the result in a property or use a pipe.',
+        message: 'reverseCodeReview.data.c002.msg2',
         points: 1,
       },
     ],
@@ -64,9 +62,9 @@ export class UserCardComponent {
 
   {
     id: '007',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c007.category',
     difficulty: 'Junior',
-    title: 'List Rendering Issues',
+    title: 'reverseCodeReview.data.c007.title',
     code: `import { Component } from '@angular/core';
 
 interface Task {
@@ -107,20 +105,19 @@ export class TaskListComponent {
       {
         line: 13,
         type: ErrorType.Performance,
-        message: 'Missing trackBy function in *ngFor. Without it, Angular re-creates all DOM elements on every change.',
+        message: 'reverseCodeReview.data.c007.msg0',
         points: 1,
       },
       {
         line: 15,
         type: ErrorType.Performance,
-        message:
-          'getColor() method call in template triggers on every change detection cycle.Use ngClass + property instead.',
+        message: 'reverseCodeReview.data.c007.msg1',
         points: 1,
       },
       {
         line: 19,
         type: ErrorType.Performance,
-        message: 'calculateTotal() runs filter on every CD cycle. Use a computed property or pipe to cache the result.',
+        message: 'reverseCodeReview.data.c007.msg2',
         points: 1,
       },
     ],
@@ -128,9 +125,9 @@ export class TaskListComponent {
 
   {
     id: '008',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c008.category',
     difficulty: 'Middle',
-    title: 'Manual Change Detection',
+    title: 'reverseCodeReview.data.c008.title',
     code: `import {
   Component,
   ChangeDetectorRef,
@@ -177,14 +174,13 @@ export class LiveFeedComponent implements OnInit {
       {
         line: 25,
         type: ErrorType.MemoryLeak,
-        message: 'setInterval without cleanup in ngOnDestroy. The interval keeps running after component is destroyed.',
+        message: 'reverseCodeReview.data.c008.msg0',
         points: 1,
       },
       {
         line: 28,
         type: ErrorType.Performance,
-        message:
-          'Manual detectChanges() inside setInterval is an anti-pattern. Use async pipe with an Observable timer.',
+        message: 'reverseCodeReview.data.c008.msg1',
         points: 1,
       },
     ],
