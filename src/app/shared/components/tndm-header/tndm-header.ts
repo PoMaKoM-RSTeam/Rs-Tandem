@@ -14,10 +14,13 @@ import { TndmAvatar } from '../avatar/tndm-avatar';
   imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
 import { ButtonConfig, TndmButton } from '../../ui/tndm-button/tndm-button';
 import { translateSignal } from '@jsverse/transloco';
+import { TndmUserProfileService } from '../../../pages/tndm-user-profile/tndm-user-profile.service';
+import { TndmAvatar } from '../avatar/tndm-avatar';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'tndm-header',
-  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton],
+  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
   templateUrl: './tndm-header.html',
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
