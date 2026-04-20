@@ -84,13 +84,28 @@
   line-height: 1.5;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .puzzle-select_grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(260px, 2fr));
     gap: 1rem;
     width: 80%;
     max-width: 1200px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .puzzle-select_grid {
+    grid-template-columns: 2fr;
+    gap: 0.75rem;
+  }
+
+  .puzzle-select_card {
+    padding: 0.9rem;
+  }
+
+  .puzzle-select_card__title {
+    font-size: 0.95rem;
   }
 }
 
