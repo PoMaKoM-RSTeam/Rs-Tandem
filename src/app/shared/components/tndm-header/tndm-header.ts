@@ -4,19 +4,11 @@ import { APP_ROUTES } from '../../constants/app-routes';
 import { TndmAuthService } from '@auth';
 import { NavigationService } from '../../../core/navigation/navigation.service';
 import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
-import { TndmButton } from '../../ui/tndm-button/tndm-button';
-import { NgTemplateOutlet } from '@angular/common';
-import { TndmUserProfileService } from '../../../pages/tndm-user-profile/tndm-user-profile.service';
-import { TndmAvatar } from '../avatar/tndm-avatar';
-
-@Component({
-  selector: 'tndm-header',
-  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
 import { ButtonConfig, TndmButton } from '../../ui/tndm-button/tndm-button';
-import { translateSignal } from '@jsverse/transloco';
+import { NgTemplateOutlet } from '@angular/common';
 import { TndmUserProfileService } from '../../../pages/tndm-user-profile/tndm-user-profile.service';
 import { TndmAvatar } from '../avatar/tndm-avatar';
-import { NgTemplateOutlet } from '@angular/common';
+import { translateSignal } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-header',
