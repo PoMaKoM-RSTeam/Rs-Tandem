@@ -10,6 +10,7 @@ import { TndmCompletionModal } from '../review-modal/review-modal';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { TndmTranslocoSupabaseLoader } from '../../../../../core/i18n/transloco-supabase-loader.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { ReverseCodeReviewService } from '../../services/reverse-code-review.service';
 
 @Component({
   selector: 'tndm-reverse-code-review',
@@ -24,8 +25,9 @@ export class TndmReverseCode {
   private readonly rulesService = inject(TndmTranslocoSupabaseLoader);
   private readonly rules = signal('');
   readonly transloco = inject(TranslocoService);
+  private readonly progressService = inject(ReverseCodeReviewService);
 
-  readonly completedIds = signal<Set<string>>(new Set());
+  readonly completedIds = this.progressService.completedIds;
 
   readonly lastScore = signal(0);
 
@@ -63,12 +65,7 @@ export class TndmReverseCode {
     }
 
     this.lastScore.set(score);
-
-    this.completedIds.update(ids => {
-      const next = new Set(ids);
-      next.add(active.id);
-      return next;
-    });
+    this.progressService.saveCaseCompletion(active.id, active.difficulty, score, this.maxScore());
     this.showModal.set(true);
   }
 
