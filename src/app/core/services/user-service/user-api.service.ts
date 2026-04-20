@@ -61,55 +61,47 @@ export class UserService {
     };
   }
 
-  async updateUserInfo(updates: {
-    displayName?: string;
-    avatarUrl?: string;
-    bio?: string;
-    password?: string;
-  }): Promise<void> {
+  async updateProfile(updates: { displayName?: string; bio?: string }): Promise<void> {
     const user = this._context();
     if (!user) return;
 
-    const dbPayload: Record<string, string | null> = {};
-    if (updates.displayName) dbPayload['display_name'] = updates.displayName;
-    if (updates.avatarUrl) dbPayload['avatar_url'] = updates.avatarUrl;
-    if (updates.bio !== undefined) dbPayload['bio'] = updates.bio;
+    const { error } = await this.supabaseClient
+      .from('user_profile')
+      .update({
+        display_name: updates.displayName,
+        bio: updates.bio,
+      })
+      .eq('id', user.id);
 
-    if (Object.keys(dbPayload).length > 0) {
-      const { error: dbError } = await this.supabaseClient.from('user_profile').update(dbPayload).eq('id', user.id);
-
-      if (dbError) throw dbError;
-
-      if (updates.displayName) this.toast.success('Success', 'Username updated');
-      if (updates.bio !== undefined) this.toast.success('Success', 'Bio updated');
+    if (error) {
+      this.toast.danger('Update Failed', error.message);
+      throw error;
     }
 
-    const authPayload: { data?: { display_name: string }; password?: string } = {};
-    if (updates.displayName) authPayload.data = { display_name: updates.displayName };
-    if (updates.password) authPayload.password = updates.password;
+    this.updateLocalState(updates);
+    this.toast.success('Success', 'Profile updated');
+  }
 
-    if (Object.keys(authPayload).length > 0) {
-      const { error: authError } = await this.supabaseClient.auth.updateUser(authPayload);
+  async updatePassword(password: string): Promise<void> {
+    const { error } = await this.supabaseClient.auth.updateUser({ password });
 
-      if (authError) throw authError;
-
-      if (updates.password) {
-        this.toast.success('Success', 'Password changed successfully');
-      }
+    if (error) {
+      this.toast.danger('Error', error.message);
+      throw error;
     }
 
-    this._context.update(prev => (prev ? { ...prev, ...updates } : null));
-
-    if (updates.displayName) {
-      this._profile.update(prev => (prev ? { ...prev, displayName: updates.displayName! } : null));
-    }
+    this.toast.success('Success', 'Password changed');
   }
 
   async updateEmail(email: string): Promise<void> {
-    return this.supabaseClient.auth.updateUser({ email }).then(({ error }) => {
-      if (error) throw error;
-      this.toast.info('Verification sent', 'Check your inbox');
-    });
+    const { error } = await this.supabaseClient.auth.updateUser({ email });
+
+    if (error) {
+      this.toast.danger('Error', error.message);
+      throw error;
+    }
+
+    this.toast.info('Verification sent', 'Check your inbox');
   }
 
   async getActivityHub(): Promise<UserActivityHub | null> {
@@ -121,6 +113,14 @@ export class UserService {
     }
 
     return data;
+  }
+
+  private updateLocalState(updates: { displayName?: string; avatarUrl?: string; bio?: string }): void {
+    this._context.update(prev => (prev ? { ...prev, ...updates } : null));
+
+    if (updates.displayName) {
+      this._profile.update(prev => (prev ? { ...prev, displayName: updates.displayName! } : null));
+    }
   }
 
   private mapToUserProfile(data: DatabaseUserFullProfileRow): UserProfile {

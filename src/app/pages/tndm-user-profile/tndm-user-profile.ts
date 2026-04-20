@@ -62,19 +62,18 @@ export class TndmUserProfile {
     if (this.profileForm.get('password')?.dirty && password) updates.password = password;
 
     if (Object.keys(updates).length === 0) {
-      return this.service.toggleEditMode();
+      this.service.toggleEditMode();
+      return;
     }
 
-    const success = await this.service.saveProfile(updates);
+    await this.service.saveChanges(updates);
 
-    if (success) {
+    if (updates.password) {
       this.profileForm.get('password')?.reset('', { emitEvent: false });
-
-      this.profileForm.markAsPristine();
-      this.profileForm.markAsUntouched();
-
-      this.profileForm.updateValueAndValidity();
     }
+
+    this.profileForm.markAsPristine();
+    this.profileForm.markAsUntouched();
   }
 
   @HostListener('window:keydown.escape')

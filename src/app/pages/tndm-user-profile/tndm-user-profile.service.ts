@@ -1,12 +1,12 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { UserService } from '../../core/services/user-service/user-api.service';
-import { ToastService } from '../../core/toast/toast-service';
 import { ProfileUpdates } from './tndm-user-profiles.types';
+import { LoadingOverlayService } from '../../core/loading-overlay/loading-overlay-service';
 
 @Injectable({ providedIn: 'root' })
 export class TndmUserProfileService {
   private readonly userService = inject(UserService);
-  private readonly toaster = inject(ToastService);
+  private readonly loaderService = inject(LoadingOverlayService);
 
   private readonly _isOpen = signal(false);
   private readonly _isEditMode = signal(false);
@@ -29,15 +29,30 @@ export class TndmUserProfileService {
     this._isEditMode.update(v => !v);
   }
 
-  async saveProfile(updates: ProfileUpdates): Promise<boolean> {
+  async saveChanges(updates: ProfileUpdates): Promise<void> {
+    this.loaderService.show();
+
     try {
-      await this.userService.updateUserInfo(updates);
-      this._isEditMode.set(false);
-      return true;
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : 'Update failed';
-      this.toaster.danger('Error', errorMsg);
-      return false;
+      const tasks: Promise<void>[] = [];
+
+      if (updates.displayName || updates.bio !== undefined) {
+        tasks.push(
+          this.userService.updateProfile({
+            displayName: updates.displayName,
+            bio: updates.bio,
+          })
+        );
+      }
+
+      if (updates.password) {
+        tasks.push(this.userService.updatePassword(updates.password));
+      }
+
+      await Promise.all(tasks);
+
+      this.toggleEditMode();
+    } finally {
+      this.loaderService.hide();
     }
   }
 }
