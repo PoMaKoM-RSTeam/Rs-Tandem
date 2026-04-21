@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import { filter, map, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TndmButton } from '../../ui/tndm-button/tndm-button';
-import { TndmNavigation } from '../tndm-header/tndm-header';
+import { TndmHeader } from '../tndm-header/tndm-header';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
 import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm-language-switcher';
 
@@ -12,7 +12,7 @@ import { TndmLangSwitcher } from '../../../core/i18n/tndm-language-switcher/tndm
   templateUrl: './tndm-main-layout.html',
   styleUrl: './tndm-main-layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TndmButton, TndmNavigation, TndmLangSwitcher],
+  imports: [RouterOutlet, TndmButton, TndmHeader, TndmLangSwitcher],
 })
 export class TndmMainLayout {
   private router = inject(Router);

@@ -17,4 +17,5 @@ export const ICONS = {
   fullscreenExit: `${BASE_PATH}full-screen-exit.svg`,
   save: `${BASE_PATH}save.svg`,
   download: `${BASE_PATH}download.svg`,
+  edit: `${BASE_PATH}edit.svg`,
 } as const;

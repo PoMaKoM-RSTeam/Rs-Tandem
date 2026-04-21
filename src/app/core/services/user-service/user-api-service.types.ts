@@ -35,3 +35,11 @@ export type DatabaseUserFullProfileRow = {
   rank_max_xp: number;
   next_rank_name: string;
 };
+
+export type User = {
+  id: string;
+  email: string | undefined;
+  displayName: string;
+  avatarUrl: string | null;
+  bio: string;
+};

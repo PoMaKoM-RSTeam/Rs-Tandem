@@ -347,5 +347,17 @@
   "reverse-burger": {
     "cases": "← кейсы",
     "code": "☰ код"
+  },
+  "profile": {
+    "title_view": "ПРОФИЛЬ",
+    "title_edit": "РЕДАКТИРОВАТЬ",
+    "placeholder_bio": "Расскажите о себе...",
+    "no_bio": "Информация отсутствует...",
+    "label_username": "имя пользователя",
+    "label_about": "обо мне",
+    "label_email": "почта",
+    "label_password": "пароль",
+    "btn_save": "сохранить",
+    "btn_cancel": "отмена"
   }
 }

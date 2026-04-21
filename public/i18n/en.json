@@ -347,5 +347,17 @@
   "reverse-burger": {
     "cases": "← cases",
     "code": "☰ code"
+  },
+  "profile": {
+    "title_view": "PROFILE",
+    "title_edit": "EDIT PROFILE",
+    "placeholder_bio": "Tell us about yourself...",
+    "no_bio": "No bio yet...",
+    "label_username": "username",
+    "label_about": "about me",
+    "label_email": "email",
+    "label_password": "password",
+    "btn_save": "save all",
+    "btn_cancel": "cancel"
   }
 }

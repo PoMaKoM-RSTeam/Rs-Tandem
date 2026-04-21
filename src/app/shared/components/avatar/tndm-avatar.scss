@@ -1,0 +1,19 @@
+@use '/styles/variables' as v;
+
+:host {
+  display: inline-block;
+}
+
+.avatar-container {
+  position: relative;
+  border-radius: 50%;
+  background-color: v.$color-grey;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

@@ -9,7 +9,13 @@
           {{ item.label }}
         </a>
       </li>
-      } }
+      }
+      <li class="nav__item">
+        <button class="nav__link avatar-btn" type="button" (click)="userProfileService.open()">
+          <tndm-avatar [size]="28" />
+        </button>
+      </li>
+      }
 
       <li class="nav__auth-mobile">
         @if(!authService.isAuthenticated){
