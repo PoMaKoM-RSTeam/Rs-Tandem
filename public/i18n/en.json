@@ -359,5 +359,31 @@
     "label_password": "password",
     "btn_save": "save all",
     "btn_cancel": "cancel"
+  },
+  "dashboard": {
+    "rank": "rank:",
+    "totalCompleted": "total completed lvl:",
+    "position": "position:",
+    "totalXp": "total xp:",
+    "lvl": "lvl:",
+    "totalScore": "total score:",
+    "streak": {
+      "days": "days streak",
+      "status": "nice",
+      "max": "max streak"
+    }
+  },
+  "days": {
+    "mo": "MO",
+    "tu": "TU",
+    "we": "WE",
+    "th": "TH",
+    "fr": "FR",
+    "sa": "SA",
+    "su": "SU"
+  },
+  "ranks": {
+    "junior": "junior",
+    "noRank": "no rank"
   }
 }

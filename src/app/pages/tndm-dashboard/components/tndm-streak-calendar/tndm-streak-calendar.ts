@@ -1,20 +1,30 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { UserActivityHub } from '../../../../core/services/user-service/user-api-service.types';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tndm-streak-calendar',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './tndm-streak-calendar.html',
   styleUrl: './tndm-streak-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TndmStreakCalendar {
-  readonly streakData = input<UserActivityHub | null>();
-  readonly daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
   private readonly CALENDAR_COLS = 15;
   private readonly CALENDAR_ROWS = 7;
   private readonly totalCells = this.CALENDAR_COLS * this.CALENDAR_ROWS;
+  private readonly transloco = inject(TranslocoService);
+  private readonly tStreak = toSignal(this.transloco.selectTranslateObject<Record<string, string>>('dashboard.streak'));
+  private readonly tDays = toSignal(this.transloco.selectTranslateObject<Record<string, string>>('days'));
+
+  readonly streakData = input<UserActivityHub | null>();
+  readonly daysOfWeek = computed(() => {
+    const labels = this.tDays();
+    if (!labels) return [];
+
+    return [labels['mo'], labels['tu'], labels['we'], labels['th'], labels['fr'], labels['sa'], labels['su']];
+  });
 
   readonly calendarDays = computed(() => {
     const days = [];
