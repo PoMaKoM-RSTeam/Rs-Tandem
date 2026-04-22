@@ -4,7 +4,8 @@
     [label]="userProgress().max"
     [max]="userProgress().max"
     [stats]="playerStats()"
-    [title]="userName()" />
+    [title]="userName()"
+    class="user-stats" />
   <tndm-streak-calendar [streakData]="streakData()" />
   @for (game of gamesProgress(); track game.title) {
   <tndm-dashboard-widget [current]="game.current" [max]="game.max" [stats]="game.stats" [title]="game.title" />

@@ -1,3 +1,5 @@
+@use 'styles/adaptive' as a;
+
 :host {
   position: relative;
   z-index: 10;
@@ -10,9 +12,29 @@
   gap: 20px;
   box-sizing: border-box;
   padding: 40px 20px;
+
+  @include a.tablet() {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 tndm-streak-calendar {
   grid-column: 2;
   grid-row: 1 / span 2;
+
+  @include a.tablet() {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+  }
+}
+
+@include a.tablet() {
+  .user-stats {
+    grid-row: 1;
+    grid-column: 1;
+  }
 }

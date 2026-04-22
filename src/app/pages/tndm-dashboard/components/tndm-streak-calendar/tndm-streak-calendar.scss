@@ -1,5 +1,6 @@
 @use 'styles/variables' as v;
 @use 'styles/typography' as t;
+@use 'styles/adaptive' as a;
 
 .streak-card {
   display: flex;
@@ -10,6 +11,10 @@
   border: 1px solid v.$text-primary-color;
   padding: 45px 20px 20px;
   @include t.text-body();
+
+  @include a.tablet() {
+    padding: 20px 10px 10px;
+  }
 }
 
 .streak-card__header {
