@@ -1,0 +1,37 @@
+@use 'styles/variables' as v;
+@use 'styles/typography' as t;
+
+.leaderboard-wrapper {
+  height: 100%;
+  padding: 20px;
+  border: 1px solid v.$border-main-color;
+}
+
+.leaderboard-inner-container {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.leaderboard {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  justify-content: center;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+
+    &.is-current-user {
+      color: v.$color-accent;
+    }
+  }
+
+  &__item:nth-child(2n) {
+    background-color: v.$color-grey;
+  }
+}

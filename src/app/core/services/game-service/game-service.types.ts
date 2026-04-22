@@ -23,3 +23,13 @@ export type GamesProgressData = {
   total_game_xp: number;
   game_rank_position: number;
 };
+
+export type LeaderboardEntry = {
+  user_id: string;
+  display_name: string;
+  avatar_url: string;
+  total_xp: number;
+  current_streak: number;
+  rank_name: string;
+  rank_position: number;
+};

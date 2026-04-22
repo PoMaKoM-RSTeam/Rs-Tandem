@@ -1,0 +1,16 @@
+<div class="leaderboard-wrapper">
+  <div class="leaderboard-inner-container">
+    <ul class="leaderboard">
+      @for (player of leaderboard(); track player.user_id) {
+      <li class="leaderboard__item" [class.is-current-user]="player.user_id === currentUserId()">
+        <span class="leaderboard__rank">#{{ player.rank_position }}</span>
+        <tndm-avatar [size]="30" [src]="player.avatar_url" />
+        <span class="leaderboard__name">{{ player.display_name }}</span>
+        <span class="leaderboard__xp">{{ player.total_xp }}xp</span>
+      </li>
+      } @empty {
+      <p>no data available</p>
+      }
+    </ul>
+  </div>
+</div>

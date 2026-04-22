@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from '../../supabase/supabase-service';
-import { DatabaseRecordRow, GamesProgressData, GlobalRecord } from './game-service.types';
+import { DatabaseRecordRow, GamesProgressData, GlobalRecord, LeaderboardEntry } from './game-service.types';
 import { ToastService } from '../../toast/toast-service';
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +19,22 @@ export class GameApiService {
     if (error) {
       throw new Error(`Update error: ${error.message}`);
     }
+  }
+
+  async getLeaderboard(limit = 10): Promise<LeaderboardEntry[]> {
+    const { data, error } = await this.supabaseClient
+      .from('leaderboard')
+      .select('*')
+      .order('rank_position', { ascending: true })
+      .limit(limit);
+
+    if (error) {
+      console.error('Error fetching leaderboard:', error);
+
+      return [];
+    }
+
+    return data;
   }
 
   async getLevelBestResult(gameId: string, levelNumber: number): Promise<number | null> {

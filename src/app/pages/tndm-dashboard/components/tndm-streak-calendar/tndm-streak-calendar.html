@@ -17,7 +17,7 @@
 
     <ul class="streak-calendar__days-grid">
       @for (day of calendarDays(); track day.date) {
-      <li [attr.data-date]="day.date" [class.active]="day.isActive" [class.today]="day.isToday"></li>
+      <li [attr.data-date]="day.date" [class.active]="day.isActive" [class.today]="day.isToday" [title]="day.date"></li>
       }
     </ul>
   </div>

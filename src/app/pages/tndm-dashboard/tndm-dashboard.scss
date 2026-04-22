@@ -1,40 +1,135 @@
 @use 'styles/adaptive' as a;
+@use 'styles/variables' as v;
+@use 'styles/mixins' as m;
 
 :host {
-  position: relative;
-  z-index: 10;
+  display: block;
+  width: 100%;
 }
 
 .dashboard {
   display: grid;
-  grid-template-columns: 1fr 1.14fr 1fr;
-  grid-auto-rows: minmax(120px, auto);
+  grid-template-columns: repeat(18, 1fr);
+  grid-template-rows: repeat(12, 32px);
+  grid-auto-flow: dense;
   gap: 20px;
-  box-sizing: border-box;
   padding: 40px 20px;
+  box-sizing: border-box;
+  max-width: 1600px;
+  margin: 0 auto;
+}
 
-  @include a.tablet() {
-    grid-template-columns: 1fr 1fr;
-  }
+tndm-dashboard-widget,
+tndm-leaderboard-widget,
+tndm-streak-calendar {
+  grid-column: span 5;
+  grid-row: span 4;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  @media (max-width: 800px) {
-    grid-template-columns: 1fr;
-  }
+.user-stats {
+  grid-row: span 3;
+  grid-column: span 6;
 }
 
 tndm-streak-calendar {
-  grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-column: span 7;
+  grid-row: span 8;
+}
 
-  @include a.tablet() {
-    grid-column: 1;
-    grid-row: 2 / span 2;
-  }
+tndm-leaderboard-widget {
+  grid-column: span 6;
+  grid-row: 4 / span 5;
+}
+
+.logo-wrapper {
+  grid-row: span 4;
+  grid-column: span 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include m.corner-borders($color: v.$color-accent, $size: 12px);
+}
+
+.logo {
+  max-width: 80px;
+}
+
+.is-expanded {
+  grid-column: span 8;
+  animation: expand-bounce 0.4s ease-out;
 }
 
 @include a.tablet() {
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: minmax(120px, auto);
+    padding: 20px;
+  }
+
+  tndm-dashboard-widget,
+  tndm-leaderboard-widget,
+  tndm-streak-calendar {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .user-stats,
+  tndm-streak-calendar,
+  tndm-leaderboard-widget {
+    grid-column: span 2;
+  }
+
   .user-stats {
     grid-row: 1;
-    grid-column: 1;
+  }
+
+  tndm-leaderboard-widget {
+    grid-row: auto;
+    grid-row-start: auto;
+  }
+
+  .logo-wrapper {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+
+  .is-expanded {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    padding: 10px;
+  }
+
+  tndm-dashboard-widget,
+  tndm-leaderboard-widget,
+  tndm-streak-calendar,
+  .user-stats,
+  .is-expanded {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+
+  .logo-wrapper {
+    padding: 20px;
+  }
+}
+
+@keyframes expand-bounce {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

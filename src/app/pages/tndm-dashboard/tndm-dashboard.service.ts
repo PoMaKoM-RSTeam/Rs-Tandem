@@ -4,7 +4,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UserService } from '../../core/services/user-service/user-api.service';
 import { GameApiService } from '../../core/services/game-service/game-api.service';
 import { LoadingOverlayService } from '../../core/loading-overlay/loading-overlay-service';
-import { GamesProgressData } from '../../core/services/game-service/game-service.types';
+import { GamesProgressData, LeaderboardEntry } from '../../core/services/game-service/game-service.types';
 import { UserActivityHub } from '../../core/services/user-service/user-api-service.types';
 import { ToastService } from '../../core/toast/toast-service';
 
@@ -15,6 +15,9 @@ export class DashboardService {
   private readonly loadingService = inject(LoadingOverlayService);
   private readonly toast = inject(ToastService);
   private readonly transloco = inject(TranslocoService);
+
+  private readonly _leaderboard = signal<LeaderboardEntry[]>([]);
+  readonly leaderboard = this._leaderboard.asReadonly();
 
   private readonly _gamesProgress = signal<GamesProgressData[] | null>(null);
   private readonly _streakData = signal<UserActivityHub | null>(null);
@@ -80,17 +83,18 @@ export class DashboardService {
     try {
       await this.userService.loadUserSession();
 
-      const [activity, games] = await Promise.all([
+      const [activity, games, leaders] = await Promise.all([
         this.userService.getActivityHub(),
         this.gameService.getGamesProgress(),
+        this.gameService.getLeaderboard(10),
       ]);
 
       this._streakData.set(activity);
       this._gamesProgress.set(games);
+      this._leaderboard.set(leaders);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'please try again';
-      this.toast.danger('Dashboard init failed', errorMsg);
-      console.error('Dashboard init failed', error);
+      this.toast.danger('dashboard init failed', errorMsg);
     } finally {
       this.loadingService.hide();
     }
