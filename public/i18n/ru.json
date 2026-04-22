@@ -359,5 +359,31 @@
     "label_password": "пароль",
     "btn_save": "сохранить",
     "btn_cancel": "отмена"
+  },
+  "dashboard": {
+    "rank": "ранг:",
+    "totalCompleted": "пройдено уровней:",
+    "position": "позиция:",
+    "totalXp": "всего опыта:",
+    "lvl": "ур:",
+    "totalScore": "всего очков:",
+    "streak": {
+      "days": "дней подряд",
+      "status": "отлично",
+      "max": "рекорд"
+    }
+  },
+  "days": {
+    "mo": "ПН",
+    "tu": "ВТ",
+    "we": "СР",
+    "th": "ЧТ",
+    "fr": "ПТ",
+    "sa": "СБ",
+    "su": "ВС"
+  },
+  "ranks": {
+    "junior": "новичок",
+    "noRank": "без ранга"
   }
 }

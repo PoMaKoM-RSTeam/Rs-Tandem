@@ -2,15 +2,15 @@
   <div class="streak-card__header">
     <p class="streak-card__current">{{streakData()?.current_streak}}</p>
     <div class="streak-card__info">
-      <p class="label">Days Streak</p>
-      <p class="status">nice</p>
-      <p class="max">max streak: {{streakData()?.max_streak || 0}}</p>
+      <p class="label">{{'dashboard.streak.days' | transloco}}</p>
+      <p class="status">{{'dashboard.streak.status' | transloco}}</p>
+      <p class="max">{{'dashboard.streak.max' | transloco}}: {{streakData()?.max_streak || 0}}</p>
     </div>
   </div>
 
   <div class="streak-calendar">
     <div class="streak-calendar__days-label">
-      @for (label of daysOfWeek; track $index) {
+      @for (label of daysOfWeek(); track $index) {
       <span>{{ label }}</span>
       }
     </div>

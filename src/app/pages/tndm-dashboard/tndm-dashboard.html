@@ -1,11 +1,11 @@
 <section class="dashboard">
   <tndm-dashboard-widget
+    class="user-stats"
     [current]="userProgress().current"
     [label]="userProgress().max"
     [max]="userProgress().max"
     [stats]="playerStats()"
-    [title]="userName()"
-    class="user-stats" />
+    [title]="userName()" />
   <tndm-streak-calendar [streakData]="streakData()" />
   @for (game of gamesProgress(); track game.title) {
   <tndm-dashboard-widget [current]="game.current" [max]="game.max" [stats]="game.stats" [title]="game.title" />
