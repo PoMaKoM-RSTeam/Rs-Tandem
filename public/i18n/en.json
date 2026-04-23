@@ -359,5 +359,16 @@
     "label_password": "password",
     "btn_save": "save all",
     "btn_cancel": "cancel"
+  },
+  "ws": {
+    "connectedMsg": "WS: connected",
+    "disconnectedMsg": "WS: disconnected, reason: {{reason}}",
+    "reconnect_attemptMsg": "WS reconnect attempt #{{attempt}}",
+    "reconnectedMsg": "WS reconnected after attempt #{{attempt}}"
+  },
+  "ai-agent": {
+    "askYourQuestion": "// Ask your question...",
+    "hereWillBeDisplayedChatHistory": "// Your chat history will appear here...",
+    "clear": "Clear"
   }
 }

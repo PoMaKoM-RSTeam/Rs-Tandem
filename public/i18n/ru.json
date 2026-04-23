@@ -359,5 +359,16 @@
     "label_password": "пароль",
     "btn_save": "сохранить",
     "btn_cancel": "отмена"
+  },
+  "ws": {
+    "connectedMsg": "WS: подключено",
+    "disconnectedMsg": "WS: отключено, причина: {{reason}}",
+    "reconnect_attemptMsg": "WS: попытка переподключения #{{attempt}}",
+    "reconnectedMsg": "WS: переподключено после попытки #{{attempt}}"
+  },
+  "ai-agent": {
+    "askYourQuestion": "// Задайте свой вопрос...",
+    "hereWillBeDisplayedChatHistory": "// Здесь будет отображаться история чата...",
+    "clear": "Очистить"
   }
 }
