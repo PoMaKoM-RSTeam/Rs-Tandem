@@ -11,7 +11,7 @@ import { TndmAiAgent } from '../../../core/tndm-ai-agent/tndm-ai-agent';
   templateUrl: './tndm-main-layout.html',
   styleUrl: './tndm-main-layout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TndmHeader],
+  imports: [RouterOutlet, TndmHeader, TndmAiAgent],
 })
 export class TndmMainLayout {
   private router = inject(Router);
