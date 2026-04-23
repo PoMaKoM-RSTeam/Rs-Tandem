@@ -18,4 +18,5 @@ export const ICONS = {
   save: `${BASE_PATH}save.svg`,
   download: `${BASE_PATH}download.svg`,
   edit: `${BASE_PATH}edit.svg`,
+  clear: `${BASE_PATH}clear.svg`,
 } as const;
