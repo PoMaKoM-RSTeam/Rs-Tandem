@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { GolfRank } from '../../types/golf-rank';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'tndm-code-golf-rank',
   standalone: true,
+  imports: [TranslocoPipe],
   templateUrl: 'code-golf-rank.html',
   styleUrl: './code-golf-rank.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

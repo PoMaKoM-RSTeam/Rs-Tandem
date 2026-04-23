@@ -1,0 +1,110 @@
+@use 'styles/variables' as v;
+@use 'styles/typography' as t;
+@use 'styles/adaptive' as a;
+
+.streak-card {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid v.$text-primary-color;
+  padding: 45px 20px 20px;
+  @include t.text-body();
+
+  @include a.tablet() {
+    padding: 20px 10px 10px;
+  }
+}
+
+.streak-card__header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-left: 13px;
+
+  .streak-card__current {
+    font-weight: 900;
+    font-size: 80px;
+    line-height: 1;
+    @include t.text-heading();
+  }
+
+  .streak-card__info {
+    p {
+      margin: 0;
+    }
+    .label {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .status {
+      color: v.$color-dark-grey;
+    }
+
+    .max {
+      margin-top: 10px;
+    }
+  }
+}
+
+.streak-calendar {
+  display: flex;
+  gap: 10px;
+}
+
+.streak-calendar__days-label {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+  list-style: none;
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-weight: 700;
+    line-height: 1;
+  }
+}
+
+.streak-calendar__days-grid {
+  display: grid;
+  flex-grow: 1;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  grid-auto-flow: column;
+  gap: 6px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    box-sizing: border-box;
+    width: 100%;
+    background: v.$color-grey;
+    transition: transform 0.2s;
+    aspect-ratio: 1 / 1;
+
+    &.active {
+      background: v.$color-accent;
+    }
+
+    &.today {
+      outline: 3px solid v.$color-accent;
+      outline-offset: -3px;
+      background-color: v.$bg-main;
+    }
+
+    &:hover {
+      z-index: 1;
+      transform: scale(1.2);
+    }
+  }
+}

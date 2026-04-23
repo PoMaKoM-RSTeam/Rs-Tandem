@@ -8,6 +8,9 @@ import { ReviewCase } from '../../models/review-case.model';
 import { REVIEW_CASES_DATA } from '../../data/review-cases.data';
 import { TndmCompletionModal } from '../review-modal/review-modal';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { TndmTranslocoSupabaseLoader } from '../../../../../core/i18n/transloco-supabase-loader.service';
+import { TranslocoService } from '@jsverse/transloco';
+import { ReverseCodeReviewService } from '../../services/reverse-code-review.service';
 
 @Component({
   selector: 'tndm-reverse-code-review',
@@ -19,12 +22,18 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class TndmReverseCode {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly rulesService = inject(TndmTranslocoSupabaseLoader);
+  private readonly rules = signal('');
+  readonly transloco = inject(TranslocoService);
+  private readonly progressService = inject(ReverseCodeReviewService);
 
-  readonly completedIds = signal<Set<string>>(new Set());
+  readonly completedIds = this.progressService.completedIds;
 
   readonly lastScore = signal(0);
 
   readonly allCases = signal<ReviewCase[]>(REVIEW_CASES_DATA);
+
+  readonly sidebarOpen = signal(true);
 
   private readonly caseId = toSignal(this.route.paramMap.pipe(map(p => p.get('caseId'))));
 
@@ -49,6 +58,11 @@ export class TndmReverseCode {
   onCaseSelected(reviewCase: ReviewCase): void {
     const hasCase = !!this.caseId();
     this.router.navigate(hasCase ? ['..', reviewCase.id] : [reviewCase.id], { relativeTo: this.route });
+    this.sidebarOpen.set(false);
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update(v => !v);
   }
 
   onCaseSolved(score: number): void {
@@ -58,12 +72,7 @@ export class TndmReverseCode {
     }
 
     this.lastScore.set(score);
-
-    this.completedIds.update(ids => {
-      const next = new Set(ids);
-      next.add(active.id);
-      return next;
-    });
+    this.progressService.saveCaseCompletion(active.id, active.difficulty, score, this.maxScore());
     this.showModal.set(true);
   }
 

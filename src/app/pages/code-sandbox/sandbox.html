@@ -1,21 +1,34 @@
-<div class="sandbox-wrapper">
+<div class="sandbox-wrapper" [class.is-fullscreen]="isFullscreen()">
   <div class="editor-section">
-    <mat-tab-group dynamicHeight [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
-      @for (tab of tabs; track tab) {
-      <mat-tab [label]="tab">
-        <div class="editor-container">
-          <ngx-monaco-editor
-            [ngModel]="tabConfig[tab].code()"
-            [options]="editorConfigs()[tab]"
-            (ngModelChange)="tabConfig[tab].code.set($event)" />
-        </div>
-      </mat-tab>
-      }
-    </mat-tab-group>
+    <div class="tabs-header-area">
+      <mat-tab-group
+        class="flex-tabs"
+        dynamicHeight
+        [selectedIndex]="selectedTab()"
+        (selectedIndexChange)="onTabChange($event)">
+        @for (tab of tabs; track tab) {
+        <mat-tab [label]="tab" />
+        }
+      </mat-tab-group>
+
+      <div class="editor-controls">
+        <tndm-button [btnConfig]="downloadBtnConfig" (clicked)="download()" />
+        <tndm-button [btnConfig]="saveBtnConfig" (clicked)="save()" />
+        <tndm-button [btnConfig]="fullscreenBtnConfig()" (clicked)="toggleFullscreen()" />
+      </div>
+    </div>
+
+    <div class="editor-container">
+      <ngx-monaco-editor
+        [ngModel]="activeCode()"
+        [options]="activeEditorOptions()"
+        (ngModelChange)="updateCode($event)" />
+    </div>
   </div>
 
   <div class="preview-section">
     <div class="preview-header">{{ 'sandbox.livePreview' | transloco }}</div>
+
     <iframe frameborder="0" [srcdoc]="previewContent()"></iframe>
   </div>
 </div>

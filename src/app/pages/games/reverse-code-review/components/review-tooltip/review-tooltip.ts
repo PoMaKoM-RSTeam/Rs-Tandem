@@ -10,7 +10,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
   templateUrl: './review-tooltip.html',
 })
 export class TndmReviewTooltip {
-  readonly topPx = input.required<number>();
   readonly wrongType = input(false);
   readonly typeSelected = output<ErrorType>();
   readonly closed = output<void>();

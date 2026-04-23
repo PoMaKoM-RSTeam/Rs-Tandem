@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_TWO: ReviewCase[] = [
   {
     id: '001',
-    category: 'Memory Leaks',
+    category: 'reverseCodeReview.data.c001.category',
     difficulty: 'Junior',
-    title: 'Leaky Subscription',
+    title: 'reverseCodeReview.data.c001.title',
     code: `import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { interval } from 'rxjs';
@@ -34,27 +34,23 @@ export class DashboardComponent implements OnInit {
       {
         line: 15,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message: 'reverseCodeReview.data.c001.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 19,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message: 'reverseCodeReview.data.c001.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
 
   {
     id: '004',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c004.category',
     difficulty: 'Middle',
-    title: 'The Subscribe Pyramid',
+    title: 'reverseCodeReview.data.c004.title',
     code: `import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { OrderService } from './order.service';
@@ -87,18 +83,14 @@ export class OrderPageComponent implements OnInit {
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c004.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 20,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message: 'reverseCodeReview.data.c004.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },

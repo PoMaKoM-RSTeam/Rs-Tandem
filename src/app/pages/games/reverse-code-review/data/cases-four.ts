@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_FOUR: ReviewCase[] = [
   {
     id: '005',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c005.category',
     difficulty: 'Junior',
-    title: 'DOM Manipulation',
+    title: 'reverseCodeReview.data.c005.title',
     code: `import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -38,27 +38,23 @@ export class HighlightComponent implements OnInit {
       {
         line: 14,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c005.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c005.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
 
   {
     id: '006',
-    category: 'Best Practice',
+    category: 'reverseCodeReview.data.c006.category',
     difficulty: 'Junior',
-    title: 'The Any Kingdom',
+    title: 'reverseCodeReview.data.c006.title',
     code: `import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -89,35 +85,29 @@ export class DataService {
       {
         line: 9,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c006.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 13,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c006.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 21,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c006.msg2',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
 
   {
     id: '010',
-    category: 'Best Practice / State',
+    category: 'reverseCodeReview.data.c010.category',
     difficulty: 'Middle',
-    title: 'Shared State Mutation',
+    title: 'reverseCodeReview.data.c010.title',
     code: `import { Injectable } from '@angular/core';
 
 export interface AppState {
@@ -153,26 +143,20 @@ export class StateService {
       {
         line: 16,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c010.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 24,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c010.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 29,
         type: ErrorType.BestPractice,
-        message: '',
+        message: 'reverseCodeReview.data.c010.msg2',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },

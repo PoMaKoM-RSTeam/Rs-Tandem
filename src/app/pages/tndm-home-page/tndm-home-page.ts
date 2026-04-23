@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NavigationService } from '../../core/navigation/navigation.service';
 
 import { TranslocoPipe } from '@jsverse/transloco';
+import { TndmAuthService } from '@auth';
 
 @Component({
   selector: 'tndm-home-page',
@@ -15,6 +16,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class TndmHomePage {
   private router = inject(Router);
   private readonly navService: NavigationService = inject(NavigationService);
+  readonly authService: TndmAuthService = inject(TndmAuthService);
 
   readonly joinBtnConfig = { label: 'create an account' } as const;
 

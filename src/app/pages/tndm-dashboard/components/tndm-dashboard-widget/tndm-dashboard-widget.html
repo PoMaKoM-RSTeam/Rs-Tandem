@@ -1,0 +1,15 @@
+<article class="main-block" [class.is-with-title]="title()">
+  @if(title()) {
+  <h2 class="main-block__title">{{title()}}</h2>
+  }
+  <tndm-circle-progress [current]="current()" [label]="label() ?? current()" [max]="max()" />
+
+  <ul class="info">
+    @for (item of stats(); track item.label) {
+    <li class="stat-row">
+      <span class="stat-label">{{ item.label }}</span>
+      <span class="stat-value" [style.color]="item.color"> {{ item.value }} </span>
+    </li>
+    }
+  </ul>
+</article>

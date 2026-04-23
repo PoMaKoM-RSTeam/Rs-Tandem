@@ -1,0 +1,9 @@
+<div class="avatar-container" [style.height.px]="size()" [style.width.px]="size()">
+  <img
+    class="avatar-img"
+    [alt]="finalAlt()"
+    [height]="size()"
+    [ngSrc]="finalSrc()"
+    [width]="size()"
+    (error)="handleError()" />
+</div>

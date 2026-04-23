@@ -4,9 +4,9 @@ import { ReviewCase } from '../models/review-case.model';
 export const CASES_ONE: ReviewCase[] = [
   {
     id: '002',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c002.category',
     difficulty: 'Junior',
-    title: 'Template Traps',
+    title: 'reverseCodeReview.data.c002.title',
     code: `import { Component } from '@angular/core';
 import { UserService } from './user.service';
 
@@ -42,35 +42,29 @@ export class UserCardComponent {
       {
         line: 8,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c002.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 9,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c002.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 10,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c002.msg2',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
 
   {
     id: '007',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c007.category',
     difficulty: 'Junior',
-    title: 'List Rendering Issues',
+    title: 'reverseCodeReview.data.c007.title',
     code: `import { Component } from '@angular/core';
 
 interface Task {
@@ -91,63 +85,35 @@ interface Task {
     </ul>
     <p>Total: {{ calculateTotal() }}</p>
   \`,
-})
-export class TaskListComponent {
-  tasks: Task[] = [];
-
-  getColor(task: Task): string {
-    return task.done ? 'green' : 'black';
-  }
-
-  calculateTotal(): number {
-    return this.tasks.filter(t => t.done).length;
-  }
-
-  remove(task: Task): void {
-    this.tasks = this.tasks.filter(t => t.id !== task.id);
-  }
-}`,
+})`,
     expectedErrors: [
       {
         line: 13,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c007.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 15,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c007.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
         line: 19,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c007.msg2',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },
 
   {
     id: '008',
-    category: 'Performance',
+    category: 'reverseCodeReview.data.c008.category',
     difficulty: 'Middle',
-    title: 'Manual Change Detection',
-    code: `import {
-  Component,
-  ChangeDetectorRef,
-  OnInit,
-  NgZone,
-} from '@angular/core';
-import { DataService } from './data.service';
-
+    title: 'reverseCodeReview.data.c008.title',
+    code: `<..>
 @Component({
   selector: 'app-live-feed',
   template: \`
@@ -155,13 +121,7 @@ import { DataService } from './data.service';
   \`,
 })
 export class LiveFeedComponent implements OnInit {
-  items: { text: string }[] = [];
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private zone: NgZone,
-    private dataService: DataService,
-  ) {}
+<..>
 
   ngOnInit(): void {
     setInterval(() => {
@@ -176,28 +136,19 @@ export class LiveFeedComponent implements OnInit {
     this.items.push({ text });
     this.cdr.detectChanges();
   }
-
-  reset(): void {
-    this.items = [];
-    this.cdr.detectChanges();
-  }
 }`,
     expectedErrors: [
       {
-        line: 25,
+        line: 12,
         type: ErrorType.MemoryLeak,
-        message: '',
+        message: 'reverseCodeReview.data.c008.msg0',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
       {
-        line: 28,
+        line: 15,
         type: ErrorType.Performance,
-        message: '',
+        message: 'reverseCodeReview.data.c008.msg1',
         points: 1,
-        fixPattern: '',
-        fixHint: 'test',
       },
     ],
   },

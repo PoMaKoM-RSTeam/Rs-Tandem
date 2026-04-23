@@ -139,62 +139,86 @@ export class TndmAsyncSorter {
     let currentIndex = 0;
 
     const moveBlock = (): void => {
-      if (currentIndex >= queue.length) {
-        return;
-      }
-
-      const currentMovingBlock = queue[currentIndex];
-
-      const oldElement = document.querySelector(`[data-execution-order="${currentMovingBlock.executionOrder}"]`);
-      const oldRect = oldElement?.getBoundingClientRect();
-      if (!oldRect) {
-        return;
-      }
-
-      // Delete current moving block from its bucket
-      const bucket = this.getBucketByType(currentMovingBlock.taskType);
-      bucket.update(items => items.filter(i => i.executionOrder !== currentMovingBlock.executionOrder));
-
-      // Add the removed block to finalCallStack and to list of invisible blocks
-      this.invisibleCodeBlocks.update(items => [...items, currentMovingBlock]);
-      this.finalCallStack.update(items => [...items, currentMovingBlock]);
+      if (currentIndex >= queue.length) return;
+      const { movingBlockData, oldRect } = this.prepareBlockForAnimation(currentIndex, queue);
 
       requestAnimationFrame(() => {
-        const duration = 1000;
-
-        const newElement = document.querySelector(`[data-execution-order="${currentMovingBlock.executionOrder}"]`);
-        if (!(newElement instanceof HTMLElement)) {
-          return;
-        }
-
-        const newRect = newElement.getBoundingClientRect();
-
-        const deltaX = oldRect.left - newRect.left;
-        const deltaY = oldRect.top - newRect.top;
-
-        newElement.style.transition = 'none';
-        newElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        const animationTime = 1000;
+        const movingBlockElement = this.positionBlockBeforeAnimation(oldRect, movingBlockData);
+        if (!movingBlockElement) return;
 
         requestAnimationFrame(() => {
-          // Delete block from the list of invisible blocks
-          this.invisibleCodeBlocks.update(items =>
-            items.filter(item => item.executionOrder !== currentMovingBlock.executionOrder)
-          );
-
-          newElement.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.8, 0.25, 1)`;
-          newElement.style.transform = 'translate(0, 0)';
+          this.performAnimation(movingBlockData, animationTime, movingBlockElement);
 
           setTimeout(() => {
-            newElement.style.transition = '';
-            newElement.style.transform = '';
-          }, duration);
+            movingBlockElement.style.transition = '';
+            movingBlockElement.style.transform = '';
+          }, animationTime);
         });
 
         currentIndex++;
-        setTimeout(moveBlock, duration);
+        setTimeout(moveBlock, animationTime);
       });
     };
 
     moveBlock();
+  }
+
+  private getBlocksRect(blockData: CodeBlockData): DOMRect {
+    const element = document.querySelector(`[data-execution-order="${blockData.executionOrder}"]`);
+    const rect = element?.getBoundingClientRect();
+    if (!rect) throw new Error(`Code block element with execution order ${blockData.executionOrder} not found`);
+    return rect;
+  }
+
+  private removeBlockFromBucket(blockData: CodeBlockData): void {
+    const bucket = this.getBucketByType(blockData.taskType);
+    bucket.update(items => items.filter(i => i.executionOrder !== blockData.executionOrder));
+  }
+
+  private addBlockToFinalCallStack(blockData: CodeBlockData): void {
+    this.invisibleCodeBlocks.update(items => [...items, blockData]);
+    this.finalCallStack.update(items => [...items, blockData]);
+  }
+
+  private prepareBlockForAnimation(
+    queueIndex: number,
+    queue: CodeBlockData[]
+  ): { oldRect: DOMRect; movingBlockData: CodeBlockData } {
+    const movingBlockData = queue[queueIndex];
+    const oldRect = this.getBlocksRect(movingBlockData);
+
+    this.removeBlockFromBucket(movingBlockData);
+    this.addBlockToFinalCallStack(movingBlockData);
+
+    return { movingBlockData, oldRect };
+  }
+
+  private positionBlockBeforeAnimation(oldRect: DOMRect, currentMovingBlock: CodeBlockData): HTMLElement | undefined {
+    const codeBLock = document.querySelector(`[data-execution-order="${currentMovingBlock.executionOrder}"]`);
+    if (!(codeBLock instanceof HTMLElement)) return;
+
+    const newRect = codeBLock.getBoundingClientRect();
+
+    const deltaX = oldRect.left - newRect.left;
+    const deltaY = oldRect.top - newRect.top;
+
+    codeBLock.style.transition = 'none';
+    codeBLock.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    return codeBLock;
+  }
+
+  private performAnimation(
+    movingBlockData: CodeBlockData,
+    animationTime: number,
+    movingBlockElement: HTMLElement
+  ): void {
+    this.invisibleCodeBlocks.update(items =>
+      items.filter(item => item.executionOrder !== movingBlockData.executionOrder)
+    );
+
+    movingBlockElement.style.transition = `transform ${animationTime}ms cubic-bezier(0.25, 0.8, 0.25, 1)`;
+    movingBlockElement.style.transform = 'translate(0, 0)';
   }
 }
