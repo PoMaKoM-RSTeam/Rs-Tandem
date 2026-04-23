@@ -60,7 +60,7 @@ The application features a set of interactive games designed to focus on specifi
 
 ## Demo
 
-...
+[Final Demo Link (up to 8 min)](https://youtu.be/o1w2O3H1CXc)
 
 ## Technologies
 
