@@ -82,6 +82,10 @@ This content is available after registration and login, in Russian and English.
 ## Week 5 Checkpoint
 [video link](https://youtu.be/nxAmDsMHFuk)
 
+## Demo
+
+[Final Demo Link (up to 8 min)](https://youtu.be/o1w2O3H1CXc)
+
 ## Technologies
 
 | Software | Version |
