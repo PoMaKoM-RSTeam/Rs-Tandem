@@ -1,46 +1,41 @@
 <header class="header">
-  <tndm-lang-switcher />
-
   <nav class="navigation" [class.open]="isMenuOpen">
-    <ul class="nav" [class.open]="isMenuOpen">
-      @if(authService.isAuthenticated){ @for (item of navItems; track item.path) {
-      <li class="nav__item">
-        <a class="nav__link" routerLinkActive="nav__link_active" [routerLink]="item.path" (click)="closeMenu()">
-          {{ item.label }}
-        </a>
-      </li>
-      }
-      <li class="nav__item">
-        <button class="nav__link avatar-btn" type="button" (click)="userProfileService.open()">
-          <tndm-avatar [size]="28" />
-        </button>
-      </li>
-      }
-
-      <li class="nav__auth-mobile">
-        @if(!authService.isAuthenticated){
-        <div class="header__auth-btns">
-          <tndm-button [btnConfig]="signUpBtnConfig()" (clicked)="onSignUpClick()" />
-          <tndm-button [btnConfig]="signInBtnConfig()" (clicked)="onSignInClick()" />
-        </div>
-        } @else {
-        <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" />
-        () }
-      </li>
-    </ul>
-
-    <div class="header__auth-desktop">
-      @if(!authService.isAuthenticated){
-      <div class="header__auth-btns">
+    <ul class="nav header__desktop" [class.open]="isMenuOpen">
+      @if(authService.isAuthenticated){
+      <button class="nav__link avatar-btn" type="button" (click)="userProfileService.open()">
+        <tndm-avatar [size]="28" />
+        <span class="avatar-btn__title">{{userService.context()?.displayName}}</span>
+      </button>
+      <tndm-dropdown label="games" [items]="navItems"><tndm-lang-switcher /> </tndm-dropdown>
+      <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" />
+      } @else{
+      <tndm-lang-switcher />
+      <li class="header__auth-btns">
         <tndm-button [btnConfig]="signUpBtnConfig()" (clicked)="onSignUpClick()" />
         <tndm-button [btnConfig]="signInBtnConfig()" (clicked)="onSignInClick()" />
-      </div>
+      </li>
+      }
+    </ul>
+
+    <div class="header__mobile">
+      @if(!authService.isAuthenticated){
+      <tndm-lang-switcher />
+      <tndm-dropdown label="menu" [items]="[]">
+        <li class="header__auth-btns">
+          <tndm-button [btnConfig]="signUpBtnConfig()" (clicked)="onSignUpClick()" />
+          <tndm-button [btnConfig]="signInBtnConfig()" (clicked)="onSignInClick()" />
+        </li>
+      </tndm-dropdown>
       } @else {
-      <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" /> }
+      <button class="nav__link avatar-btn" type="button" (click)="userProfileService.open()">
+        <tndm-avatar [size]="28" />
+        <span class="avatar-btn__title">{{userService.context()?.displayName}}</span>
+      </button>
+      <tndm-dropdown label="menu" [items]="navItems">
+        <tndm-button [btnConfig]="logoutBtnConfig()" (clicked)="onLogoutClick()" />
+        <tndm-lang-switcher />
+      </tndm-dropdown>
+      }
     </div>
   </nav>
-
-  <button class="burger-menu" type="button" [class.open]="isMenuOpen" (click)="toggleMenu()">
-    <span></span><span></span><span></span><span></span>
-  </button>
 </header>
