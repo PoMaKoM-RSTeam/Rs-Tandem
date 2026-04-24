@@ -1,5 +1,6 @@
 @use 'styles/variables' as v;
 @use 'styles/typography' as t;
+@use 'styles/adaptive' as a;
 
 .user-profile-overlay {
   position: fixed;
@@ -28,6 +29,7 @@
   padding: 1.5rem 2rem 3rem;
   box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
   color: #333;
+  margin: 10px;
 
   &__header {
     display: flex;
@@ -47,6 +49,10 @@
     flex-direction: column;
     gap: 10px;
     background-color: inherit;
+  }
+
+  @include a.mobile() {
+    padding: 20px;
   }
 }
 

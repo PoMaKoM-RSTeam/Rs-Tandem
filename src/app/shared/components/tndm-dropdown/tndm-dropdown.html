@@ -1,0 +1,19 @@
+<div class="dropdown-container" [class.open]="isOpen()">
+  <button class="dropdown-button" type="button" [class.open]="isOpen()" (click)="toggleOpen()">
+    {{ label() }}
+    <button class="burger-menu" type="button" [class.open]="isOpen()">
+      <span></span><span></span><span></span><span></span>
+    </button>
+  </button>
+
+  @if (isOpen()) {
+  <ul class="dropdown">
+    @for (item of items(); track item) {
+    <li class="dropdown__item">
+      <a class="dropdown__link" routerLinkActive="dropdown__link_active" [routerLink]="item.path"> {{ item.label }} </a>
+    </li>
+    }
+    <ng-content />
+  </ul>
+  }
+</div>

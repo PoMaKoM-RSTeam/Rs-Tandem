@@ -9,10 +9,12 @@ import { NgTemplateOutlet } from '@angular/common';
 import { TndmUserProfileService } from '../../../pages/tndm-user-profile/tndm-user-profile.service';
 import { TndmAvatar } from '../avatar/tndm-avatar';
 import { translateSignal } from '@jsverse/transloco';
+import { TndmDropdown } from '../tndm-dropdown/tndm-dropdown';
+import { UserService } from '../../../core/services/user-service/user-api.service';
 
 @Component({
   selector: 'tndm-header',
-  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, NgTemplateOutlet],
+  imports: [RouterLink, RouterLinkActive, TndmLangSwitcher, TndmButton, TndmAvatar, TndmDropdown, NgTemplateOutlet],
   templateUrl: './tndm-header.html',
   styleUrl: './tndm-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +24,7 @@ export class TndmHeader {
   readonly authService: TndmAuthService = inject(TndmAuthService);
   readonly navService: NavigationService = inject(NavigationService);
   readonly userProfileService: TndmUserProfileService = inject(TndmUserProfileService);
+  readonly userService: UserService = inject(UserService);
 
   private readonly signInLabel: Signal<string> = translateSignal('auth.signIn');
   readonly signInBtnConfig: Signal<ButtonConfig> = computed(() => ({ label: this.signInLabel() }));
