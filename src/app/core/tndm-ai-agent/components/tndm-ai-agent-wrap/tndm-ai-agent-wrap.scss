@@ -1,83 +1,158 @@
 @use '../../../../../styles/variables' as vars;
 @use '../../../../../styles/mixins' as mix;
 
-@mixin cross-side($direction: right) {
-  width: 15px;
-  height: 30px;
-
-  @if $direction == right {
-    &::before,
-    &::after {
-      left: calc(50% + 7.5px);
-    }
-  } @else if $direction == left {
-    &::before,
-    &::after {
-      left: calc(50% - 7.5px);
-    }
-  }
+:host {
+  display: block;
+  height: 100%;
 }
 
-.ai-agent {
-  &__content {
-    position: relative;
-    display: grid;
-    grid-template-rows: 30% 50% 20%;
-    height: calc(100vh - 59px);
-    width: 100%;
-    overflow: hidden;
-  }
+.ai-agent-shell {
+  position: relative;
+  height: 100%;
+  z-index: 530;
+}
 
-  &__wrapper {
-    height: calc(100vh - 59px);
-    background-color: vars.$bg-main;
-    width: 0;
-    transition:
-      width ease-in 0.5s,
-      border-color ease-in 0.5s;
-    border: none;
+.ai-agent__wrapper {
+  position: relative;
+  height: 100%;
+  width: calc((100vw - 80px) / 4);
+  min-width: 450px;
+  max-width: calc(100vw - 24px);
+  overflow: hidden;
+  border: 1px solid transparent;
+  background-color: vars.$bg-main;
+  z-index: 100;
 
-    &_open {
-      border: 1px solid vars.$color-grey;
-      width: calc(calc(100vw - 77px) / 4);
-    }
-  }
+  clip-path: inset(0 0 0 100%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    clip-path 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    border-color 220ms ease,
+    visibility 0s linear 280ms;
+
+  will-change: clip-path, opacity;
+  backface-visibility: hidden;
+  contain: layout paint style;
+}
+
+.ai-agent__wrapper_open {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  border-color: vars.$color-grey;
+
+  transition:
+    clip-path 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    border-color 220ms ease,
+    visibility 0s linear 0s;
+}
+
+.ai-agent__intro,
+.ai-agent__content {
+  position: absolute;
+  inset: 0;
+}
+
+.ai-agent__intro {
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    visibility 0s linear 460ms;
+}
+
+.ai-agent__content {
+  display: grid;
+  grid-template-rows: calc(30vh - 53px) 45vh 25vh;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    visibility 0s linear 460ms;
+}
+
+.ai-agent__wrapper_open .ai-agent__intro {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 160ms ease 120ms,
+    visibility 0s linear 0s;
+}
+
+.ai-agent__wrapper_open .ai-agent__content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 220ms ease 520ms,
+    visibility 0s linear 0s;
+}
+
+.ai-agent__wrapper_open.ai-agent__wrapper_intro-done .ai-agent__intro {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 180ms ease,
+    visibility 0s linear 180ms;
 }
 
 .cross {
   @include mix.cross-base();
+  z-index: 110;
+  pointer-events: none;
+  opacity: 0;
+  background-color: transparent;
 
-  &_position_top-left {
-    top: -1px;
-    left: 1px;
-  }
+  transition-property: opacity;
+  transition-duration: 140ms;
+  transition-timing-function: ease;
+  transition-delay: 0ms; // при закрытии тухнут сразу
+}
 
-  &_position_top-right {
-    top: -1px;
-    right: -29px;
-  }
+.ai-agent-shell_open .cross {
+  opacity: 1;
+  transition-delay: 280ms; // ждём пока панель выедет
+}
 
-  &_position_middle-right {
-    top: 30%;
-    right: -7.5px;
-    @include cross-side(right);
-  }
+.cross_position_top-left {
+  top: -1px;
+  left: 0;
+  background-color: transparent;
+}
 
-  &_position_bottom-right {
-    top: 80%;
-    right: -7.5px;
-    @include cross-side(right);
-  }
+.cross_position_top-right {
+  top: -1px;
+  right: -30px;
+  background-color: transparent;
+}
 
-  &_position_middle-left {
-    top: 30%;
-    left: 6.5px;
-    @include cross-side(left);
-  }
+.cross_position_middle-right {
+  top: calc(30vh - 53px);
+  right: -30px;
+}
 
-  &_position_bottom-left {
-    top: 80%;
-    left: 6.5px;
-    @include cross-side(left);
-  }
+.cross_position_bottom-right {
+  top: calc(75vh - 53px);
+  right: -30px;
+}
+
+.cross_position_middle-left {
+  top: calc(30vh - 53px);
+  left: 0;
+}
+
+.cross_position_bottom-left {
+  top: calc(75vh - 53px);
+  left: 0;
 }
