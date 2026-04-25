@@ -369,6 +369,7 @@
   "ai-agent": {
     "askYourQuestion": "// Задайте свой вопрос...",
     "hereWillBeDisplayedChatHistory": "// Здесь будет отображаться история чата...",
-    "clear": "Очистить"
+    "clear": "Очистить",
+    "send": "Отправить"
   }
 }

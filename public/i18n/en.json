@@ -369,6 +369,7 @@
   "ai-agent": {
     "askYourQuestion": "// Ask your question...",
     "hereWillBeDisplayedChatHistory": "// Your chat history will appear here...",
-    "clear": "Clear"
+    "clear": "Clear",
+    "send": "Send"
   }
 }
