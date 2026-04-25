@@ -5,6 +5,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { TndmHeader } from '../tndm-header/tndm-header';
 import { TndmTitleStrategy } from '../../../core/title-strategy/tndm-title-strategy';
 import { TndmAiAgent } from '../../../core/tndm-ai-agent/tndm-ai-agent';
+import { TndmWsService } from '../../../core/tndm-ai-agent/services/tndm-ws-service';
+import { TndmAuthService } from '@auth';
 
 @Component({
   selector: 'tndm-main-layout',
@@ -17,6 +19,8 @@ export class TndmMainLayout {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private titleStrategy = inject(TndmTitleStrategy);
+  readonly wsService = inject(TndmWsService);
+  readonly authService = inject(TndmAuthService);
 
   readonly pageTitle = this.titleStrategy.pageTitle;
 
