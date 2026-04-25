@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { ButtonConfig, TndmButton } from '../../../../shared/ui/tndm-button/tndm-button';
 import { TndmAiChatService } from '../../services/tndm-ai-chat-service';
+import { translateSignal } from '@jsverse/transloco';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,13 +16,14 @@ export class TndmAiInput {
 
   protected readonly input = signal('');
 
-  protected readonly placeholder = '// Ask your question...';
+  protected readonly placeholder = translateSignal('ai-agent.askYourQuestion');
 
   protected readonly isSendDisabled = computed(() => this.chatService.assistantTyping() || !this.input().trim());
 
+  protected readonly sendButtonLabel = translateSignal('ai-agent.send')
   protected readonly sendButtonConfig: Signal<ButtonConfig> = computed(
     (): ButtonConfig => ({
-      label: 'Send',
+      label: this.sendButtonLabel(),
       variant: 'primary',
       isDisabled: this.isSendDisabled(),
     })

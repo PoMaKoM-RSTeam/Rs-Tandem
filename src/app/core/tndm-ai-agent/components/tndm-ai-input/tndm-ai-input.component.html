@@ -3,7 +3,7 @@
     <textarea
       class="ai-input__textarea"
       maxlength="2000"
-      [placeholder]="placeholder"
+      [placeholder]="placeholder()"
       [value]="input()"
       (input)="onInput($event)"
       (keydown.enter)="onEnter($event)"></textarea>
