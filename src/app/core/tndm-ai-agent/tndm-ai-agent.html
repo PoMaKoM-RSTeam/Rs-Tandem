@@ -1,2 +1,9 @@
 <tndm-ai-agent-button [isOpen]="isOpen()" (click)="toggleAgentWrap()" />
 <tndm-ai-agent-wrap [isOpen]="isOpen()" />
+
+<button
+  aria-label="Close agent panel"
+  class="ai-agent__overlay"
+  type="button"
+  [class.ai-agent__overlay_open]="isOpen()"
+  (click)="toggleAgentWrap()"></button>
