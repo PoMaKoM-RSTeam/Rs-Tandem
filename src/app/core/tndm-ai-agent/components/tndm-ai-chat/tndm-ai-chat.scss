@@ -43,3 +43,34 @@
   scrollbar-width: thin;
   scrollbar-color: vars.$color-accent vars.$bg-main;
 }
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: vars.$space-xl;
+  padding: 0 vars.$space-md;
+  text-align: center;
+  top: 1px;
+  left: 0;
+  position: absolute;
+  isolation: isolate;
+  height: calc(100% - 2px);
+  width: 100%;
+  overflow: hidden;
+  background: vars.$bg-main;
+  z-index: 520;
+
+  @include typ.text-ui;
+}
+
+.clear-btn {
+  margin-top: vars.$space-md;
+}
+
+.chat-logo {
+  position: relative;
+  color: #e96423;
+  filter: drop-shadow(0 1px 1px rgba(233, 100, 35, 0.12));
+}

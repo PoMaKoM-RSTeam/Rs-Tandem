@@ -1,5 +1,6 @@
 <div class="ai-chat__wrapper">
   <div class="ai-chat__messages-wrapper">
+    @if (messages().length) {
     <div #scrollContainer class="chat__messages scroller">
       @for(message of messages(); track message.id) {
       <tndm-ai-chat-message
@@ -8,5 +9,14 @@
         [message]="message" />
       }
     </div>
+    <tndm-button class="clear-btn" [btnConfig]="clearBtnConfig()" (click)="clearMessages()" />
+    } @else {
+    <div class="placeholder chat-zigzag">
+      <div class="placeholder">
+        <svg-icon class="chat-logo" [src]="'svgs/union.svg'" />
+        <div class="chat-pattern">{{ 'ai-agent.hereWillBeDisplayedChatHistory' | transloco }}</div>
+      </div>
+    </div>
+    }
   </div>
 </div>
