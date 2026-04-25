@@ -1,4 +1,4 @@
-import { DestroyRef, effect, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { effect, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { ChatMessage, ChatRole, ChatWsMessage } from '../types/chat';
 import { TndmWsService } from './tndm-ws-service';
 import { uuid } from '../helpers/uuid';
@@ -7,7 +7,6 @@ import { uuid } from '../helpers/uuid';
   providedIn: 'root',
 })
 export class TndmAiChatService {
-  private readonly destroyRef = inject(DestroyRef);
   private readonly wsService = inject(TndmWsService);
 
   private readonly _messages: WritableSignal<ChatMessage[]> = signal<ChatMessage[]>([]);
@@ -22,32 +21,45 @@ export class TndmAiChatService {
   private readonly _currentAssistantId: WritableSignal<string | null> = signal(null);
   readonly currentAssistantId: Signal<string | null> = this._currentAssistantId.asReadonly();
 
+  private readonly _error = signal<string | null>(null);
+
   constructor() {
     effect((): void => {
-      const events = this.wsService.events();
-      const last = events.at(-1);
+      const lastMessage = this.wsService.lastMessage();
 
-      if (!last) {
-        return;
-      }
+      if (!lastMessage) return;
 
-      this.handleWSMessage(last);
-    });
-
-    this.destroyRef.onDestroy((): void => {
-      this.reset();
+      this.handleWSMessage(lastMessage);
     });
   }
 
-  handleWSMessage(msg: ChatWsMessage): void {
+  private handleWSMessage(msg: ChatWsMessage): void {
     if (msg.type === 'chunk') {
       this.appendAssistantChunk(msg.text ?? '');
       return;
     }
 
-    if (msg.type === 'done' || msg.type === 'error') {
+    if (msg.type === 'done') {
       this.finishAssistantTurn();
     }
+
+    if (msg.type === 'error') {
+      this.handleError(msg);
+    }
+  }
+
+  private handleError(msg: Extract<ChatWsMessage, { type: 'error' }>): void {
+    this.finishAssistantTurn();
+
+    const errorText = msg.message ?? 'Unexpected error';
+    this._error.set(errorText);
+
+    const errorMessage: ChatMessage = this.buildMessage('assistant', `⚠️ ${errorText}`);
+    this._messages.update(list => [...list, errorMessage]);
+  }
+
+  clearMessages(): void {
+    this._messages.set([]);
   }
 
   private buildMessage(role: ChatRole, text: string, id: string = uuid()): ChatMessage {
@@ -65,6 +77,8 @@ export class TndmAiChatService {
     if (!text) {
       return;
     }
+
+    this._error.set(null);
 
     const userMessage: ChatMessage = this.buildMessage('user', text);
 
@@ -84,30 +98,28 @@ export class TndmAiChatService {
       return;
     }
 
+    const currentAssistantId = this._currentAssistantId();
+
+    if (!currentAssistantId) {
+      const msg: ChatMessage = this.buildMessage('assistant', text);
+
+      this._currentAssistantId.set(msg.id);
+      this._messages.update((listMessages: ChatMessage[]): ChatMessage[] => [...listMessages, msg]);
+      return;
+    }
+
     this._messages.update((list: ChatMessage[]): ChatMessage[] => {
-      const currentAssistantId = this._currentAssistantId();
+      const exists = list.some(message => message.id === currentAssistantId);
 
-      if (!currentAssistantId) {
-        const msg: ChatMessage = this.buildMessage('assistant', text);
-
-        this._currentAssistantId.set(msg.id);
-        return [...list, msg];
-      }
-
-      const idx = list.findIndex(m => m.id === currentAssistantId);
-      if (idx === -1) {
+      if (!exists) {
         const msg: ChatMessage = this.buildMessage('assistant', text, currentAssistantId);
-
         return [...list, msg];
       }
 
-      const target = list[idx];
-      const updated: ChatMessage = {
-        ...target,
-        text: target.text + text,
-      };
-
-      return [...list.slice(0, idx), updated, ...list.slice(idx + 1)];
+      return list.map(
+        (message: ChatMessage): ChatMessage =>
+          message.id === currentAssistantId ? { ...message, text: message.text + text } : message
+      );
     });
   }
 
@@ -115,12 +127,5 @@ export class TndmAiChatService {
     this._loading.set(false);
     this._assistantTyping.set(false);
     this._currentAssistantId.set(null);
-  }
-
-  private reset(): void {
-    this._loading.set(false);
-    this._assistantTyping.set(false);
-    this._currentAssistantId.set(null);
-    this._messages.set([]);
   }
 }
